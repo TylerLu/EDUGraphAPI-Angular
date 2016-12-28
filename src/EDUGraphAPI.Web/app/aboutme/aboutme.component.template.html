@@ -1,0 +1,22 @@
+﻿<div class="container ">
+    <h2>About Me</h2>
+    <div class="margin-top-12 margin-btm-12">
+        <b>Username:</b><br> {{model.UserName}}
+    </div>
+    <div class="margin-btm-12">
+        <b>Favorite Color:</b>
+        <div *ngIf="model.IsLinked">
+            <select name="favoritecolor">
+                <option *ngFor="let color of model.FavoriteColors" [value]="color.Value">{{color.DisplayName}}</option>
+            </select>
+            <input type="button" value="Save" (click)="updateFavoriteColor()">
+        </div>
+    </div>
+    <div class="margin-btm-12 ">
+        <b>Classes:</b>
+        <br>
+        <div *ngIf="model.Groups">
+            <div *ngFor="let group of model.Groups">{{group}}</div>
+        </div>
+    </div>
+</div>

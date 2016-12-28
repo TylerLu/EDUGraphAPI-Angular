@@ -1,0 +1,24 @@
+﻿import express = require('express');
+import { SchoolService } from '../services/schoolService';
+
+var router = express.Router();
+router.route('/seatingArrangements/:classId')
+    .get((req, res) => {
+        var classId = req.params.classId as string;
+        var schoolService = new SchoolService();
+        schoolService.getSeatingArrangementsAsync(classId)
+            .then(arrangement => {
+                return res.json(arrangement);
+            })
+            .catch(error => res.json(500, error));
+    })
+    .post((req, res) => {
+        var newItems = req.body as Array<any>;
+        var classId = req.params.classId as string;
+        var schoolService = new SchoolService();
+        schoolService.updateSeatingArrangementsAsync(classId, newItems)
+            .then(() => res.end())
+            .catch(error => res.json(500, error));
+    });
+
+export = router;

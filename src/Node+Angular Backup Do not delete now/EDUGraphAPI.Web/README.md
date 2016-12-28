@@ -1,3 +1,0 @@
-﻿# EDUGraphAPI.Web
-
-

@@ -1,0 +1,344 @@
+﻿[
+  {
+    "component": "schools",
+    "action": "index",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/school.component.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/school.component.template.html"
+      },
+      {
+        "title": "Service",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/school.service.ts"
+      },
+      {
+        "title": "Model",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/school.ts"
+      },
+      {
+        "title": "Module",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/school.module.ts"
+      },
+      {
+        "title": "Router",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/school-routing.ts"
+      }
+    ]
+  },
+  {
+    "component": "classes",
+    "action": "classes",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI/app/classes/classes.component.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI/app/classes/classes.component.template.html"
+      },
+      {
+        "title": "Service",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/school.service.ts"
+      },
+      {
+        "title": "Model",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/classes.ts"
+      },
+      {
+        "title": "Module",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/school.module.ts"
+      },
+      {
+        "title": "Router",
+        "url": "/blob/master/src/EDUGraphAPI/app/school/school-routing.ts"
+      }
+    ]
+  },
+  {
+    "component": "schools",
+    "action": "myclasses",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Schoolscomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Schools/Classes.cshtml"
+      },
+      {
+        "title": "ApplicationService",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/ApplicationService.ts"
+      },
+      {
+        "title": "SchoolsService",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/SchoolsService.ts"
+      },
+      {
+        "title": "SectionsViewModel",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Models/SectionsViewModel.ts"
+      }
+    ]
+  },
+  {
+    "component": "schools",
+    "action": "users",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Schoolscomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Schools/Users.cshtml"
+      },
+      {
+        "title": "SchoolsService",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/SchoolsService.ts"
+      },
+      {
+        "title": "SchoolUsersViewModel",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Models/SchoolUsersViewModel.ts"
+      }
+    ]
+  },
+  {
+    "component": "schools",
+    "action": "classdetails",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Schoolscomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Schools/ClassDetails.cshtml"
+      },
+      {
+        "title": "ApplicationService",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/ApplicationService.ts"
+      },
+      {
+        "title": "SchoolsService",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/SchoolsService.ts"
+      },
+      {
+        "title": "SectionDetailsViewModel",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Models/SectionDetailsViewModel.ts"
+      },
+      {
+        "title": "SeatingViewModel",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Models/SeatingViewModel.ts"
+      }
+    ]
+  },
+  {
+    "component": "login",
+    "action": "login",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI/app/login/login.component.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI/app/login/login.component.template.html"
+      }
+    ]
+  },
+  {
+    "component": "account",
+    "action": "register",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Accountcomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Account/Register.cshtml"
+      },
+      {
+        "title": "EducationRegisterViewModel",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Models/EducationRegisterViewModel.ts"
+      }
+    ]
+  },
+  {
+    "component": "admin",
+    "action": "index",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI/app/admin/admin.component.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI/app/admin/admin.component.template.html"
+      },
+      {
+        "title": "Service",
+        "url": "/blob/master/src/EDUGraphAPI/app/admin/admin.service.ts"
+      },
+      {
+        "title": "Module",
+        "url": "/blob/master/src/EDUGraphAPI/app/admin/admin.module.ts"
+      },
+      {
+        "title": "Router",
+        "url": "/blob/master/src/EDUGraphAPI/app/admin/admin-routing.ts"
+      }
+    ]
+  },
+  {
+    "component": "admin",
+    "action": "linkedaccounts",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Admincomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Admin/LinkedAccounts.cshtml"
+      },
+      {
+        "title": "ApplicationService",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/ApplicationService.ts"
+      }
+    ]
+  },
+  {
+    "component": "admin",
+    "action": "unlinkaccounts",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Admincomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Admin/UnlinkAccounts.cshtml"
+      },
+      {
+        "title": "ApplicationService",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/ApplicationService.ts"
+      }
+    ]
+  },
+  {
+    "component": "link",
+    "action": "index",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Linkcomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Link/Index.cshtml"
+      },
+      {
+        "title": "ApplicationService",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/ApplicationService.ts"
+      },
+      {
+        "title": "UserContext",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Models/UserContext.ts"
+      },
+      {
+        "title": "AADGraphClient",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/GraphClients/AADGraphClient.ts"
+      },
+      {
+        "title": "MSGraphClient",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/GraphClients/MSGraphClient.ts"
+      }
+    ]
+  },
+  {
+    "component": "link",
+    "action": "loginlocal",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Linkcomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Link/LoginLocal.cshtml"
+      },
+      {
+        "title": "LoginViewModel",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Models/AccountViewModels.ts"
+      },
+      {
+        "title": "AADGraphClient",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/GraphClients/AADGraphClient.ts"
+      }
+    ]
+  },
+  {
+    "component": "link",
+    "action": "createlocalaccount",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Linkcomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Link/CreateLocalAccount.cshtml"
+      },
+      {
+        "title": "ApplicationService",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/ApplicationService.ts"
+      },
+      {
+        "title": "EducationRegisterViewModel",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Models/EducationRegisterViewModel.ts"
+      },
+      {
+        "title": "AADGraphClient",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Services/GraphClients/AADGraphClient.ts"
+      }
+    ]
+  },
+  {
+    "component": "link",
+    "action": "logino365required",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Linkcomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Link/LoginO365Required.cshtml"
+      }
+    ]
+  },
+  {
+    "component": "manage",
+    "action": "aboutme",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/components/Managecomponent.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Views/Manage/AboutMe.cshtml"
+      },
+      {
+        "title": "AboutMeViewModel",
+        "url": "/blob/master/src/EDUGraphAPI.Web/Models/AboutMeViewModel.ts"
+      }
+    ]
+  }
+]

@@ -204,7 +204,7 @@
       "type": "Microsoft.Web/sites",
       "name": "[variables('apiSiteName')]",
       "apiVersion": "2015-08-01",
-      "location": "[variables('apiSiteName')]",
+      "location": "[variables('location')]",
       "properties": {
         "name": "[variables('apiSiteName')]",
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
@@ -222,7 +222,7 @@
             "ida:ClientSecret": "[parameters('clientSecret')]",
             "SourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]",
             "APIUrl": "[concat('https://', variables('apiSiteName'), '.azurewebsites.net')]",
-            "project": "src/EDUGraphAPI/EDUGraphAPI.API.csproj"
+            "project": "src/EDUGraphAPI/EDUGraphAPI.API.njsproj"
           }
         },
         {
@@ -231,8 +231,7 @@
           "type": "sourcecontrols",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites/', variables('apiSiteName'))]",
-            "[resourceId('Microsoft.Web/Sites/config', variables('apiSiteName'), 'appsettings')]",
-            "[resourceId('Microsoft.Web/Sites/config', variables('apiSiteName'), 'connectionstrings')]"
+            "[resourceId('Microsoft.Web/Sites/config', variables('apiSiteName'), 'appsettings')]"
           ],
           "properties": {
             "RepoUrl": "[parameters('sourceCodeRepositoryURL')]",

@@ -152,8 +152,8 @@
     <Content Include="app\fonts\HelveticaNeueLTStd-Th.woff" />
     <Content Include="app\fonts\HelveticaNeueLTStd-Th.woff2" />
     <Content Include="app\demo\demo-pages.json" />
-    <None Include="Properties\PublishProfiles\edugraphapi2-dev - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\edugraphapi2-dev - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\edugraphapi2dev - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\edugraphapi2dev - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\File System.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -178,6 +178,7 @@
     <TypeScriptCompile Include="app\demo\demo.component.ts" />
     <TypeScriptCompile Include="app\demo\demoPage.ts" />
     <TypeScriptCompile Include="app\demo\demoService.ts" />
+    <TypeScriptCompile Include="app\services\commonUtils.ts" />
     <TypeScriptCompile Include="app\utils\authenticationHelper.ts" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <TypeScriptCompile Include="app\constants.ts" />
