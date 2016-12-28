@@ -10,7 +10,7 @@ import { ColorEntity } from '../models/common/colorEntity';
 export class AboutMeService {
     private graphUrlBase: string = SvcConsts.AAD_Graph_RESOURCE + '/' + SvcConsts.TENANT_ID;
 
-    constructor(private http: Http, @Inject('auth') private authService, @Inject('data') private dataService) {
+    constructor(private http: Http, @Inject('me') private meService, @Inject('data') private dataService) {
     }
 
     /**
@@ -18,8 +18,7 @@ export class AboutMeService {
      * Reference URL: 
      */
     getMe(): any {
-        return this.dataService.get("/api/users/me")
-            .map((response: Response): AboutMeModel => <AboutMeModel>response.json());
+        return this.meService.getCurrentUser();
     }
 
     /**
@@ -44,17 +43,9 @@ export class AboutMeService {
      * Get current users's classes.
      * Reference URL: 
      */
-    updateFavoriteColor(color: ColorEntity): any {
-        return this.dataService.post("/api/users/updateFavoriteColor")
-            .map((response: Response): ClassesModel[] => {
-                var classes: ClassesModel[] = new Array<ClassesModel>();
-                var groups: any[] = <any[]>response.json().value;
-                groups.forEach((group) => {
-                    if (group["objectType"] === "Group" && group["extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"] === "Section") {
-                        classes.push(group);
-                    }
-                });
-                return classes;
-            });
+    updateFavoriteColor(color: string): any {
+        this.meService.updateFavoriteColor(color, function () {
+            console.log('updated');
+        });
     }
 }

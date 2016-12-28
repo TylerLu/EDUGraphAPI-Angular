@@ -12,7 +12,7 @@ export class UserService {
 
     private dbContext = new DbContext();
 
-    public creatUser(email: string, password: string, favoriteColor: string): Promise<UserInstance> {
+    public creatUser(email: string, password: string, firstName: string, lastName: string, favoriteColor: string): Promise<UserInstance> {
         return new Promise<any>((resolve, reject) => {
             this.dbContext.User
                 .findOne({ where: { email: email } })
@@ -24,6 +24,8 @@ export class UserService {
                             {
                                 id: uuid.v4(),
                                 email: email,
+                                firstName: firstName,
+                                lastName: lastName,
                                 passwordHash: passwordHash,
                                 salt: passwordSalt,
                                 favoriteColor: favoriteColor

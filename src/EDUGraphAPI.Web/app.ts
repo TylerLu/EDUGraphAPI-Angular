@@ -13,9 +13,11 @@ var fs = require("fs");
 var url = require("url");
 var querystring = require("querystring");
 var dbContext_1 = require("./data/dbContext");
-var me = require("./routes/me");
-var schools = require("./routes/schools");
 var config = require('./config');
+
+var meRoute = require("./routes/me");
+var usersRoute = require("./routes/users");
+var schoolsRoute = require("./routes/schools");
 
 // Start QuickStart here
 var OIDCStrategy = require('./node_modules/passport-azure-ad/lib/index').OIDCStrategy;
@@ -140,12 +142,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 // APIs
-app.use('/api/me', me);
-//app.use('/api', routes);
+app.use('/api/me', meRoute);
+app.use('/api/users', usersRoute);
+app.use('/api/schools', schoolsRoute);
 //app.post('/api/authenticate/:action', authenticate);
-////app.use('/users', authenticateModule.ValidateLogin, users);
-//app.use('/api/users', localusers);
-app.use('/api/schools', schools);
 // Angular 2
 app.use("/app", express.static(path.join(__dirname, 'app')));
 app.use("/node_modules", express.static(path.join(__dirname, 'node_modules')));
@@ -176,11 +176,7 @@ function ensureAuthenticated(req, res, next) {
     }
     res.redirect('/');
 }
-;
-app.get('/', function (req, res) {
-    //res.render('index', { user: req.user });
-    res.sendfile(path.join(__dirname, 'index.html'));
-});
+
 // '/account' is only available to logged in user
 app.get('/account', ensureAuthenticated, function (req, res) {
     res.render('account', { user: req.user });
@@ -239,25 +235,37 @@ app.get('/api/getaccesstoken', function (req, res) {
         switch (req.query["resource"]) {
             case windowsGraphResourceUrl:
                 if ((new Date()).getTime() < cacheToken[req.user.oid]['windowsgraph.expires']) {
-                    res.json({ accesstoken: cacheToken[req.user.oid]['windowsgraph.accesstoken'] });
+                    res.json({
+                        accesstoken: cacheToken[req.user.oid]['windowsgraph.accesstoken'],
+                        expires: cacheToken[req.user.oid]['aadgraph.expires']
+                    });
                 }
                 else {
                     azureADAuthSrv.getAccessToeknViaRefreshToken(cacheToken[req.user.oid]['windowsgraph.refreshToken']).then((result) => {
                         cacheToken[req.user.oid]['windowsgraph.accesstoken'] = result.access_token;
                         cacheToken[req.user.oid]['windowsgraph.expires'] = result.expires_on * 1000;
-                        res.json({ accesstoken: result.access_token });
+                        res.json({
+                            accesstoken: result.access_token,
+                            expires: cacheToken[req.user.oid]['aadgraph.expires']
+                        });
                     });
                 }
                 break;
             case AADGraphResourceUrl:
-                if ((new Date()).getTime() < cacheToken[req.user.oid]['aadgraph.expires']) {
-                    res.json({ accesstoken: cacheToken[req.user.oid]['aadgraph.accesstoken'] });
+                if ((new Date()).getTime() < cacheToken[req.user.oid]['aadgraph.expires'] /*TODO: Theo - 5min*/) {
+                    res.json({
+                        accesstoken: cacheToken[req.user.oid]['aadgraph.accesstoken'],
+                        expires: cacheToken[req.user.oid]['aadgraph.expires']
+                    });
                 }
                 else {
                     azureADAuthSrv.getAccessToeknViaRefreshToken(cacheToken[req.user.oid]['aadgraph.refreshToken']).then((result) => {
                         cacheToken[req.user.oid]['aadgraph.accesstoken'] = result.access_token;
                         cacheToken[req.user.oid]['aadgraph.expires'] = result.expires_on * 1000;
-                        res.json({ accesstoken: result.access_token });
+                        res.json({
+                            accesstoken: result.access_token,
+                            expires: cacheToken[req.user.oid]['aadgraph.expires']
+                        });
                     });
                 }
                 break;
@@ -269,6 +277,11 @@ app.get('/api/getaccesstoken', function (req, res) {
     else {
         res.json({ error: "401 unauthorized" });
     }
+});
+
+app.get('/*', function (req, res) {
+    //res.render('index', { user: req.user });
+    res.sendfile(path.join(__dirname, 'index.html'));
 });
 
 // catch 404 and forward to error handler

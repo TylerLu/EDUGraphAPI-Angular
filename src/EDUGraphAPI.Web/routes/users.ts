@@ -9,20 +9,21 @@ var userService = new UserService();
 router.get('/linked', function (req, res, next) {
     userService.getLinkedUsers()
         .then(users => res.json(users))
-        .catch(error => res.send(500, error));
+        .catch(error => res.json(500, { error: error }));
 });
 
 router.post('/', function (req, res) {
-    userService.creatUser(req.body.email, req.body.password, req.body.favoriteColor)
+    var user = req.body;
+    userService.creatUser(user.email, user.password, user.firstName, user.lastName, user.favoriteColor)
         .then(user => res.send(201, user))
-        .catch(error => res.send(500, error));
+        .catch(error => res.json(500, { error: error }));
 });
 
 router.get('/:userId/unlink', function (req, res) {
     var userId = req.params.userId;
     userService.unlinkUser(userId)
         .then(() => res.end())
-        .catch(error => res.send(500, error));
+        .catch(error => res.json(500, { error: error }));
 });
 
 
@@ -68,3 +69,5 @@ router.get('/:userId/unlink', function (req, res) {
 //            res.json(err);
 //        });
 //});
+
+export = router;

@@ -166,4 +166,15 @@ export class SchoolService {
         return this.dataService.get(url)
             .map((response: Response) => <SeatingArrangement[]>response.json());
     }
+
+    saveSeatingArrangement(classId: string, seatingArrangements: SeatingArrangement[] ) {
+        var url = "/api/schools/seatingArrangements/" + classId;
+        return this.dataService.post(url, seatingArrangements)
+            .map(this.extractData);
+    }
+
+    private extractData(res: Response) {
+        let body = res.json();
+        return body.data || {};
+    }
 }

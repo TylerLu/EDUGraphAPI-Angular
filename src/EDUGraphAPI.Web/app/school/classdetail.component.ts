@@ -87,12 +87,14 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
                         this.classEntity.Students.forEach((stu) => {
                             this.seatingArrangements.forEach((arrangment) => {
                                 if (stu.O365UserId == arrangment.o365UserId) {
-                                    stu.IsSeated = true;
-                                    stu.SeatingClass = "seated";
-                                    stu.SeatingArrangment = arrangment.position;
+                                    stu.SeatingArrangment = arrangment.position+"";
+                                    stu.SeatingClass = "seated hideitem";
                                     if (stu.SeatingArrangment != "0") {
+                                        stu.IsSeated = true;
                                         stu.ContainerClass = "white";
+                                        stu.SeatingClass = "seated";
                                     }
+
                                     if (this.me.O365UserId == stu.O365UserId) {
                                         stu.ContainerClass = "green";
                                     }
@@ -154,17 +156,31 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
 
     saveeditseats() {
         var detail = this;
+        detail.newseatingArrangements = [];
+        detail.isEditing = false;
+        $(".deskclose").hide();
+        $(".deskcontainer").attr("draggable", "false");
+        $(".lstproducts li").attr("draggable", "false");
         $(".deskcontainer").each(function () {
             var userid = $(this).attr("ng-reflect-userid");
             if (userid) {
                 var position = $(this).attr("ng-reflect-position");
                 var arrangement = new SeatingArrangement();
                 arrangement.classId = detail.classObjectId;
-                arrangement.o365UserId = detail.me.O365UserId;
+                arrangement.o365UserId = userid;
                 arrangement.position = position;
                 detail.newseatingArrangements.push(arrangement);
             }
         });
+        this.schoolService
+            .saveSeatingArrangement(this.classObjectId, detail.newseatingArrangements)
+            .subscribe();
+        $(".desktile .deskcontainer.unsaved").removeClass("unsaved");
+        $(".desktile .deskcontainer[ng-reflect-prev-position]").removeAttr("ng-reflect-prev-position");
+        $("#hidtiles .deskcontainer:not(.unsaved)").remove();
+        $('<div id="saveResult"><div>Seating map changes saved.</div></div>')
+            .insertBefore($('#dvleft'))
+            .fadeIn("slow", function () { $(this).delay(3000).fadeOut("slow"); });
     }
 
     canceleditseats() {

@@ -13,7 +13,7 @@ import { SvcConsts } from '../SvcConsts/SvcConsts';
     styles: []
 })
 
-export class AboutMeComponent implements OnInit {
+export class AboutMe implements OnInit {
     private sub: any;
     model: AboutMeModel = new AboutMeModel();
 
@@ -24,16 +24,13 @@ export class AboutMeComponent implements OnInit {
 
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
-        //    this.aboutMeservice
-        //        .getMe()
-        //        .subscribe((result) => {
-        //            var model: AboutMeModel = MapUtils.deserialize(AboutMeModel, result);
-        //            this.model.Username = model.Username;
-        //            this.model.MyFavoriteColor = model.MyFavoriteColor;
-        //        });
-            this.model.IsLinked = true;
-            this.model.UserName = "Some User";
-            this.model.MyFavoriteColor = "#127605";
+            this.aboutMeservice
+                .getMe()
+                .subscribe((user) => {
+                    this.model.UserName = (user.firstName + " " + user.lastName).trim();
+                    this.model.MyFavoriteColor = user.favoriteColor;
+                    this.model.IsLinked = true;
+                });
 
             this.aboutMeservice
                 .getMyClasses()
@@ -54,12 +51,7 @@ export class AboutMeComponent implements OnInit {
     }
 
     updateFavoriteColor() {
-        //this.aboutMeservice
-        //    .updateFavoriteColor()
-        //    .subscribe((result) => {
-        //        var model: AboutMeModel = MapUtils.deserialize(AboutMeModel, result);
-        //        this.model.Username = model.Username;
-        //        this.model.MyFavoriteColor = model.MyFavoriteColor;
-        //    });
+        this.aboutMeservice.updateFavoriteColor(this.model.MyFavoriteColor, function () {
+        });
     }
 }

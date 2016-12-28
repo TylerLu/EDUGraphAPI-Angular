@@ -6,7 +6,7 @@ import { Header } from './header/header.component';
 import { Link } from './link/link.component';
 import { Demo } from './demo/demo.component';
 import { Register } from './register/register.component';
-import { AboutMeComponent } from './aboutme/aboutme.component';
+import { AboutMe } from './aboutme/aboutme.component';
 
 
 export const appRoutes: Routes = [
@@ -17,7 +17,7 @@ export const appRoutes: Routes = [
     { path: 'header', component: Header },
     {path:'link',component:Link},
     { path: 'demo', component: Demo },
-    { path: 'aboutme', component: AboutMeComponent },
+    { path: 'aboutme', component: AboutMe },
     {
         path: '',  // otherwise route.
         redirectTo: 'dashboard',

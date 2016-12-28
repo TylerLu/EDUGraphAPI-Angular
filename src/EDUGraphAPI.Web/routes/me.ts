@@ -16,20 +16,20 @@ router.route('/')
         var userId = getCurrentUserId();
         userService.getUserModelById(userId)
             .then(user => res.json(user))
-            .catch(error => res.send(500, error));
+            .catch(error => res.json(500, { error: error }));
     })
     .post(function (req, res) {
         var user = req.body;
         userService.updateUser(user)
             .then(() => res.end())
-            .catch(error => res.send(500, error));
+            .catch(error => res.json(500, { error: error }));
     });
 
 router.get('/accessToken/:resource', function (req, res) {
     var resource = req.param['resource'] as string;
     userService.getAccessToken(resource)
         .then(token => res.json(token))
-        .catch(error => res.send(500, error));
+        .catch(error => res.json(500, { error: error }));
 });
 
 export = router;

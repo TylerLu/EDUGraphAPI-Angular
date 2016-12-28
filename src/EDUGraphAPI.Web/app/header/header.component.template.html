@@ -17,7 +17,7 @@
             </ul>
             <form action="/Account/LogOff" class="navbar-right" id="logoutForm" method="post">
                 <div class="userinfo">
-                    <a href="javascript:void(0);" id="userinfolink" (click)="showContextMenu(this)">Hello Admin Trivedi!</a>
+                    <a href="javascript:void(0);" id="userinfolink" (click)="showContextMenu(this)">Hello {{fullName}}!</a>
                     <span class="caret" id="caret" [class.transformcaret]="ifShowContextMenu"></span>
                 </div>
                 <div class="" id="userinfoContainer" [hidden]="!ifShowContextMenu">

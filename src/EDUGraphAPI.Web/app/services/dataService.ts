@@ -29,9 +29,16 @@ export class DataService {
         header.append('Authorization', 'Bearer ' + token); 
         return header;
     }
+    getHeaderWithoutToken() {
+        let header = new Headers();
+        return header;
+    }
 
     public get(actionUrl: string) {
         return this._http.get(actionUrl, { headers: this.getHeader(this.authToken) });
+    }
+    public post(actionUrl: string, data: any) {
+        return this._http.post(actionUrl, data, { headers: this.getHeaderWithoutToken() });
     }
 
     public getWithMsToken(actionUrl: string) {

@@ -1,4 +1,4 @@
-﻿import { Component, Input, OnInit } from '@angular/core';
+﻿import { Component, Input, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 
@@ -13,12 +13,14 @@ export class Header implements OnInit {
 
     urlParts: string[];
     ifShowContextMenu: boolean;
+    fullName: string;
 
-    constructor(private router: Router) { }
+    constructor(private router: Router,@Inject('me') private meService) { }
 
     ngOnInit() {
         this.initUrlParts();
         this.ifShowContextMenu = false;
+        this.initFullName();
     }
 
     initUrlParts() {
@@ -66,6 +68,13 @@ export class Header implements OnInit {
 
     showContextMenu() {
         this.ifShowContextMenu = !(this.ifShowContextMenu);
+    }
+
+    initFullName() {
+        this.meService.getCurrentUser()
+            .subscribe((user) => {
+                this.fullName = user.firstName + " " + user.lastName;
+            });
     }
     
 }

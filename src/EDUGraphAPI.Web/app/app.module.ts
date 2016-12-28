@@ -1,4 +1,5 @@
-﻿import { NgModule, Inject}      from '@angular/core';
+﻿import { NgModule, Inject } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { HttpModule } from '@angular/http';
@@ -19,14 +20,14 @@ import { JsonProperty, MapUtils } from "./services/jsonHelper";
 import { SchoolModule } from './school/school.module';
 import { AdminModule } from './admin/admin.module';
 import { Register } from './register/register.component';
-import { AboutMeComponent } from './aboutme/aboutme.component';
+import { AboutMe } from './aboutme/aboutme.component';
 import { AboutMeService } from './aboutme/aboutme.service';
 
 
 
 @NgModule({
-    imports: [BrowserModule, routing, HttpModule, SchoolModule,AdminModule],
-    declarations: [AppComponent, Login, Register, Header, Link, Demo, AboutMeComponent],
+    imports: [BrowserModule, FormsModule, ReactiveFormsModule, routing, HttpModule, SchoolModule,AdminModule],
+    declarations: [AppComponent, Login, Register, Header, Link, Demo, AboutMe],
     bootstrap: [AppComponent],
     providers: [
         { provide: 'auth', useClass: AuthHelper },

@@ -10,7 +10,7 @@ router.route('/seatingArrangements/:classId')
             .then(arrangement => {
                 return res.json(arrangement);
             })
-            .catch(error => res.json(500, error));
+            .catch(error => res.json(500, { error: error }));
     })
     .post((req, res) => {
         var newItems = req.body as Array<any>;
@@ -18,7 +18,7 @@ router.route('/seatingArrangements/:classId')
         var schoolService = new SchoolService();
         schoolService.updateSeatingArrangementsAsync(classId, newItems)
             .then(() => res.end())
-            .catch(error => res.json(500, error));
+            .catch(error => res.json(500, { error: error }));
     });
 
 export = router;
