@@ -19,7 +19,7 @@ router.post('/', function (req, res) {
         .catch(error => res.json(500, { error: error }));
 });
 
-router.get('/:userId/unlink', function (req, res) {
+router.post('/:userId/unlink', function (req, res) {
     var userId = req.params.userId;
     userService.unlinkUser(userId)
         .then(() => res.end())

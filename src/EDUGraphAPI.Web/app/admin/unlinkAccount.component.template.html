@@ -1,0 +1,11 @@
+﻿<h2>Unlink Accounts</h2>
+<h3>Are you sure you want to unlink the accounts?</h3>
+<div>
+    <hr />
+    <p>Local Account: {{account.email}}</p>
+    <p>Office 365 Account: {{account.o365Email}}</p>
+    <div class="form-actions no-color">
+        <input type="submit" value="Unlink" class="btn btn-default" (click)="doUnlink()" /> |
+        <a href="javascript:void(0)" (click)="goBack()">Back to List</a>
+    </div>
+</div>

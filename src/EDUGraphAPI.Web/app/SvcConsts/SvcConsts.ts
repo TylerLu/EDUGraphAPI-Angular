@@ -5,8 +5,9 @@ export class SvcConsts {
     public static TENANT_ID: string = "canvizEDU.onmicrosoft.com";
     public static MS_GRAPH_RESOURCE: string = "https://graph.microsoft.com";
     public static AAD_Graph_RESOURCE: string = "https://graph.windows.net";
-    public static COOKIE_TOKEN: string = "user_token";
-    public static MS_COOKIE_TOKEN: string = "ms_user_token";
+    public static COOKIE_TOKEN: string = "user_token_ad";
+    public static MS_COOKIE_TOKEN: string = "user_token_ms";
+    public static LOGIN_TOKEN = "authType";
     public static BING_MAP_KEY: string = "AgWV4amBPg2dzbgGPB8Ya5GDfGqBnueTJUfu1oAAilDje_vXB0RpKGF4mDabOmwB";
     public static FavoriteColors: ColorEntity[] = [new ColorEntity("Blue", "#2F19FF"), new ColorEntity("Green", "#127605"), new ColorEntity("Grey", "#535353")];
 }

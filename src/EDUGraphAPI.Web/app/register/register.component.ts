@@ -1,11 +1,10 @@
-﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { Inject } from '@angular/core';
 import {RegisterModel} from './register'
 
 
 @Component({
-    selector: 'register-form',
+    selector: '',
     templateUrl: '/app/register/register.component.template.html',
     styles: []
 })
@@ -13,14 +12,23 @@ import {RegisterModel} from './register'
 export class Register implements OnInit {
     model: RegisterModel = new RegisterModel();
 
-    constructor( @Inject('userService') private userMeservice
-        ,private router: Router, private activatedRoute: ActivatedRoute) {
+    constructor( @Inject('user') private userService
+        , private router: Router, private activatedRoute: ActivatedRoute) {
+        this.model.email = "";
+        this.model.password = "";
+        this.model.ConfirmPassword = "";
+        this.model.favoriteColor = this.model.FavoriteColors[0].Value;
     }
 
     ngOnInit() {
     }
 
     createLocalUser() {
-
+        this.userService.createLocalAccount(this.model)
+            .subscribe((result) => {
+                if (result.ok) {
+                    this.router.navigate(["link"]);
+                }
+            });
     }
 }

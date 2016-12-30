@@ -38,13 +38,18 @@ export class AppComponent implements OnInit{
                 //if (AuthenticationHelper.isUserLoggedIn()) {
                 //    this.router.navigate([this.router.url]);
                 //}
-                if (this.auth.access_token !== null) {
+                if (this.auth.IsLogin()) {
                     var url = this.router.url == '/' ? 'schools' : this.router.url;
                     this.router.navigate([url]);
                 }
-                else if (this.router.url != "/register"){
-                    this.router.navigate(['login']);
+                else {
+                    if (this.router.url != "/register") {
+                        this.router.navigate(['login']);
+                    } else {
+                        this.router.navigate(['register']);
+                    }
                 }
+
             });
     
     }

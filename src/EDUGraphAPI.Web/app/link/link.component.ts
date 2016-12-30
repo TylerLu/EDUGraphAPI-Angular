@@ -7,33 +7,45 @@ import { UserInfo } from '../models/common/userinfo';
 @Component({
     selector: 'linkPage',
     templateUrl: '/app/link/link.component.template.html',
-    styleUrls: ['app/css/bootstrap.min.css','app/css/Site.css']
+    styleUrls: ['app/css/bootstrap.min.css', 'app/css/Site.css']
 })
 
 export class Link implements OnInit {
-    isAccountsLinked: boolean;
+    areAccountsLinked: boolean;
     isLocalAccount: boolean;
     localAccountExisted: boolean;
     localAccountExistedMessage: string;
     userInfo: UserInfo; 
 
 
-    constructor( @Inject('linkService') private linkService: LinkService, private router: Router, @Inject('me') private meService) { }
+    constructor( @Inject('linkService') private linkService: LinkService, private router: Router, @Inject('me') private meService, @Inject('user') private userService) { }
 
     ngOnInit() {
+        this.initCurrentUser();
         this.localAccountExistedMessage = '';
-        this.isAccountsLinked = this.linkService.isAccountsLinked();
-        this.isLocalAccount = this.linkService.isLocalAccount();
+        this.initIsLocalAccount();
+        this.initLocalAccountExisted();
+        this.userService.getLinkedAccounts()
+            .subscribe((result) => {
+                console.log(result);
+            });
+    }
+
+    initCurrentUser() {
         this.userInfo = new UserInfo();
-        this.userInfo.email = 'testEmail';
-        this.userInfo.o365Email = 'testO365Email';
-        this.meService.getCurrentUser()
-                      .subscribe((user) => {console.log(user)});
-        this.meService.updateFavoriteColor("blue", function () { console.log('updated'); });
+        this.linkService.getCurrentUser()
+            .subscribe((user) => {
+                this.userInfo.readFromJson(user);
+                this.areAccountsLinked = false;//this.userInfo.areAccountsLinked();
+            });
     }
 
     initLocalAccountExisted() {
         this.localAccountExisted = (this.localAccountExistedMessage != undefined || this.localAccountExistedMessage != null || this.localAccountExistedMessage != '');
+    }
+
+    initIsLocalAccount() {
+        this.isLocalAccount = this.meService.isLocalAccount();
     }
 
     loginO365() {
@@ -42,7 +54,7 @@ export class Link implements OnInit {
 
     createLocalAccount() {
         console.log('createLocalAccount');
-        this.router.navigate(['createLocalAccount']);
+        this.router.navigate(['link-local']);
     }
 
 }

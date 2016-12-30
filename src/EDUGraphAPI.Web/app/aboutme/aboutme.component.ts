@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Inject } from '@angular/core';
+import { UserInfo } from '../models/common/userInfo';
 import { AboutMeModel } from './aboutme';
 import { ClassesModel } from '../school/classes';
 import { MapUtils } from '../services/jsonhelper';
@@ -14,7 +15,6 @@ import { SvcConsts } from '../SvcConsts/SvcConsts';
 })
 
 export class AboutMe implements OnInit {
-    private sub: any;
     model: AboutMeModel = new AboutMeModel();
 
     constructor(@Inject('aboutMeService') private aboutMeservice
@@ -23,31 +23,27 @@ export class AboutMe implements OnInit {
     }
 
     ngOnInit() {
-        this.sub = this.route.params.subscribe(params => {
-            this.aboutMeservice
-                .getMe()
-                .subscribe((user) => {
-                    this.model.UserName = (user.firstName + " " + user.lastName).trim();
-                    this.model.MyFavoriteColor = user.favoriteColor;
-                    this.model.IsLinked = true;
-                });
+        this.aboutMeservice
+            .getMe()
+            .subscribe((data) => {
+                let user: UserInfo = new UserInfo();
+                user.readFromJson(data);
+                this.model.UserName = (user.firstName + " " + user.lastName).trim();
+                this.model.MyFavoriteColor = user.favoriteColor;
+                this.model.IsLinked = user.areAccountsLinked();
+            });
 
-            this.aboutMeservice
-                .getMyClasses()
-                .subscribe((result) => {
-                    if (this.model.Groups === undefined) {
-                        this.model.Groups = new Array<string>();
-                    }
-                    result.forEach((obj) => {
-                        var classModel = MapUtils.deserialize(ClassesModel, obj);
-                        this.model.Groups.push(classModel.DisplayName);
-                    });
+        this.aboutMeservice
+            .getMyClasses()
+            .subscribe((result) => {
+                if (this.model.Groups === undefined) {
+                    this.model.Groups = new Array<string>();
+                }
+                result.forEach((obj) => {
+                    var classModel = MapUtils.deserialize(ClassesModel, obj);
+                    this.model.Groups.push(classModel.DisplayName);
                 });
-        });
-    }
-
-    ngOnDestroy() {
-        this.sub.unsubscribe();
+            });
     }
 
     updateFavoriteColor() {

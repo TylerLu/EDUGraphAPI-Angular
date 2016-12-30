@@ -1,13 +1,16 @@
-﻿var https = require("https");
+﻿var http = require("http");
+var https = require("https");
+var cookieSession = require('cookie-session');
 var express = require("express");
-var expressSession = require("express-session");
+//var expressSession = require("express-session");
 var passport = require("passport");
 var path = require("path");
 var favicon = require("serve-favicon");
 var logger = require("morgan");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
-var azureADAuthSrv= require('./services/azureADAuthService');
+var azureADAuthSrv = require('./services/azureADAuthService');
+import { TokenCacheService } from './services/tokenCacheService';
 
 var fs = require("fs");
 var url = require("url");
@@ -18,11 +21,26 @@ var config = require('./config');
 var meRoute = require("./routes/me");
 var usersRoute = require("./routes/users");
 var schoolsRoute = require("./routes/schools");
+var localauthRoute = require("./routes/localauth");
+
+var app = express();
+
+// Angular 2
+app.use("/app", express.static(path.join(__dirname, 'app')));
+app.use("/node_modules", express.static(path.join(__dirname, 'node_modules'), { maxAge: 1000 * 60 * 60 * 24 }));
+app.use("/fonts", express.static(path.join(__dirname, 'app/fonts'), { maxAge: 1000 * 60 * 60 * 24 }));
+app.get("/styles.css", function (req, res) {
+    res.sendfile(path.join(__dirname, 'styles.css'));
+});
+app.get("/systemjs.config.js", function (req, res) {
+    res.sendfile(path.join(__dirname, 'systemjs.config.js'));
+});
 
 // Start QuickStart here
 var OIDCStrategy = require('./node_modules/passport-azure-ad/lib/index').OIDCStrategy;
 var windowsGraphResourceUrl = 'https://graph.microsoft.com';
 var AADGraphResourceUrl = 'https://graph.windows.net';
+var tokenCache = new TokenCacheService();
 /******************************************************************************
  * Set up passport in the app
  ******************************************************************************/
@@ -33,25 +51,14 @@ var AADGraphResourceUrl = 'https://graph.windows.net';
 // the user by ID when deserializing.
 //-----------------------------------------------------------------------------
 passport.serializeUser(function (user, done) {
-    done(null, user['oid']);
+    done(null, user);
 });
-passport.deserializeUser(function (oid, done) {
-    findByOid(oid, function (err, user) {
-        done(err, user);
-    });
+
+passport.deserializeUser(function (user, done) {
+    done(null, user);
 });
 // array to hold logged in users
-var users = [];
-var cacheToken = {};
-var findByOid = function (oid, fn) {
-    for (var i = 0, len = users.length; i < len; i++) {
-        var user = users[i];
-        if (user.oid === oid) {
-            return fn(null, user);
-        }
-    }
-    return fn(null, null);
-};
+
 var getQueryString = function (field, href) {
     var reg = new RegExp('[?&]' + field + '=([^&#]*)', 'i');
     var string = reg.exec(href);
@@ -79,7 +86,7 @@ passport.use(new OIDCStrategy({
     clientID: config.creds.clientID,
     responseType: config.creds.responseType,
     responseMode: config.creds.responseMode,
-    redirectUrl: config.creds.redirectUrl,
+    redirectUrl: app.get('env') === 'development' ? 'https://localhost:44380' + config.creds.redirectUrl : 'https://edugraphapi2dev.azurewebsites.net' + config.creds.redirectUrl,
     allowHttpForRedirectUrl: config.creds.allowHttpForRedirectUrl,
     clientSecret: config.creds.clientSecret,
     validateIssuer: config.creds.validateIssuer,
@@ -93,45 +100,36 @@ passport.use(new OIDCStrategy({
     if (!profile.oid) {
         return done(new Error("No oid found"), null);
     }
-    var resource = getQueryString('resource', querystring.unescape(url.parse(req.headers.referer).query));
-    if (cacheToken[profile.oid] == null)
-        cacheToken[profile.oid] = {};
-    if (resource == windowsGraphResourceUrl) {
-        cacheToken[profile.oid]['windowsgraph.accesstoken'] = access_token;
-        cacheToken[profile.oid]['windowsgraph.refreshToken'] = refresh_token;
-        cacheToken[profile.oid]['windowsgraph.expires'] = params.expires_on * 1000;
+    profile.authType = 'O365';
+    req.res.cookie('authType', 'O365');
+ 
+    if (params.resource.toLowerCase() == windowsGraphResourceUrl.toLowerCase()) {
+        tokenCache.updateMSGToken(profile.oid, access_token, refresh_token, params.expires_on * 1000);
     }
-    if (resource == AADGraphResourceUrl) {
-        cacheToken[profile.oid]['aadgraph.accesstoken'] = access_token;
-        cacheToken[profile.oid]['aadgraph.refreshToken'] = refresh_token;
-        cacheToken[profile.oid]['aadgraph.expires'] = params.expires_on * 1000;
+    if (params.resource.toLowerCase() == AADGraphResourceUrl) {
+        tokenCache.updateAADGToken(profile.oid, access_token, refresh_token, params.expires_on * 1000);
     }
     // asynchronous verification, for effect...
     process.nextTick(function () {
-        findByOid(profile.oid, function (err, user) {
-            if (err) {
-                return done(err);
-            }
-            if (!user) {
-                // "Auto-registration"
-                users.push(profile);
-                return done(null, profile);
-            }
-            return done(null, user);
-        });
+        return done(null, profile);
     });
 }));
 //-----------------------------------------------------------------------------
 // Config the app, include middlewares
 //-----------------------------------------------------------------------------
-var app = express();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
+//app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
+app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2'],
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -142,23 +140,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 // APIs
-app.use('/api/me', meRoute);
-app.use('/api/users', usersRoute);
-app.use('/api/schools', schoolsRoute);
-//app.post('/api/authenticate/:action', authenticate);
-// Angular 2
-app.use("/app", express.static(path.join(__dirname, 'app')));
-app.use("/node_modules", express.static(path.join(__dirname, 'node_modules')));
-app.get("/styles.css", function (req, res) {
-    res.sendfile(path.join(__dirname, 'styles.css'));
-});
-app.get("/systemjs.config.js", function (req, res) {
-    res.sendfile(path.join(__dirname, 'systemjs.config.js'));
-});
-//app.use("/api/users", localusers);
-//app.all("/*", (req, res) => {
-//    res.sendfile(path.join(__dirname, 'index.html'));
-//});
+app.use('/api/me', ensureAuthenticated, meRoute);
+app.use('/api/users', ensureAuthenticated, usersRoute);
+app.use('/api/schools', ensureAuthenticated, schoolsRoute);
+app.post('/api/authenticate/:action', localauthRoute);
+
 //-----------------------------------------------------------------------------
 // Set up the route controller
 //
@@ -172,7 +158,11 @@ app.get("/systemjs.config.js", function (req, res) {
 //-----------------------------------------------------------------------------
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
+        res.setHeader("client-authenticate-flag", "authenticated");
         return next();
+    }
+    else if (req.baseUrl.startsWith("/api/")) {
+        res.send(401, 'missing authorization header');
     }
     res.redirect('/');
 }
@@ -216,63 +206,68 @@ app.post('/auth/openid/return', passport.authenticate('azuread-openidconnect', {
         res.redirect('/o365login/windowsgraph');
     }
     if (resource == windowsGraphResourceUrl) {
-        //res.cookie('user_token', cacheToken[req.user.oid]['aadgraph.accesstoken']);
-        //res.cookie('ms_user_token', cacheToken[req.user.oid]['windowsgraph.accesstoken']);
         res.redirect('/');
     }
+    res.redirect('/');
 });
 // 'logout' route, logout from passport, and destroy the session with AAD.
 app.get('/logout', function (req, res) {
-    req.session.destroy(function (err) {
-        req.logOut();
-        res.redirect(config.destroySessionUrl);
-    });
+    res.clearCookie('authType');
+    req.logOut();
+    req.session = null;
+    res.redirect(config.destroySessionUrl + req.protocol + '://' + req.get('host'));
 });
 
 //web api for get access token
 app.get('/api/getaccesstoken', function (req, res) {
     if (req.isAuthenticated()) {
-        switch (req.query["resource"]) {
-            case windowsGraphResourceUrl:
-                if ((new Date()).getTime() < cacheToken[req.user.oid]['windowsgraph.expires']) {
-                    res.json({
-                        accesstoken: cacheToken[req.user.oid]['windowsgraph.accesstoken'],
-                        expires: cacheToken[req.user.oid]['aadgraph.expires']
-                    });
+        let oid = req.user.oid;
+        tokenCache.getTokenCacheByOID(oid)
+            .then((tokenObject) => {
+                switch (req.query["resource"]) {
+                    case windowsGraphResourceUrl:
+                        if ((new Date()).getTime() < tokenObject.msgExpires - 5 * 60 * 1000) {
+                            res.json({
+                                accesstoken: tokenObject.msgAccessToken,
+                                expires: tokenObject.msgExpires
+                            });
+                        }
+                        else {
+                            azureADAuthSrv.getAccessToeknViaRefreshToken(tokenObject.msgRefreshgToken).then((result) => {
+                                tokenObject.msgAccessToken = result.access_token;
+                                tokenObject.msgExpires = result.expires_on * 1000;
+                                tokenObject.save();
+                                res.json({
+                                    accesstoken: tokenObject.msgAccessToken,
+                                    expires: tokenObject.msgExpires
+                                });
+                            });
+                        }
+                        break;
+                    case AADGraphResourceUrl:
+                        if ((new Date()).getTime() < tokenObject.aadgExpires - 5 * 60 * 1000) {
+                            res.json({
+                                accesstoken: tokenObject.aadgAccessToken,
+                                expires: tokenObject.aadgExpires
+                            });
+                        }
+                        else {
+                            azureADAuthSrv.getAccessToeknViaRefreshToken(tokenObject.aadgRefreshgToken).then((result) => {
+                                tokenObject.aadgAccessToken = result.access_token;
+                                tokenObject.aadgExpires = result.expires_on * 1000;
+                                tokenObject.save();
+                                res.json({
+                                    accesstoken: tokenObject.aadgAccessToken,
+                                    expires: tokenObject.aadgExpires
+                                });
+                            });
+                        }
+                        break;
+                    default:
+                        res.json({ error: "resource is invalid" });
+                        break;
                 }
-                else {
-                    azureADAuthSrv.getAccessToeknViaRefreshToken(cacheToken[req.user.oid]['windowsgraph.refreshToken']).then((result) => {
-                        cacheToken[req.user.oid]['windowsgraph.accesstoken'] = result.access_token;
-                        cacheToken[req.user.oid]['windowsgraph.expires'] = result.expires_on * 1000;
-                        res.json({
-                            accesstoken: result.access_token,
-                            expires: cacheToken[req.user.oid]['aadgraph.expires']
-                        });
-                    });
-                }
-                break;
-            case AADGraphResourceUrl:
-                if ((new Date()).getTime() < cacheToken[req.user.oid]['aadgraph.expires'] /*TODO: Theo - 5min*/) {
-                    res.json({
-                        accesstoken: cacheToken[req.user.oid]['aadgraph.accesstoken'],
-                        expires: cacheToken[req.user.oid]['aadgraph.expires']
-                    });
-                }
-                else {
-                    azureADAuthSrv.getAccessToeknViaRefreshToken(cacheToken[req.user.oid]['aadgraph.refreshToken']).then((result) => {
-                        cacheToken[req.user.oid]['aadgraph.accesstoken'] = result.access_token;
-                        cacheToken[req.user.oid]['aadgraph.expires'] = result.expires_on * 1000;
-                        res.json({
-                            accesstoken: result.access_token,
-                            expires: cacheToken[req.user.oid]['aadgraph.expires']
-                        });
-                    });
-                }
-                break;
-            default:
-                res.json({ error: "resource is invalid" });
-                break;
-        }
+            });
     }
     else {
         res.json({ error: "401 unauthorized" });
@@ -280,7 +275,6 @@ app.get('/api/getaccesstoken', function (req, res) {
 });
 
 app.get('/*', function (req, res) {
-    //res.render('index', { user: req.user });
     res.sendfile(path.join(__dirname, 'index.html'));
 });
 
@@ -316,11 +310,15 @@ var db = new dbContext_1.DbContext();
 db.sync({ force: false }).then(function () { });
 //
 var port = process.env.port || 1337;
-//http.createServer(app).listen(port, function () {
-//    console.log('Express server listening on port ' + port);
-//});
-https.createServer({
-    key: fs.readFileSync('ssl/key.pem'),
-    cert: fs.readFileSync('ssl/cert.pem')
-}, app).listen(port);
+if (app.get('env') === 'development') {
+    https.createServer({
+        key: fs.readFileSync('ssl/key.pem'),
+        cert: fs.readFileSync('ssl/cert.pem')
+    }, app).listen(port);
+}
+else {
+    http.createServer(app).listen(port, function () {
+        console.log('Express server listening on port ' + port);
+    });
+}
 //# sourceMappingURL=app - Copy.js.map

@@ -5,13 +5,15 @@ import { SchoolModel } from '../school/school';
 import { SvcConsts } from '../SvcConsts/SvcConsts'
 import { UserModel } from '../school/user';
 import { AuthorizationHelper, Prompt } from '../utils/AuthorizationHelper';
+import { Constants } from '../constants'
 
 @Injectable()
 export class AdminService {
 
+
     private getMeUrl = SvcConsts.AAD_Graph_RESOURCE + '/' + SvcConsts.TENANT_ID + "/me?api-version=1.5";
 
-
+    
     constructor(private http: Http, @Inject('auth') private authService, @Inject('data') private dataService) { }
 
 
@@ -21,8 +23,14 @@ export class AdminService {
     }
 
     consent() {
-        var state = this.generateNonce();
-        var url = AuthorizationHelper.getUrl('/admin', state, Prompt.AdminConsent);
+        var redirectUrl = `${window.location.protocol}/${window.location.host}${window.location.pathname}`;
+        var url = AuthorizationHelper.getUrl(
+            'id_token',
+            window.location.href,
+            this.generateNonce(),
+            Constants.MSGraphResource,
+            Prompt.AdminConsent,
+            this.generateNonce());
         window.location.href = url;
     }
 

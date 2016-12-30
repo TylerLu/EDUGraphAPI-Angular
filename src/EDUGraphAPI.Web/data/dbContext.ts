@@ -76,6 +76,20 @@ export interface ClassroomSeatingArrangementInstance extends Sequelize.Instance<
 }
 export interface ClassroomSeatingArrangementModel extends Sequelize.Model<ClassroomSeatingArrangementInstance, ClassroomSeatingArrangementAttributes> { }
 
+// Tokencache
+export interface TokenCacheAttributes {
+    oid: string;
+    msgAccessToken?: string;
+    msgRefreshgToken?: string;
+    msgExpires?: number;
+    aadgAccessToken?: string;
+    aadgRefreshgToken?: string;
+    aadgExpires?: number;
+}
+export interface TokenCacheInstance extends Sequelize.Instance<TokenCacheAttributes>, TokenCacheAttributes {
+}
+export interface TokenCacheModel extends Sequelize.Model<TokenCacheInstance, TokenCacheAttributes> { }
+
 // DbContext
 export class DbContext {
     public sequelize: Sequelize.Sequelize;
@@ -84,6 +98,7 @@ export class DbContext {
     public UserRole: UserRoleModel;
     public UserClaim: UserClaimModel;
     public ClassroomSeatingArrangement: ClassroomSeatingArrangementModel;
+    public TokenCache: TokenCacheModel;
 
     constructor() {
         this.init();
@@ -166,6 +181,21 @@ export class DbContext {
             {
                 timestamps: false,
                 tableName: "ClassroomSeatingArrangements"
+            });
+
+        this.TokenCache = this.sequelize.define<TokenCacheInstance, TokenCacheAttributes>('TokenCache',
+            {
+                oid: Sequelize.STRING,
+                msgAccessToken: Sequelize.TEXT,
+                msgRefreshgToken: Sequelize.TEXT,
+                msgExpires: { type: Sequelize.BIGINT, allowNull: true },
+                aadgAccessToken: Sequelize.TEXT,
+                aadgRefreshgToken: Sequelize.TEXT,
+                aadgExpires: { type: Sequelize.BIGINT, allowNull: true },
+            },
+            {
+                timestamps: false,
+                tableName: "TokenCache"
             });
         
     }

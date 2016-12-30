@@ -15,7 +15,7 @@ export class Header implements OnInit {
     ifShowContextMenu: boolean;
     fullName: string;
 
-    constructor(private router: Router,@Inject('me') private meService) { }
+    constructor(private router: Router, @Inject('me') private meService, @Inject('auth') private authService) { }
 
     ngOnInit() {
         this.initUrlParts();
@@ -67,6 +67,13 @@ export class Header implements OnInit {
 
 
     showContextMenu() {
+        let isLogin = false;
+        for (var i = 0; i < this.urlParts.length; i++) {
+            if (this.urlParts[i].toLowerCase() == "login")
+                isLogin = true;
+        }
+        if (isLogin)
+            return;
         this.ifShowContextMenu = !(this.ifShowContextMenu);
     }
 

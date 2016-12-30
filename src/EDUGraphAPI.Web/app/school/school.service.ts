@@ -6,7 +6,7 @@ import { SchoolModel } from '../school/school';
 import { SvcConsts } from '../SvcConsts/SvcConsts'
 import { UserModel, StudentModel, TeacherModel } from '../school/user';
 import { ClassesModel, ClassesModelWithPagination } from '../school/classes';
-import { Document, OneDrive} from './document';
+import { Document, OneDrive } from './document';
 import { Conversation } from './conversation';
 import { SeatingArrangement } from './seatingarrangements'
 
@@ -16,7 +16,10 @@ export class SchoolService {
     private urlBase: string = SvcConsts.AAD_Graph_RESOURCE + '/' + SvcConsts.TENANT_ID;
     private bingMapUrl: string = "http://dev.virtualearth.net/REST/v1/Locations/US/{0}/{1}/{2}?output=json&key=" + SvcConsts.BING_MAP_KEY;
 
-    constructor(private http: Http, @Inject('auth') private authService, @Inject('data') private dataService) { }
+    constructor(private http: Http, @Inject('auth') private authService,
+        @Inject('data') private dataService) {
+
+    }
 
 
     /**
@@ -25,7 +28,8 @@ export class SchoolService {
      */
     getSchools(): any {
         return this.dataService.get(this.urlBase + "/administrativeUnits?api-version=beta")
-            .map((response: Response) => <SchoolModel[]>response.json().value);
+            .map((response: Response) => <SchoolModel[]>response.json().value)
+            ;
     }
 
     /**
@@ -94,7 +98,7 @@ export class SchoolService {
     * <returns></returns>
      */
     getClassById(classId: string) {
-        return this.dataService.get(this.urlBase + "/groups/" + classId+"?api-version=beta&$expand=members")
+        return this.dataService.get(this.urlBase + "/groups/" + classId + "?api-version=beta&$expand=members")
             .map((response: Response) => <ClassesModel>response.json());
     }
     /**
@@ -144,20 +148,20 @@ export class SchoolService {
     }
 
     getDocuments(classId: string) {
-        var url = SvcConsts.MS_GRAPH_RESOURCE +  "/v1.0/groups/" + classId + "/drive/root/children";
-        return this.dataService.getWithMsToken(url)
+        var url = SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/groups/" + classId + "/drive/root/children";
+        return this.dataService.get(url)
             .map((response: Response) => <Document[]>response.json().value);
     }
 
     getOneDriveWebURl(classId: string) {
         var url = SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/groups/" + classId + "/drive/root";
-        return this.dataService.getWithMsToken(url)
+        return this.dataService.get(url)
             .map((response: Response) => <OneDrive>response.json());
     }
 
     getConversation(classId: string) {
-        var url = SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/" + SvcConsts.TENANT_ID+"/groups/" + classId + "/conversations";
-        return this.dataService.getWithMsToken(url)
+        var url = SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/" + SvcConsts.TENANT_ID + "/groups/" + classId + "/conversations";
+        return this.dataService.get(url)
             .map((response: Response) => <Conversation[]>response.json().value);
     }
 
@@ -167,7 +171,7 @@ export class SchoolService {
             .map((response: Response) => <SeatingArrangement[]>response.json());
     }
 
-    saveSeatingArrangement(classId: string, seatingArrangements: SeatingArrangement[] ) {
+    saveSeatingArrangement(classId: string, seatingArrangements: SeatingArrangement[]) {
         var url = "/api/schools/seatingArrangements/" + classId;
         return this.dataService.post(url, seatingArrangements)
             .map(this.extractData);

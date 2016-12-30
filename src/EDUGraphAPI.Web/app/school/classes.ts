@@ -75,7 +75,14 @@ export class ClassesModel {
     public Students: UserModel[] = [];
     public Teachers: UserModel[] = [];
 
-    public CombinedCourseNumber: string;
+    public get CombinedCourseNumber(): string {
+        var result = this.CourseName.substring(0, 3).toUpperCase();
+        var regexp = new RegExp(/\d+/);
+        var dd = this.CourseName.match(regexp);
+        if (dd != null) result += dd[0];
+        return result;
+    }
+
     public UIHoverShowDetail: boolean = false;
     public IsMyClasses: boolean = false;
     constructor() {
@@ -102,7 +109,6 @@ export class ClassesModel {
         this.SyncSource = undefined;
         this.AnchorId = undefined;
         this.EducationStatus = undefined;
-        this.CombinedCourseNumber = undefined;
     }
 }
 

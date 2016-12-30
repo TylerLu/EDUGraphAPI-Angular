@@ -8,8 +8,9 @@ import { UserModel } from './user'
 import { ClassesModel } from './classes';
 import { Document, OneDrive } from './document';
 import { Conversation } from './conversation';
-import { SeatingArrangement } from './seatingarrangements'
-
+import { SeatingArrangement } from './seatingarrangements';
+import { CompareHelper } from '../utils/compareHelper';
+import * as moment from 'moment';
 
 @Component({
     selector: '',
@@ -25,7 +26,7 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
     me: UserModel;
     classEntity: ClassesModel;
     documents: Document[] = [];
-    favoriteColor: string = "";
+     favoriteColor: string = "";
     oneDriveURL: string = "";
     conversations: Conversation[] = [];
     seatingArrangements: SeatingArrangement[] = [];
@@ -34,8 +35,9 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
     isEditing: boolean = false;
     dragId: string = "";
 
-    constructor( @Inject('schoolService') private schoolService
-        , private route: ActivatedRoute, private router: Router) {
+    constructor( @Inject('schoolService') private schoolService, @Inject('userPhotoService') private userPhotoService, private route: ActivatedRoute, private router: Router,
+        @Inject('me') private meService
+    ) {
 
     }
 
@@ -61,56 +63,80 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
             .getMe()
             .subscribe((result) => {
                 this.me = MapUtils.deserialize(UserModel, result);
-            });
-        this.schoolService
-            .getSeatingArrangements(this.classObjectId)
-            .subscribe((result) => {
-                result.forEach((obj) => {
-                    this.seatingArrangements.push(MapUtils.deserialize(SeatingArrangement, obj));
-                });
-                this.schoolService
-                    .getClassById(this.classObjectId)
-                    .subscribe((result) => {
-                        this.classEntity = MapUtils.deserialize(ClassesModel, result);
-                        this.classEntity.IsMyClasses = true;
-                        this.classEntity.Users = [];
-                        result.members.forEach((obj) => {
-                            var user = MapUtils.deserialize(UserModel, obj);
-                            this.classEntity.Users.push(user);
-                            if (user.ObjectType == "Teacher") {
-                                this.classEntity.Teachers.push(user);
-                            }
-                            if (user.ObjectType == "Student") {
-                                this.classEntity.Students.push(user);
-                            }
-                        });
-                        this.classEntity.Students.forEach((stu) => {
-                            this.seatingArrangements.forEach((arrangment) => {
-                                if (stu.O365UserId == arrangment.o365UserId) {
-                                    stu.SeatingArrangment = arrangment.position+"";
-                                    stu.SeatingClass = "seated hideitem";
-                                    if (stu.SeatingArrangment != "0") {
-                                        stu.IsSeated = true;
-                                        stu.ContainerClass = "white";
-                                        stu.SeatingClass = "seated";
-                                    }
+                this.meService.getCurrentUser()
+                    .subscribe((user) => {
+                        this.favoriteColor = user.favoriteColor;
+                        if (this.me.ObjectType == 'Teacher') {
+                            $(".teacherdesk").css("background-color", user.favoriteColor);
+                        } else {
+                            $(".greenicon").css("background-color", user.favoriteColor);
+                        }
+                        this.schoolService
+                            .getSeatingArrangements(this.classObjectId)
+                            .subscribe((result) => {
+                                result.forEach((obj) => {
+                                    this.seatingArrangements.push(MapUtils.deserialize(SeatingArrangement, obj));
+                                });
+                                this.schoolService
+                                    .getClassById(this.classObjectId)
+                                    .subscribe((result) => {
+                                        this.classEntity = MapUtils.deserialize(ClassesModel, result);
+                                        this.classEntity.TermStartDate = moment.utc(this.classEntity.TermStartDate).local().format('MMMM D YYYY');
+                                        this.classEntity.TermEndDate = moment.utc(this.classEntity.TermEndDate).local().format('MMMM D YYYY');
+                                        this.classEntity.IsMyClasses = true;
+                                        this.classEntity.Users = [];
+                                        result.members.forEach((obj) => {
+                                            var user = MapUtils.deserialize(UserModel, obj);
+                                            this.userPhotoService.getUserPhotoUrl(user.O365UserId)
+                                                .then(url => user.Photo = url);
+                                            this.classEntity.Users.push(user);                                            
+                                            if (user.ObjectType == "Teacher") {
+                                                this.classEntity.Teachers.push(user);
+                                            }
+                                            if (user.ObjectType == "Student") {
+                                                this.classEntity.Students.push(user);
+                                            }
+                                        });
+                                        this.classEntity.Students.forEach((stu) => {
+                                            this.seatingArrangements.forEach((arrangment) => {
+                                                if (stu.O365UserId == arrangment.o365UserId) {
+                                                    stu.SeatingArrangment = arrangment.position + "";
+                                                    stu.SeatingClass = "seated hideitem";
+                                                    if (stu.SeatingArrangment != "0") {
+                                                        stu.IsSeated = true;
+                                                        stu.ContainerClass = "white";
+                                                        stu.SeatingClass = "seated";
+                                                    }
 
-                                    if (this.me.O365UserId == stu.O365UserId) {
-                                        stu.ContainerClass = "green";
-                                    }
-                                }
+                                                    if (this.me.O365UserId == stu.O365UserId) {
+                                                        stu.ContainerClass = this.favoriteColor;
+                                                    }
+                                                }
+                                            });
+                                        });
+                                        this.classEntity.Students.sort((n1, n2) => {
+                                            if (n1.DisplayName > n2.DisplayName) {
+                                                return 1;
+                                            }
+                                            if (n1.DisplayName < n2.DisplayName) {
+                                                return -1;
+                                            }
+                                            return 0;
+                                        })
+
+                                    });
                             });
-                        });
- 
-                        
+
                     });
             });
         this.schoolService
             .getDocuments(this.classObjectId)
             .subscribe((result) => {
                 result.forEach((obj) => {
-                    this.documents.push(MapUtils.deserialize(Document, obj));
-
+                    var doc = MapUtils.deserialize(Document, obj);
+                    doc.lastModifiedDateTime = moment(doc.lastModifiedDateTime).utc(true)
+                        .local().format('MM/DD/YYYY hh: mm: ss A');
+                    this.documents.push(doc);
                 });
             });
         
@@ -126,6 +152,8 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
                     this.conversations.push(MapUtils.deserialize(Conversation, obj));
                 });
             });
+
+
     }
 
     ngOnDestroy() {
@@ -325,6 +353,74 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
             item.off("dragstart dragend");
         }
         return item;
+    }
+
+    sortAsc: boolean = false;
+    sortStu(sortby: string) {
+        $("#students .table-green-header th").removeClass("headerSortDown").removeClass("headerSortUp");
+        if (sortby == 'name') {
+            if (this.sortAsc) {
+                $("#students .table-green-header th").first().addClass("headerSortDown");
+                this.sortAsc = false;
+            } else {
+                $("#students .table-green-header th").first().addClass("headerSortUp");
+                this.sortAsc = true;
+            }
+            var sort = CompareHelper.createComparer("DisplayName", this.sortAsc);
+            this.classEntity.Students.sort(sort);
+        }
+        else {
+            if (this.sortAsc) {
+                $("#students .table-green-header th").last().addClass("headerSortUp");
+                this.sortAsc = false;
+            } else {
+                $("#students .table-green-header th").last().addClass("headerSortDown");
+                this.sortAsc = true;
+            }
+            var sort = CompareHelper.createComparer("EducationGrade", this.sortAsc);
+            this.classEntity.Students.sort(sort);
+
+        }
+    }
+
+    sortDocAsc: boolean = false;
+    sortDoc(sortby: string) {
+        $("#studoc .table-green-header th").removeClass("headerSortDown").removeClass("headerSortUp");
+        if (sortby == 'name') {
+            if (this.sortDocAsc) {
+                $("#studoc .table-green-header th:eq(2)").addClass("headerSortDown");
+                this.sortDocAsc = false;
+            } else {
+                $("#studoc .table-green-header th:eq(2)").addClass("headerSortUp");
+                this.sortDocAsc = true;
+            }
+            var sort = CompareHelper.createComparer("Name", this.sortDocAsc);
+            this.documents.sort(sort);
+
+        }
+        else if (sortby == 'modified') {
+            if (this.sortDocAsc) {
+                $("#studoc .table-green-header th:eq(3)").addClass("headerSortDown");
+                this.sortDocAsc = false;
+            } else {
+                $("#studoc .table-green-header th:eq(3)").addClass("headerSortUp");
+                this.sortDocAsc = true;
+            }
+            var sort = CompareHelper.createComparer("lastModifiedDateTime", this.sortDocAsc);
+            this.documents.sort(sort);
+        }
+        else {
+            if (this.sortDocAsc) {
+                $("#studoc .table-green-header th:eq(4)").addClass("headerSortDown");
+                this.sortDocAsc = false;
+            } else {
+                $("#studoc .table-green-header th:eq(4)").addClass("headerSortUp");
+                this.sortDocAsc = true;
+            }
+            var sort = CompareHelper.createComparer("LastModifiedBy", this.sortDocAsc);
+            this.documents.sort(sort);
+
+        }
     }
 
 }

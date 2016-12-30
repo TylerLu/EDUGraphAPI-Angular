@@ -4,6 +4,9 @@ import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
+import { UserInfo } from '../models/common/userinfo';
+import { Cookie } from './cookieService';
+import { SvcConsts } from "../svcConsts/svcConsts"
 
 
 
@@ -12,6 +15,7 @@ import 'rxjs/add/operator/toPromise';
 export class MeService {
 
     private meAPIUrl = 'api/me';
+    private usersAPIUrl = 'api/users';
 
     constructor(private _http: Http, @Inject('auth') private authService) {
     }
@@ -31,4 +35,14 @@ export class MeService {
             });
     }
 
+    public isLocalAccount() {
+        let authType = Cookie.get(SvcConsts.LOGIN_TOKEN);
+        if (authType == null || authType == undefined)
+            return true;
+        return authType.toLowerCase() == "o365";
+    }
+
+    public isO365Account() {
+        return !this.isLocalAccount();
+    }
 }

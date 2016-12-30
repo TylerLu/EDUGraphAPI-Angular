@@ -1,34 +1,37 @@
-﻿<h2>Link Office 365 & Local Account</h2>
-<div *ngIf="isAccountsLinked==false">
-    <p>This page will enable you to link your Office 365 & Local Account together to successfully use the demo application.</p>
-    <div class="form-horizontal" id="linkAccountPrompt" *ngIf="isLocalAccount">
-        <hr />
-        <p>
-            <input type="submit" value="Use Existing O365 account" class="btn btn-primary" (click)="loginO365(this)"/> &nbsp; &nbsp;
-            <a class="btn btn-primary" href="/schools">Cancel</a>
-        </p>
-    </div>
-    <div *ngIf="isLocalAccount==false">
-        <hr />
-        <div class="form-horizontal">
-            <p *ngIf="localAccountExisted">{{localAccountExistedMessage}}</p>
+﻿<div class="link-component">
+    <h2>Link Office 365 & Local Account</h2>
+    <div *ngIf="areAccountsLinked==false">
+        <p>This page will enable you to link your Office 365 & Local Account together to successfully use the demo application.</p>
+        <div class="form-horizontal" id="linkAccountPrompt" *ngIf="isLocalAccount">
+            <hr />
             <p>
-                <a class="btn btn-primary" href="/loginLocal">Use Existing Local Account</a>
-                <input type="button"  [disabled]="localAccountExisted" value="Create Local Account" class="btn btn-primary" (click)="createLocalAccount(this)" /> 
-                &nbsp; &nbsp;
+                <input type="submit" value="Use Existing O365 account" class="btn btn-primary" (click)="loginO365(this)" /> &nbsp; &nbsp;
                 <a class="btn btn-primary" href="/schools">Cancel</a>
             </p>
         </div>
+        <div *ngIf="isLocalAccount==false">
+            <hr />
+            <div class="form-horizontal">
+                <p *ngIf="localAccountExisted">{{localAccountExistedMessage}}</p>
+                <p>
+                    <a class="btn btn-primary" href="/loginLocal">Use Existing Local Account</a>
+                    <input type="button" [disabled]="localAccountExisted" value="Create Local Account" class="btn btn-primary" (click)="createLocalAccount(this)" />
+                    &nbsp; &nbsp;
+                    <a class="btn btn-primary" href="/schools">Cancel</a>
+                </p>
+            </div>
+        </div>
     </div>
-</div>
-<div *ngIf="isAccountsLinked">
-    <p>Your local account and Office 365 account are now linked.</p>
-    <p>
-        <ul>
-            <li>Local account: {{userInfo.email}}</li>
-            <li>Office 365 account: {{userInfo.o365Email}}</li>
-        </ul>
-    <p>
-        <a class="btn btn-primary" href="/schools">Return to home</a>
-    </p>
+    <div *ngIf="areAccountsLinked">
+        <p>Your local account and Office 365 account are now linked.</p>
+        <p>
+            <ul>
+                <li>Local account: {{userInfo.email}}</li>
+                <li>Office 365 account: {{userInfo.o365Email}}</li>
+            </ul>
+        <p>
+            <a class="btn btn-primary" href="/schools">Return to home</a>
+        </p>
+    </div>
+
 </div>

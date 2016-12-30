@@ -404,7 +404,6 @@ top: -10px;cursor:pointer;}
 }
 .teacher-student .tiles-root-container .student-bg{background-color:#444444}
 .teacher-student .tiles-root-container .teacher-bg{background-color:#4DA143;}
-
 /* Pagination */
 .pagination{width:100%;text-align:center;}
 .pagination span{font-size:12px; color:#444344; background-color:transparent; margin:0 10px; font-family:'Helvetica Neue LT Std Bold'; cursor:pointer}
@@ -503,13 +502,15 @@ top: -10px;cursor:pointer;}
     text-align: center;
 }
 
+.body-content .link-component {padding-left:15px;}
+
 .nodata{width:100%;text-align:center;padding-top:20px; background-color:white;}
 .saveresult{margin-left:6px;color:green;}
 .tablesorter .header{background-image:url('../Images/arrow-all.png');background-repeat:no-repeat;background-position-y:center;background-size:10px;}
 .tablesorter .headerSortDown{background-image:url('../Images/arrow-up.png');background-repeat:no-repeat;background-position-y:center;background-size:10px;}
 .tablesorter .headerSortUp{background-image:url('../Images/arrow-down.png');background-repeat:no-repeat;background-position-y:center;background-size:10px;}
 .tablesorter .header:nth-child(1){background-position-x:137px;}
-.tablesorter .header:nth-child(2){background-position-x:64px;}
+.tablesorter .header:nth-child(2){background-position-x:69px;}
 #studoc .header:nth-child(3){background-position-x:150px;}
 #studoc .header:nth-child(4){background-position-x:90px;}
 #studoc .header:nth-child(5){background-position-x:115px;}

@@ -7,6 +7,8 @@ import { AuthHelper } from "../authHelper/authHelper";
 import { AdminService } from './admin.service';
 import { DataService } from '../services/DataService';
 import { AdminComponent } from './admin.component';
+import { LinkedAccountsComponent } from './linkedAccounts.component';
+import { UnlinkAccountComponent } from './unlinkAccount.component';
 import { routing } from './admin-routing';
 
 @NgModule({
@@ -16,7 +18,7 @@ import { routing } from './admin-routing';
         HttpModule,
         routing
     ],
-    declarations: [AdminComponent],
+    declarations: [AdminComponent, LinkedAccountsComponent, UnlinkAccountComponent],
     providers: [
         { provide: 'adminService', useClass: AdminService },
         { provide: 'auth', useClass: AuthHelper },

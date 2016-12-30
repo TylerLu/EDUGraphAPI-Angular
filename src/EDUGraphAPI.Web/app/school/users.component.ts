@@ -1,15 +1,15 @@
 ﻿import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SchoolModel } from './school'
-import {UserModel, StudentModel, TeacherModel} from './user'
+import { UserModel, StudentModel, TeacherModel } from './user'
 import { MapUtils } from '../services/jsonhelper'
 
 class UsersViewModel {
-    users: UserModel[];
+    users: UserModel[] = new Array<UserModel>();
     nextLink: string;
     curPage: number = 1;
     isGettingData: boolean = false;
-    getData(schoolService: any, id: string) {
+    getData(schoolService: any, userPhotoService: any, id: string) {
         if (this.isGettingData) {
             return;
         }
@@ -22,17 +22,19 @@ class UsersViewModel {
                 }
                 this.isGettingData = false;
                 this.nextLink = result["odata.nextLink"];
-                if (this.users === undefined) {
-                    this.users = new Array<UserModel>();
-                }
-                result.value.forEach((obj) => { this.users.push(MapUtils.deserialize(UserModel, obj)); });
+                result.value.forEach((obj) => {
+                    const model: UserModel = MapUtils.deserialize(UserModel, obj);
+                    this.users.push(model);
+                    userPhotoService.getUserPhotoUrl(model.O365UserId)
+                        .then(url => model.Photo = url);
+                });
             });
     }
 }
 
 class StudentsViewModel extends UsersViewModel {
-    users: StudentModel[];
-    getData(schoolService: any, id: string) {
+    users: StudentModel[] = new Array<StudentModel>();
+    getData(schoolService: any, userPhotoService: any, id: string) {
         if (this.isGettingData) {
             return;
         }
@@ -45,17 +47,19 @@ class StudentsViewModel extends UsersViewModel {
                 }
                 this.isGettingData = false;
                 this.nextLink = result["odata.nextLink"];
-                if (this.users === undefined) {
-                    this.users = new Array<StudentModel>();
-                }
-                result.value.forEach((obj) => { this.users.push(MapUtils.deserialize(StudentModel, obj)); });
+                result.value.forEach((obj) => {
+                    const model: StudentModel = MapUtils.deserialize(StudentModel, obj);
+                    this.users.push(model);
+                    userPhotoService.getUserPhotoUrl(model.O365UserId)
+                        .then(url => model.Photo = url);
+                });
             });
     }
 }
 
 class TeachersViewModel extends UsersViewModel {
-    users: TeacherModel[];
-    getData(schoolService: any, id: string) {
+    users: TeacherModel[] = new Array<TeacherModel>();
+    getData(schoolService: any, userPhotoService: any, id: string) {
         if (this.isGettingData) {
             return;
         }
@@ -69,10 +73,12 @@ class TeachersViewModel extends UsersViewModel {
                 }
                 this.isGettingData = false;
                 this.nextLink = result["odata.nextLink"];
-                if (this.users === undefined) {
-                    this.users = new Array<TeacherModel>();
-                }
-                result.value.forEach((obj) => { this.users.push(MapUtils.deserialize(TeacherModel, obj)); });
+                result.value.forEach((obj) => {
+                    const model: TeacherModel = MapUtils.deserialize(TeacherModel, obj);
+                    this.users.push(model);
+                    userPhotoService.getUserPhotoUrl(model.O365UserId)
+                        .then(url => model.Photo = url);
+                });
             });
     }
 }
@@ -94,6 +100,7 @@ export class UsersComponent implements OnInit {
     teachersModel: TeachersViewModel = new TeachersViewModel();
 
     constructor( @Inject('schoolService') private schoolService
+        , @Inject('userPhotoService') private userPhotoService
         , private route: ActivatedRoute, private router: Router) {
 
     }
@@ -108,9 +115,9 @@ export class UsersComponent implements OnInit {
                     this.school = MapUtils.deserialize(SchoolModel, result);
                 });
 
-            this.usersModel.getData(this.schoolService, this.schoolGuId);
-            this.studentsModel.getData(this.schoolService, this.schoolId);
-            this.teachersModel.getData(this.schoolService, this.schoolId);
+            this.usersModel.getData(this.schoolService, this.userPhotoService, this.schoolGuId);
+            this.studentsModel.getData(this.schoolService, this.userPhotoService, this.schoolId);
+            this.teachersModel.getData(this.schoolService, this.userPhotoService, this.schoolId);
         });
     }
 
@@ -132,7 +139,7 @@ export class UsersComponent implements OnInit {
                 model.curPage += 1;
             }
             else if (model.nextLink) {
-                model.getData(this.schoolService, id);
+                model.getData(this.schoolService, this.userPhotoService, id);
             }
         }
         else {

@@ -25,7 +25,9 @@
             'rxjs': 'npm:rxjs',
             'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
             'reflect-metadata': 'npm:reflect-metadata/Reflect.js',
-            'kurvejs': 'node_modules/kurvejs/dist/kurve.js'
+            'kurvejs': 'npm:kurvejs/dist/kurve.js',
+            'ng2-validation': 'npm:ng2-validation/dist',
+            'moment': 'npm:moment/moment.js'
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {
@@ -38,6 +40,11 @@
             },
             'angular2-in-memory-web-api': {
                 main: './index.js',
+                defaultExtension: 'js'
+            },
+            'ng2-validation': {
+                main: './index.js',
+                directives: './directives/',
                 defaultExtension: 'js'
             }
         }

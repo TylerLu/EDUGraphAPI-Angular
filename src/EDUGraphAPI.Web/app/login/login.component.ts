@@ -32,17 +32,20 @@ export class Login implements OnInit {
             .filter(route => route.outlet === 'primary')
             .mergeMap(route => route.data)
             .subscribe((event) => {
-                if (this.auth.access_token !== null) {
+                if (this.auth.IsLogin()) {
                     this.router.navigate(['schools']);
                 }
                 else {
-                    this.router.navigate(['login']);
+                    if (this.router.url != "/register") {
+                        this.router.navigate(['login']);
+                    } else {
+                        this.router.navigate(['register']);
+                    }
                 }
             });
 
 
     }
-
 
     login() {
         this.auth.login();
@@ -53,4 +56,7 @@ export class Login implements OnInit {
         //});
     }
 
+    gotoRegister() {
+        this.router.navigate(["register"]);
+    }
 }

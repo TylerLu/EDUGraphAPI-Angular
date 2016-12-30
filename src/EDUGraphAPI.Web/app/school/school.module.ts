@@ -5,7 +5,8 @@ import { FormsModule } from '@angular/forms';
 
 import { AuthHelper } from "../authHelper/authHelper";
 import { SchoolService } from './school.service';
-import { DataService } from '../services/DataService';
+import { DataService } from '../services/dataService';
+import { UserPhotoService } from '../services/userPhotoService';
 import { SchoolComponent } from './school.component';
 import { routing } from './school-routing';
 import { ClassesComponent } from './classes.component';
@@ -28,6 +29,7 @@ import { CustomPosition, CustomUserId, CustomRealHeader, CustomPrevPosition} fro
         { provide: 'schoolService', useClass: SchoolService },
         { provide: 'auth', useClass: AuthHelper },
         { provide: 'dataService', useClass: DataService },
+        { provide: 'userPhotoService', useClass: UserPhotoService }
     ],
     bootstrap: [SchoolComponent]
 })

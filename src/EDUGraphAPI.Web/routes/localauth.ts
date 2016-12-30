@@ -10,14 +10,14 @@ interface ILocalAccountAuthResult {
 
 import express = require('express');
 import cache = require('memory-cache');
-import authenticateSrv = require('../services/authenticateService');
+import authenticateSrv = require('../services/localAuthService');
 import * as Promise from "bluebird";
 var router: any = express.Router();
 import { UserService } from '../services/userService';
 
 var userSrv = new UserService();
 
-router.post('/authenticate/:action', function (req: express.Request, res: express.Response) {
+router.post('/localauth/:action', function (req: express.Request, res: express.Response) {
     const email: string = req.body.Email,
         password: string = req.body.Password,
         authorizationCode: string = req.body.authorizationCode,
@@ -46,8 +46,6 @@ function signIn(email: string, password: string): Promise<ILocalAccountAuthResul
             if (user) {
                 cache.put(user.Id, true);
 
-                //Get access token 
-                //TO DO
                 result = { status: "success", authorizationCode: authenticateSrv.GetAuthorizationCode(user.Id), accessToken: '' };
             }
             else {

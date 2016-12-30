@@ -53,10 +53,14 @@ export class UserService {
         return this.dbContext.User.findById(userId);
     }
 
-    public getUserModelById(userId: string): Promise<any> {
+    public getUserModel(where: any): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.dbContext.User.findById(userId)
+            this.dbContext.User.findOne({ where: where })
                 .then(user => {
+                    if (user == null) {
+                        resolve(null);
+                        return;
+                    }
                     var result = {
                         id: user.id,
                         firstName: user.firstName,
@@ -88,23 +92,28 @@ export class UserService {
     public getLinkedUsers(): Promise<UserInstance[]> {
         return this.dbContext.User.findAll({
             where: {
-                o365UserId: { $notIn: [null, ''] },
-                o365Email: { $notIn: [null, ''] }
+                $and: [{
+                    o365UserId: { $ne: null },
+                    o365Email: { $ne: null }
+                },
+                {
+                    o365UserId: { $ne: '' },
+                    o365Email: { $ne: '' }
+                }]
             }
         });
     }
 
-    public updateUser(user: any): Promise<void> {
+    public updateUser(userId: string, user: any): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            this.getUserById(user.id).then(u => {
+            this.getUserById(userId).then(u => {
                 let promises = new Array<Promise<any>>();
-
                 // update basic info
                 if (user.firstName != undefined) u.firstName = user.firstName;
                 if (user.lastName != undefined) u.lastName = user.lastName;
                 if (user.o365UserId != undefined) u.o365UserId = user.o365UserId;
                 if (user.o365Email != undefined) u.o365Email = user.o365Email
-                if (user.favoriteColor != undefined) u.favoriteColor = user.favoriteColor;                
+                if (user.favoriteColor != undefined) u.favoriteColor = user.favoriteColor;
                 promises.push(u.save().catch(reject));
 
                 // update or create organization

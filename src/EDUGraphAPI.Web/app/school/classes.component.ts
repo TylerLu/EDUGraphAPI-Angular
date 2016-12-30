@@ -81,14 +81,6 @@ export class ClassesComponent implements OnInit {
                     this.classesArray = [];
                 }
                 result.value.forEach((obj) => { this.classesArray.push(MapUtils.deserialize(ClassesModel, obj)); });
-                this.classesArray.forEach((obj) => {
-                    obj.CombinedCourseNumber = obj.CourseName.substring(0, 3).toUpperCase();
-                    var regexp = new RegExp(/\d+/);
-                    var dd = obj.CourseName.match(regexp);
-                    if (dd != null) {
-                        obj.CombinedCourseNumber += dd[0];
-                    }
-                });
                 this.schoolService.getMyClasses(this.schoolId)
                     .subscribe((result) => {
                         if (this.myClassesArray === undefined) {

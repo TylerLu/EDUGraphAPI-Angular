@@ -24,6 +24,8 @@ export class UserModel {
     @JsonProperty("extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId")
     public StudentId: string;
 
+    public Photo: string;
+
     public IsSeated: boolean = false;
     public SeatingClass: string = "seated hideitem";
     public ContainerClass: string = "unsaved";
@@ -38,6 +40,7 @@ export class UserModel {
         this.O365UserId = undefined;
         this.TeacherId = undefined;
         this.StudentId = undefined;
+        this.Photo = undefined;
     }
 }
 
