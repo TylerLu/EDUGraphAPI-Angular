@@ -162,7 +162,7 @@
             "ida:ClientId": "[parameters('clientId')]",
             "ida:ClientSecret": "[parameters('clientSecret')]",
             "SourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]",
-            "command": "src/EDUGraphAPI.Web/deploy.cmd"
+            "command": "src\\EDUGraphAPI.Web\\deploy.cmd" 
           }
         },
         {
