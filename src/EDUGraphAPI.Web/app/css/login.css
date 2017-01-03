@@ -1,4 +1,6 @@
 ﻿.containerbg{height:100%;}
+.container{width:100% !important;}
+.container.body-content{height :100% !important;}
 .body-content{background-image:url('/app/Images/longin-bg.jpg') ; background-size:cover; margin:0;width:100%;}
 .container>div.row{background-color:transparent;}
 .loginbody{margin:auto;padding:110px 15px 0 15px;max-width:1200px;}

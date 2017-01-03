@@ -19,7 +19,7 @@ export class UserPhotoService {
                         type: 'GET',
                         headers: { 'Authorization': 'Bearer ' + result.accesstoken },
                         mimeType: "text/plain; charset=x-user-defined",
-                        success: function (data) {                      
+                        success: function (data) {
                             var dataUrl = `data:image/jpeg;base64,${ConvertHelper.BinaryToBase64(data)}`;
                             resolve(dataUrl);
                         },

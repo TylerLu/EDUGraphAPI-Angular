@@ -24,11 +24,10 @@
     </div>
     <div *ngIf="areAccountsLinked">
         <p>Your local account and Office 365 account are now linked.</p>
-        <p>
-            <ul>
-                <li>Local account: {{userInfo.email}}</li>
-                <li>Office 365 account: {{userInfo.o365Email}}</li>
-            </ul>
+        <ul>
+            <li>Local account: {{userInfo.email}}</li>
+            <li>Office 365 account: {{userInfo.o365Email}}</li>
+        </ul>
         <p>
             <a class="btn btn-primary" href="/schools">Return to home</a>
         </p>

@@ -6,7 +6,10 @@ import * as Promise from "bluebird";
 import * as Models from '../data/models';
 import * as bcrypt from 'bcryptjs';
 
-import organizationService = require('../services/organizationService');
+import * as request from 'superagent';
+import * as MicrosoftGraph from "microsoft-graph-typings"
+
+import { TokenCacheService } from '../services/TokenCacheService';
 
 export class UserService {
 
@@ -178,5 +181,60 @@ export class UserService {
 
     public getAccessToken(resource: string): Promise<string> {
         return Promise.resolve('');
+    }
+
+    public getAccessTokenByUserId(userId: string): Promise<string> {
+        return new Promise<string>((resolve, reject) => {
+            let tokenService = new TokenCacheService();
+            tokenService.getTokenCacheByOID(userId)
+                .then((cach) => {
+                    resolve(cach.msgAccessToken);
+                })
+                .catch(reject);
+        });
+    }
+
+    public linkExstingLocalUser(o386User:any, localEmail: string, localPassword: string): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+
+            this.dbContext.User
+                .findOne({ where: { email: localEmail } })
+                .then(user => {
+                    if (user != null && bcrypt.hashSync(localPassword, user.salt) == user.passwordHash) {
+                        if (user.o365UserId != null && user.o365UserId.length > 0) {
+                            reject("The local account has already been linked to another Office 365 account.")
+                        }
+                        else {
+                            this.getAccessTokenByUserId(o386User.oid)
+                                .then((accessToken) => {
+                                    //let client = GraphClient.init({
+                                    //    authProvider: (done) => {
+                                    //        done(null, accessToken);
+                                    //    }
+                                    //});
+                                    //client.api("/me")
+                                    //    .get((err, user: MicrosoftGraph.User) => {
+                                    //        if (err) reject(err);
+
+                                    //    })
+
+                                })
+                                //.catch()
+                        }
+                    }
+                    else {
+                        reject("Invalid login attempt.")
+                    }
+                })
+                .catch((erro) => {
+                    reject(erro);
+                })
+        });
+    }
+
+    public linkCreateLocalUser(o386User: any, localEmail: string, localPassword: string): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+
+        });
     }
 }

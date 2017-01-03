@@ -1,50 +1,49 @@
-﻿<div class="containerbg">
-    <div class="container body-content form-horizontal">
-        <h2>Register.</h2>
+﻿        <h2>Register.</h2>
         <form #form="ngForm">
             <h4>Create a new account.</h4>
             <hr />
-            <div class="validation-summary-valid text-danger">
-                <ul>
-                    <li [hidden]="!email.errors?.email || (email.pristine && !form.submitted)">The Email field is not a valid e-mail address.</li>
-                    <li [hidden]="!email.errors?.required || (email.pristine && !form.submitted)">The Email field is required.</li>
-                    <li [hidden]="!password.errors?.minlength || (password.pristine && !form.submitted)">The Password must be at least 6 characters long.</li>
-                    <li [hidden]="!password.errors?.maxlength || (password.pristine && !form.submitted)">The Password must be at most 100 characters long.</li>
-                    <li [hidden]="!password.errors?.required || (password.pristine && !form.submitted)">The Password field is required.</li>
-                    <li [hidden]="!confirmPassword.errors?.equalTo || (confirmPassword.pristine && !form.submitted)">The password and confirmation password do not match.</li>
-                </ul>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="Email">Email</label>
-                <div class="col-md-10">
-                    <input [(ngModel)]="model.email" #email="ngModel" class="form-control" id="Email" name="Email" email required>
+            <div class="register">
+                <div class="validation-summary-valid text-danger">
+                    <ul>
+                        <li [hidden]="!email.errors?.email || (email.pristine && !form.submitted)">The Email field is not a valid e-mail address.</li>
+                        <li [hidden]="!email.errors?.required || (email.pristine && !form.submitted)">The Email field is required.</li>
+                        <li [hidden]="!password.errors?.minlength || (password.pristine && !form.submitted)">The Password must be at least 6 characters long.</li>
+                        <li [hidden]="!password.errors?.maxlength || (password.pristine && !form.submitted)">The Password must be at most 100 characters long.</li>
+                        <li [hidden]="!password.errors?.required || (password.pristine && !form.submitted)">The Password field is required.</li>
+                        <li [hidden]="!confirmPassword.errors?.equalTo || (confirmPassword.pristine && !form.submitted)">The password and confirmation password do not match.</li>
+                    </ul>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="Password">Password</label>
-                <div class="col-md-10">
-                    <input [(ngModel)]="model.password" #password="ngModel" class="form-control" id="Password" name="Password" type="password" minlength="6" maxlength="100" required>
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="Email">Email</label>
+                    <div class="col-md-10">
+                        <input [(ngModel)]="model.email" #email="ngModel" class="form-control" id="Email" name="Email" email required>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="ConfirmPassword">Confirm password</label>
-                <div class="col-md-10">
-                    <input [(ngModel)]="model.ConfirmPassword" #confirmPassword="ngModel" class="form-control" id="ConfirmPassword" name="ConfirmPassword" type="password" [equalTo]="password">
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="Password">Password</label>
+                    <div class="col-md-10">
+                        <input [(ngModel)]="model.password" #password="ngModel" class="form-control" id="Password" name="Password" type="password" minlength="6" maxlength="100" required>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="FavoriteColor">Favorite color</label>
-                <div class="col-md-10">
-                    <select name="FavoriteColor" id="FavoriteColor" class="form-control" [(ngModel)]="model.favoriteColor">
-                        <option *ngFor="let color of model.FavoriteColors" [value]="color.Value">{{color.DisplayName}}</option>
-                    </select>
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="ConfirmPassword">Confirm password</label>
+                    <div class="col-md-10">
+                        <input [(ngModel)]="model.ConfirmPassword" #confirmPassword="ngModel" class="form-control" id="ConfirmPassword" name="ConfirmPassword" type="password" [equalTo]="password">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="button" class="btn btn-default" value="Register" [disabled]="!form.valid || form.pristine" (click)="createLocalUser()">
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="FavoriteColor">Favorite color</label>
+                    <div class="col-md-10">
+                        <select name="FavoriteColor" id="FavoriteColor" class="form-control" [(ngModel)]="model.favoriteColor">
+                            <option *ngFor="let color of model.FavoriteColors" [value]="color.Value">{{color.DisplayName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" class="btn btn-default" value="Register" [disabled]="!form.valid || form.pristine" (click)="createLocalUser()">
+                    </div>
                 </div>
             </div>
         </form>
-    </div>
-</div>
+

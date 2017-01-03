@@ -46,6 +46,9 @@
                 main: './index.js',
                 directives: './directives/',
                 defaultExtension: 'js'
+            },
+            dist: {
+                defaultExtension: 'js'
             }
         }
     });

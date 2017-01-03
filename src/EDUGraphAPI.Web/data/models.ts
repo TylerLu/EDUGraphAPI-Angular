@@ -1,5 +1,5 @@
 ﻿// UserInfo
-export interface UserInfoAttributes {
+export interface O365UserInfoAttributes {
     id?: string;
     givenName?: string;
     surname?: string;

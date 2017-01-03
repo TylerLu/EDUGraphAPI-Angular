@@ -12,9 +12,11 @@ export class UserService {
         this.authToken = authService.access_token;
     }
 
-    public unlinkAccount(id:string) {
-        return this._http.get(this.usersAPIUrl +'/:'+id+'/unlink', {})
-            .map((response: Response) => response.json());
+    public unlinkAccount(id: string) {
+        return this._http.post(`${this.usersAPIUrl}/${id}/unlink`, {})
+            .map((response: Response) => {
+                return response.ok;
+            });
     }
 
     public getLinkedAccounts() {

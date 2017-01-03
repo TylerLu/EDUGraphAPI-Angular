@@ -1,8 +1,4 @@
-﻿<div class="containerbg stucontainer">
-
-
-    <div class="container body-content">
-
+﻿
 
         <div class="row schools class-details">
             <div class="tophero">
@@ -130,7 +126,7 @@
                                     </div>
                                     <ul id="lstproducts" *ngIf="classEntity">
                                         <li *ngFor="let stu of classEntity.Students" id="{{stu.O365UserId}}">
-                                            <img src="{{stu.O365UserId}}" realheader="/Photo/UserPhoto/ecbff977-3a95-4c72-a597-6464634aa5d0"> <span class="disname"> {{stu.DisplayName}} </span> <span class="{{stu.SeatingClass}}">seated ✓</span>
+                                            <img [src]="stu.Photo || 'app/images/header-default.jpg'"> <span class="disname"> {{stu.DisplayName}} </span> <span class="{{stu.SeatingClass}}">seated ✓</span>
                                         </li>
                                     </ul>
 
@@ -138,7 +134,7 @@
                                         <div *ngFor="let stu of classEntity.Students" [position]="stu.SeatingArrangment" [userid]="stu.O365UserId" class="deskcontainer " [style.background-color]="stu.ContainerClass">
                                             <div class="deskclose" [hidden]="!isEditing"><img src="/app/Images/close.png"></div>
                                             <div class="deskicon">
-                                                <img src="/app/images/header-default.jpg" />
+                                                <img [src]="stu.Photo || 'app/images/header-default.jpg'" />
                                             </div>
                                             <div class="stuname">{{stu.DisplayName}}</div>
                                         </div>
@@ -170,6 +166,3 @@
             </div>
             <br style="clear:both;"/>
         </div>
-        <footer></footer>
-    </div>
-</div>

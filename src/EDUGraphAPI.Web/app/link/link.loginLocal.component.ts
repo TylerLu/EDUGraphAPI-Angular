@@ -8,9 +8,9 @@ import { SvcConsts } from '../SvcConsts/SvcConsts';
 
 
 @Component({
+    moduleId: module.id,
     selector: 'link-loginLocal',
-    templateUrl: '/app/link/link.loginLocal.component.template.html',
-    styleUrls: ['app/css/bootstrap.min.css', 'app/css/Site.css']
+    templateUrl: 'link.loginLocal.component.template.html'
 })
 
 export class LinkLoginLocal implements OnInit {
@@ -45,6 +45,14 @@ export class LinkLoginLocal implements OnInit {
     loginLocal() {
         if (!this.checkValid())
             return;
+        this.linkService.linkLocalUser(this.loginLocalModel.email, this.loginLocalModel.password)
+                        .subscribe((result) => {
+                            if (result.success) {
+                                this.router.navigate(["schools"]);
+                            } else {
+                                this.errorMsgs = result.erroMsgs;
+                            }    
+                        });
     }
 
 }

@@ -25,14 +25,15 @@ export class MeService {
             .map((response: Response) => response.json());
     }
 
-    public updateFavoriteColor(favoriteColor: string,doneFn) {
-        this.getCurrentUser()
-            .subscribe((user) => {
-                user.favoriteColor = favoriteColor;
-                this._http.post(this.meAPIUrl, user)
-                    .map((response: Response) => response)
-                    .subscribe(() => { doneFn(); });
-            });
+    public updateFavoriteColor(favoriteColor): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.getCurrentUser()
+                .subscribe((user) => {
+                    user.favoriteColor = favoriteColor;
+                    this._http.post(this.meAPIUrl, user)
+                        .subscribe((response) => resolve(response));
+                });
+        });
     }
 
     public isLocalAccount() {

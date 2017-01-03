@@ -7,8 +7,9 @@ import { UrlHelper } from '../utils/urlHelper';
 
 
 @Component({
+    moduleId: module.id,
     selector: 'admin',
-    templateUrl: '/app/admin/admin.component.template.html',
+    templateUrl: 'admin.component.template.html',
     styleUrls: []
 })
 
@@ -21,13 +22,25 @@ export class AdminComponent implements OnInit {
     public error: string;
     public message: string;
 
-    constructor( @Inject('adminService') private adminService: AdminService, private router: Router) {
+    constructor( @Inject('adminService') private adminService: AdminService, private router: Router,
+        @Inject('auth') private auth
+    ) {
 
     }
 
     ngOnInit() {
-        this.initMessage();
-        this.IsAdminConsented = true;
+        if (!this.auth.IsLogin()) {
+            this.auth.reLogin();
+        }
+        this.adminService.getAdmin()
+            .subscribe((result) => {
+                if (!this.adminService.isAdmin(result)) {
+                    this.auth.reLogin();
+                } else {
+                    this.initMessage();
+                    this.IsAdminConsented = true;
+                }
+            });
     }
 
     consent() {

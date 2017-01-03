@@ -5,17 +5,26 @@ import { UserModel, StudentModel, TeacherModel } from './user'
 import { MapUtils } from '../services/jsonhelper'
 
 class UsersViewModel {
+    private static cache = {};
+    private userPhotoService: any;
+    private id: string;
+
+    constructor(id: string, userPhotoService: any) {
+        this.id = id;
+        this.userPhotoService = userPhotoService;
+    }
+
     users: UserModel[] = new Array<UserModel>();
     nextLink: string;
     curPage: number = 1;
     isGettingData: boolean = false;
-    getData(schoolService: any, userPhotoService: any, id: string) {
+
+    getData(usersGetter: (id: string, nextLink: string) => any) {
         if (this.isGettingData) {
             return;
         }
         this.isGettingData = true;
-        schoolService
-            .getUsers(id, this.nextLink)
+        usersGetter(this.id, this.nextLink)
             .subscribe((result) => {
                 if (this.nextLink) {
                     this.curPage += 1;
@@ -25,99 +34,85 @@ class UsersViewModel {
                 result.value.forEach((obj) => {
                     const model: UserModel = MapUtils.deserialize(UserModel, obj);
                     this.users.push(model);
-                    userPhotoService.getUserPhotoUrl(model.O365UserId)
-                        .then(url => model.Photo = url);
+                    const userId: string = model.O365UserId;
+                    var cachedItem = UsersViewModel.cache[userId];
+                    if (!cachedItem) {
+                        cachedItem = UsersViewModel.cache[userId] = { queue: new Array<UserModel>(model)};
+                        this.userPhotoService.getUserPhotoUrl(userId)
+                            .then(url => {
+                                cachedItem["data"] = url;
+                                cachedItem.queue.forEach(user => { user.Photo = url; });
+                            });
+                    }
+                    else if (!cachedItem.data) {
+                        cachedItem.queue.push(model);
+                    }
+                    else {
+                        model.Photo = cachedItem.data;
+                    }
                 });
             });
     }
-}
 
-class StudentsViewModel extends UsersViewModel {
-    users: StudentModel[] = new Array<StudentModel>();
-    getData(schoolService: any, userPhotoService: any, id: string) {
-        if (this.isGettingData) {
-            return;
+    changePage(usersGetter: (id: string, nextLink: string) => any, isNext: boolean) {
+        if (isNext) {
+            if (this.curPage * 12 < this.users.length) {
+                this.curPage += 1;
+            }
+            else if (this.nextLink) {
+                this.getData(usersGetter);
+            }
         }
-        this.isGettingData = true;
-        schoolService
-            .getStudents(id, this.nextLink)
-            .subscribe((result) => {
-                if (this.nextLink) {
-                    this.curPage += 1;
-                }
-                this.isGettingData = false;
-                this.nextLink = result["odata.nextLink"];
-                result.value.forEach((obj) => {
-                    const model: StudentModel = MapUtils.deserialize(StudentModel, obj);
-                    this.users.push(model);
-                    userPhotoService.getUserPhotoUrl(model.O365UserId)
-                        .then(url => model.Photo = url);
-                });
-            });
-    }
-}
-
-class TeachersViewModel extends UsersViewModel {
-    users: TeacherModel[] = new Array<TeacherModel>();
-    getData(schoolService: any, userPhotoService: any, id: string) {
-        if (this.isGettingData) {
-            return;
+        else {
+            if (this.curPage > 1) {
+                this.curPage -= 1;
+            }
         }
-
-        this.isGettingData = true;
-        schoolService
-            .getTeachers(id, this.nextLink)
-            .subscribe((result) => {
-                if (this.nextLink) {
-                    this.curPage += 1;
-                }
-                this.isGettingData = false;
-                this.nextLink = result["odata.nextLink"];
-                result.value.forEach((obj) => {
-                    const model: TeacherModel = MapUtils.deserialize(TeacherModel, obj);
-                    this.users.push(model);
-                    userPhotoService.getUserPhotoUrl(model.O365UserId)
-                        .then(url => model.Photo = url);
-                });
-            });
     }
 }
 
 @Component({
+    moduleId: module.id,
     selector: '',
-    templateUrl: '/app/school/users.component.template.html',
+    templateUrl: 'users.component.template.html',
     styleUrls: []
 })
 
 export class UsersComponent implements OnInit {
     private sub: any;
-    schoolGuId: string;
-    schoolId: string;
+
     school: SchoolModel;
     view: string = "users";
-    usersModel: UsersViewModel = new UsersViewModel();
-    studentsModel: StudentsViewModel = new StudentsViewModel();
-    teachersModel: TeachersViewModel = new TeachersViewModel();
+    usersModel: UsersViewModel;
+    studentsModel: UsersViewModel;
+    teachersModel: UsersViewModel;
 
     constructor( @Inject('schoolService') private schoolService
         , @Inject('userPhotoService') private userPhotoService
         , private route: ActivatedRoute, private router: Router) {
-
     }
 
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
-            this.schoolGuId = params['id'];
-            this.schoolId = params['id2'];
+            const objectId: string = params['id'];
+            const Id: string = params['id2'];
             this.schoolService
-                .getSchoolById(this.schoolGuId)
+                .getSchoolById(objectId)
                 .subscribe((result) => {
                     this.school = MapUtils.deserialize(SchoolModel, result);
                 });
-
-            this.usersModel.getData(this.schoolService, this.userPhotoService, this.schoolGuId);
-            this.studentsModel.getData(this.schoolService, this.userPhotoService, this.schoolId);
-            this.teachersModel.getData(this.schoolService, this.userPhotoService, this.schoolId);
+            if (!this.usersModel) {
+                this.usersModel = new UsersViewModel(objectId, this.userPhotoService);
+            }
+            if (!this.studentsModel) {
+                this.studentsModel = new UsersViewModel(Id, this.userPhotoService);
+            }
+            if (!this.teachersModel) {
+                this.teachersModel = new UsersViewModel(Id, this.userPhotoService);
+            }
+            this.usersModel.getData(this.schoolService.getUsers.bind(this.schoolService));
+            this.studentsModel.getData(this.schoolService.getStudents.bind(this.schoolService));
+            this.teachersModel.getData(this.schoolService.getTeachers.bind(this.schoolService));
         });
     }
 
@@ -129,23 +124,21 @@ export class UsersComponent implements OnInit {
         this.view = view;
     }
 
-    changePage(model: UsersViewModel, isNext: boolean) {
-        let id: string = this.schoolGuId;
-        if (model instanceof StudentsViewModel || model instanceof TeachersViewModel) {
-            id = this.schoolId;
+    changePage(userType: string, model: UsersViewModel, id: string, isNext: boolean) {
+        let usersGetter: (id: string, nextLink: string) => any;
+        switch (userType) {
+            case "users":
+                usersGetter = this.schoolService.getUsers.bind(this.schoolService);
+                break;
+            case "teachers":
+                usersGetter = this.schoolService.getStudents.bind(this.schoolService);
+                break;
+            case "students":
+                usersGetter = this.schoolService.getTeachers.bind(this.schoolService);
+                break;
+            default:
+                return;
         }
-        if (isNext) {
-            if (model.curPage * 12 < model.users.length) {
-                model.curPage += 1;
-            }
-            else if (model.nextLink) {
-                model.getData(this.schoolService, this.userPhotoService, id);
-            }
-        }
-        else {
-            if (model.curPage > 1) {
-                model.curPage -= 1;
-            }
-        }
+        model.changePage(usersGetter, isNext);
     }
 }

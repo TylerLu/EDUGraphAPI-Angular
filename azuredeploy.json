@@ -162,7 +162,7 @@
             "ida:ClientId": "[parameters('clientId')]",
             "ida:ClientSecret": "[parameters('clientSecret')]",
             "SourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]",
-            "project": "src/EDUGraphAPI/EDUGraphAPI.csproj"
+            "command": "src/EDUGraphAPI.Web/deploy.cmd"
           }
         },
         {
@@ -188,50 +188,6 @@
             "[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]",
             "[resourceId('Microsoft.Web/Sites/config', variables('webSiteName'), 'appsettings')]",
             "[resourceId('Microsoft.Web/Sites/config', variables('webSiteName'), 'connectionstrings')]"
-          ],
-          "properties": {
-            "RepoUrl": "[parameters('sourceCodeRepositoryURL')]",
-            "branch": "[parameters('sourceCodeBranch')]",
-            "IsManualIntegration": "parameters('sourceCodeManualIntegration')]"
-          }
-        }
-      ],
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.Web/sites",
-      "name": "[variables('apiSiteName')]",
-      "apiVersion": "2015-08-01",
-      "location": "[variables('location')]",
-      "properties": {
-        "name": "[variables('apiSiteName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
-      },
-      "resources": [
-        {
-          "apiVersion": "2015-08-01",
-          "type": "config",
-          "name": "appsettings",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites/', variables('apiSiteName'))]"
-          ],
-          "properties": {
-            "ida:ClientId": "[parameters('clientId')]",
-            "ida:ClientSecret": "[parameters('clientSecret')]",
-            "SourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]",
-            "APIUrl": "[concat('https://', variables('apiSiteName'), '.azurewebsites.net')]",
-            "project": "src/EDUGraphAPI/EDUGraphAPI.API.njsproj"
-          }
-        },
-        {
-          "apiVersion": "2015-08-01",
-          "name": "web",
-          "type": "sourcecontrols",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites/', variables('apiSiteName'))]",
-            "[resourceId('Microsoft.Web/Sites/config', variables('apiSiteName'), 'appsettings')]"
           ],
           "properties": {
             "RepoUrl": "[parameters('sourceCodeRepositoryURL')]",

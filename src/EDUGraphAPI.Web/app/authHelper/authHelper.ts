@@ -24,6 +24,11 @@ export class AuthHelper {
         }
     }
 
+    public reLogin() {
+        Cookie.delete(SvcConsts.LOGIN_TOKEN);
+        this.router.navigate(['login']);
+    }
+
     public getAccessToken() {
         return this.get("/api/getaccesstoken?resource=https%3A%2F%2Fgraph.windows.net")
             .map((response: Response) => <TokenEntity>response.json());

@@ -28,8 +28,7 @@ export class SchoolService {
      */
     getSchools(): any {
         return this.dataService.get(this.urlBase + "/administrativeUnits?api-version=beta")
-            .map((response: Response) => <SchoolModel[]>response.json().value)
-            ;
+            .map((response: Response) => <SchoolModel[]>response.json().value);
     }
 
     /**
@@ -103,7 +102,6 @@ export class SchoolService {
     }
     /**
      * Get all users of a school.
-     * Get all users of a school.
      * @param  {string} schoolId Identification of the school
      * @param  {string} nextLink next link in the previous response for next page
      * Reference URL: https://msdn.microsoft.com/en-us/office/office365/api/school-rest-operations#get-school-members
@@ -147,6 +145,11 @@ export class SchoolService {
             .map((response: Response) => <TeacherModel[]>response.json());
     }
 
+    /**
+     * Get all documents from OneDrive.
+     * @param classId
+     * Reference URL: https://dev.onedrive.com/items/list.htm.
+     */
     getDocuments(classId: string) {
         var url = SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/groups/" + classId + "/drive/root/children";
         return this.dataService.get(url)
@@ -159,6 +162,11 @@ export class SchoolService {
             .map((response: Response) => <OneDrive>response.json());
     }
 
+    /**
+     * Get a group's conversations.
+     * @param classId
+     * Reference URL: https://graph.microsoft.io/en-us/docs/api-reference/v1.0/api/group_list_threads.
+     */
     getConversation(classId: string) {
         var url = SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/" + SvcConsts.TENANT_ID + "/groups/" + classId + "/conversations";
         return this.dataService.get(url)

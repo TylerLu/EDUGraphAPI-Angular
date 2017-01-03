@@ -13,8 +13,9 @@ import { CompareHelper } from '../utils/compareHelper';
 import * as moment from 'moment';
 
 @Component({
+    moduleId: module.id,
     selector: '',
-    templateUrl: '/app/school/classdetail.component.template.html',
+    templateUrl: 'classdetail.component.template.html',
     styleUrls: []
 })
 

@@ -5,9 +5,9 @@ import { UserInfo } from '../models/common/userinfo';
 
 
 @Component({
+    moduleId: module.id,
     selector: 'linkPage',
-    templateUrl: '/app/link/link.component.template.html',
-    styleUrls: ['app/css/bootstrap.min.css', 'app/css/Site.css']
+    templateUrl: 'link.component.template.html',
 })
 
 export class Link implements OnInit {

@@ -21,12 +21,15 @@ var config = require('./config');
 var meRoute = require("./routes/me");
 var usersRoute = require("./routes/users");
 var schoolsRoute = require("./routes/schools");
+var linkRoute = require("./routes/link");
 var localauthRoute = require("./routes/localauth");
+
 
 var app = express();
 
 // Angular 2
 app.use("/app", express.static(path.join(__dirname, 'app')));
+app.use("/dist", express.static(path.join(__dirname, 'dist')));
 app.use("/node_modules", express.static(path.join(__dirname, 'node_modules'), { maxAge: 1000 * 60 * 60 * 24 }));
 app.use("/fonts", express.static(path.join(__dirname, 'app/fonts'), { maxAge: 1000 * 60 * 60 * 24 }));
 app.get("/styles.css", function (req, res) {
@@ -102,7 +105,7 @@ passport.use(new OIDCStrategy({
     }
     profile.authType = 'O365';
     req.res.cookie('authType', 'O365');
- 
+
     if (params.resource.toLowerCase() == windowsGraphResourceUrl.toLowerCase()) {
         tokenCache.updateMSGToken(profile.oid, access_token, refresh_token, params.expires_on * 1000);
     }
@@ -143,6 +146,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/me', ensureAuthenticated, meRoute);
 app.use('/api/users', ensureAuthenticated, usersRoute);
 app.use('/api/schools', ensureAuthenticated, schoolsRoute);
+app.use('/api/link', ensureAuthenticated, linkRoute);
 app.post('/api/authenticate/:action', localauthRoute);
 
 //-----------------------------------------------------------------------------
@@ -274,8 +278,9 @@ app.get('/api/getaccesstoken', function (req, res) {
     }
 });
 
+var indexPage = app.get('env') === 'development' ? 'index.html' : 'index.prod.html';
 app.get('/*', function (req, res) {
-    res.sendfile(path.join(__dirname, 'index.html'));
+    res.sendfile(path.join(__dirname, indexPage));
 });
 
 // catch 404 and forward to error handler

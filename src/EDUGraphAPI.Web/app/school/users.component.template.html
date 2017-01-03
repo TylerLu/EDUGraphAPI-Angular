@@ -49,8 +49,8 @@
                     </div>
                 </div>
                 <div *ngIf="usersModel.nextLink || usersModel.users.length > 12" class="pagination">
-                    <span class="prev" [ngClass]="{'current' : usersModel.curPage === 1, 'disabled': usersModel.isGettingData}" (click)="changePage(usersModel, false)">Previous</span>
-                    <span class="next" [ngClass]="{'current' : !usersModel.nextLink && usersModel.curPage *12 >= usersModel.users.length, 'disabled': usersModel.isGettingData}" (click)="changePage(usersModel, true)">Next</span>
+                    <span class="prev" [ngClass]="{'current' : usersModel.curPage === 1, 'disabled': usersModel.isGettingData}" (click)="changePage('users', usersModel, false)">Previous</span>
+                    <span class="next" [ngClass]="{'current' : !usersModel.nextLink && usersModel.curPage *12 >= usersModel.users.length, 'disabled': usersModel.isGettingData}" (click)="changePage('users', usersModel, true)">Next</span>
                 </div>
             </div>
         </div>
@@ -66,8 +66,8 @@
                     </div>
                 </div>
                 <div *ngIf="studentsModel.nextLink || studentsModel.users.length > 12" class="pagination">
-                    <span class="prev" [ngClass]="{'current' : studentsModel.curPage === 1, 'disabled': studentsModel.isGettingData}" (click)="changePage(studentsModel, false)">Previous</span>
-                    <span class="next" [ngClass]="{'current' : !studentsModel.nextLink && studentsModel.curPage *12 >= studentsModel.users.length, 'disabled': studentsModel.isGettingData}" (click)="changePage(studentsModel, true)">Next</span>
+                    <span class="prev" [ngClass]="{'current' : studentsModel.curPage === 1, 'disabled': studentsModel.isGettingData}" (click)="changePage('students', studentsModel, false)">Previous</span>
+                    <span class="next" [ngClass]="{'current' : !studentsModel.nextLink && studentsModel.curPage *12 >= studentsModel.users.length, 'disabled': studentsModel.isGettingData}" (click)="changePage('students', studentsModel, true)">Next</span>
                 </div>
             </div>
         </div>
@@ -83,8 +83,8 @@
                     </div>
                 </div>
                 <div *ngIf="teachersModel.nextLink || teachersModel.users.length > 12" class="pagination">
-                    <span class="prev" [ngClass]="{'current' : teachersModel.curPage === 1, 'disabled': teachersModel.isGettingData}" (click)="changePage(teachersModel, false)">Previous</span>
-                    <span class="next" [ngClass]="{'current' : !teachersModel.nextLink && teachersModel.curPage *12 >= teachersModel.users.length, 'disabled': teachersModel.isGettingData}" (click)="changePage(teachersModel, true)">Next</span>
+                    <span class="prev" [ngClass]="{'current' : teachersModel.curPage === 1, 'disabled': teachersModel.isGettingData}" (click)="changePage('teachers', teachersModel, false)">Previous</span>
+                    <span class="next" [ngClass]="{'current' : !teachersModel.nextLink && teachersModel.curPage *12 >= teachersModel.users.length, 'disabled': teachersModel.isGettingData}" (click)="changePage('teachers', teachersModel, true)">Next</span>
                 </div>
             </div>
         </div>

@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 
 
 @Component({
+    moduleId: module.id,
     selector: 'header',
-    templateUrl: '/app/header/header.component.template.html',
-    styleUrls: ['app/css/bootstrap.min.css','app/css/Site.css']
+    templateUrl: 'header.component.template.html',
 })
 
 export class Header implements OnInit {

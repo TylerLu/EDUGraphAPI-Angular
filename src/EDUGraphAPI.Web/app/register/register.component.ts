@@ -4,8 +4,9 @@ import {RegisterModel} from './register'
 
 
 @Component({
+    moduleId: module.id,
     selector: '',
-    templateUrl: '/app/register/register.component.template.html',
+    templateUrl: 'register.component.template.html',
     styles: []
 })
 

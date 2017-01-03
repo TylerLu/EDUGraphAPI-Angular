@@ -8,9 +8,9 @@ import { SvcConsts } from '../SvcConsts/SvcConsts';
 
 
 @Component({
+    moduleId: module.id,
     selector: 'link-local',
-    templateUrl: '/app/link/link.createLocal.component.template.html',
-    styleUrls: ['app/css/bootstrap.min.css', 'app/css/Site.css']
+    templateUrl: 'link.createLocal.component.template.html'
 })
 
 export class LinkCreateLocal implements OnInit {
@@ -48,9 +48,12 @@ export class LinkCreateLocal implements OnInit {
     createLocal() {
         if (!this.checkValid())
             return;
-        this.userInfo.favoriteColor = this.localModel.favoriteColor;
-        this.userInfo.password = this.localModel.password;
-        this.userService.createLocalAccount(this.userInfo);
+        this.linkService.createLocalUser(this.userInfo.email, this.localModel.password, this.localModel.favoriteColor)
+            .subscribe((result) => {
+                if (result.success) {
+                    this.router.navigate(["schools"]);
+                } 
+            });
     }
 
 }

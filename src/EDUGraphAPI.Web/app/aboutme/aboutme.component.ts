@@ -9,8 +9,9 @@ import { SvcConsts } from '../SvcConsts/SvcConsts';
 
 
 @Component({
+    moduleId: module.id,
     selector: '',
-    templateUrl: '/app/aboutme/aboutme.component.template.html',
+    templateUrl: 'aboutme.component.template.html',
     styles: []
 })
 
@@ -47,7 +48,6 @@ export class AboutMe implements OnInit {
     }
 
     updateFavoriteColor() {
-        this.aboutMeservice.updateFavoriteColor(this.model.MyFavoriteColor, function () {
-        });
+        this.aboutMeservice.updateFavoriteColor(this.model.MyFavoriteColor).then((response) => { });
     }
 }

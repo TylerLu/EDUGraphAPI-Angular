@@ -9,11 +9,12 @@ import { UserModel } from './user'
 
 
 @Component({
+    moduleId: module.id,
     selector: 'schools-list',
     host: {
         '(document:click)': 'showMap($event)',
     },
-    templateUrl: '/app/school/school.component.template.html',
+    templateUrl: 'school.component.template.html',
     styleUrls: []
 })
 

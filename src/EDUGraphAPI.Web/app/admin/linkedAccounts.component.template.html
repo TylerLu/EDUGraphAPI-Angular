@@ -6,11 +6,11 @@
             <th>Office 365 Account</th>
             <th></th>
         </tr>
-        <tr *ngFor="let account of accounts">
+        <tr *ngFor="let account of accounts; let i = index">
             <td>{{account.email}}</td>
             <td>{{account.o365Email}}</td>
             <td>
-                <a href="javascript:void(0)" (click)="gotoUnlink(account.id)">Unlink</a>
+                <a href="javascript:void(0)" (click)="unlink(account, i)">Unlink</a>
             </td>
         </tr>
     </tbody>

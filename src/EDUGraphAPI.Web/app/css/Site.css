@@ -188,9 +188,9 @@ textarea {
 .schools .table-schools .table-green-header th {font-family: 'Helvetica Neue LT Std Bold';}
 
 .ignore{display:none;}
-.container>div.row{height:100%;background-color:#fff;}
-.container.body-content{height:100%; background-color:#fff;}
-.schools{height:100%;background-color:#fff;padding:0;}
+.container>div.row{background-color:#fff;}
+.container.body-content{ background-color:#fff;height:auto;}
+.schools{background-color:#fff;padding:0;}
 .schools .toptiles{float:right;padding-left: 15px;}
 .hr-green{border: 0;height: 10px;margin-top: 10px;}
 
@@ -428,7 +428,7 @@ top: -10px;cursor:pointer;}
     float: left;
     width: 65px;
     height: 77px;
-    background: url(app/images/demo-helper-header-expanded.png) 15px 9px no-repeat white;      
+    background: url(/app/images/demo-helper-header-expanded.png) 15px 9px no-repeat white;      
     padding: 47px 4px 4px 4px;
     text-align: center;    
     font-family: 'Helvetica Neue LT Std Bold';
@@ -443,7 +443,7 @@ top: -10px;cursor:pointer;}
     box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.75);
 }
 .demo-helper-control.collapsed .header {
-    background: url(app/images/demo-helper-header-collapsed.png) 15px 9px no-repeat white;
+    background: url(/app/images/demo-helper-header-collapsed.png) 15px 9px no-repeat white;
 } 
 
 .demo-helper-control .header-right-shadow-mask {        
@@ -516,3 +516,4 @@ top: -10px;cursor:pointer;}
 #studoc .header:nth-child(5){background-position-x:115px;}
 
 .blanktr th{border:none !important;height:20px;visibility:hidden}
+.register .form-group{width:100%;float:left;}

@@ -8,9 +8,9 @@ import { SvcConsts } from '../SvcConsts/SvcConsts';
 
 
 @Component({
+    moduleId: module.id,
     selector: 'link-loginO365Requried',
-    templateUrl: '/app/link/link.loginO365Required.component.template.html',
-    styleUrls: ['app/css/bootstrap.min.css', 'app/css/Site.css']
+    templateUrl: 'link.loginO365Required.component.template.html'
 })
 
 export class LinkLoginO365Requried implements OnInit {

@@ -12,25 +12,40 @@ export class AdminService {
 
 
     private getMeUrl = SvcConsts.AAD_Graph_RESOURCE + '/' + SvcConsts.TENANT_ID + "/me?api-version=1.5";
+    private getAdminUrl = '/api/me';
 
-    
     constructor(private http: Http, @Inject('auth') private authService, @Inject('data') private dataService) { }
 
 
     getAdmin(): any {
+        return this.dataService.get(this.getAdminUrl)
+            .map((response: Response) => <any>response.json());
+    }
+
+    getMe(): any {
         return this.dataService.get(this.getMeUrl)
             .map((response: Response) => <UserModel>response.json());
     }
 
+    isAdmin(result): boolean {
+        return true;
+        //if (!result || !result.roles || result.roles == 'undefined' || result.roles.length == 0) {
+        //    return false;
+        //}
+        //else {
+        //    return true;
+        //}
+    }
+
     consent() {
-        var redirectUrl = `${window.location.protocol}/${window.location.host}${window.location.pathname}`;
+        var redirectUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
         var url = AuthorizationHelper.getUrl(
             'id_token',
-            window.location.href,
-            this.generateNonce(),
+            redirectUrl,
+            AuthorizationHelper.generateNonce(),
             Constants.MSGraphResource,
             Prompt.AdminConsent,
-            this.generateNonce());
+            AuthorizationHelper.generateNonce());
         window.location.href = url;
     }
 
@@ -39,7 +54,7 @@ export class AdminService {
         console.log('unconsent');
     }
 
-    linkedAccounts(){
+    linkedAccounts() {
         // tbd
         console.log('linkedAccounts');
     }
@@ -48,14 +63,4 @@ export class AdminService {
         // tbd
         console.log('addAppRoleAssignments');
     }
-
-    private generateNonce(): string {
-        var text = "";
-        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        for (var i = 0; i < 32; i++) {
-            text += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return text;
-    }
-
 }

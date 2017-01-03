@@ -43,9 +43,7 @@ export class AboutMeService {
      * Get current users's classes.
      * Reference URL: 
      */
-    updateFavoriteColor(color: string): any {
-        this.meService.updateFavoriteColor(color, function () {
-            console.log('updated');
-        });
+    updateFavoriteColor(color: string): Promise<any> {
+        return this.meService.updateFavoriteColor(color);
     }
 }

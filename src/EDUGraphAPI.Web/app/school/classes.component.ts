@@ -7,8 +7,9 @@ import { ClassesModel } from './classes';
 
 
 @Component({
+    moduleId: module.id,
     selector: '',
-    templateUrl: '/app/school/classes.component.template.html',
+    templateUrl: 'classes.component.template.html',
     styleUrls: []
 })
 

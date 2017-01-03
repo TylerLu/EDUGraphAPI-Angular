@@ -2,9 +2,10 @@
 import { Tab } from './tab';
 
 @Component({
+    moduleId: module.id,
     selector: 'tabs',
-    templateUrl: 'app/tabs/tabs.html',
-    styleUrls:['app/tabs/tabs.css'],
+    templateUrl: 'tabs.html',
+    styleUrls: ['../../app/tabs/tabs.css'],
 })
 export class Tabs implements AfterContentInit {
 

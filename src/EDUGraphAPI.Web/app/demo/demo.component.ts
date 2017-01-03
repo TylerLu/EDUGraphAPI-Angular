@@ -7,9 +7,9 @@ import { MapUtils } from '../services/jsonhelper';
 
 
 @Component({
+    moduleId: module.id,
     selector: 'demo',
-    templateUrl: '/app/demo/demo.component.template.html',
-    styleUrls: ['app/css/bootstrap.min.css', 'app/css/Site.css']
+    templateUrl: 'demo.component.template.html'
 })
 
 export class Demo implements OnInit {
