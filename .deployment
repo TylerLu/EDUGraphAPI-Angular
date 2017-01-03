@@ -1,2 +1,2 @@
 [config]
-command = %REPOSITORY_ROOT%\src\EDUGraphAPI.Web\deploy.cmd
+command = deploy.cmd
