@@ -1,2 +1,2 @@
 [config]
-command = src/EDUGraphAPI.Web.njsproj/deploy.cmd
+command = deploy.cmd
