@@ -119,7 +119,8 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 echo D
 
 :: 4. Gulp
-	IF EXIST "%DEPLOYMENT_TARGET%\gulpfile.js" (
+COPY "%DEPLOYMENT_SOURCE%\gulpfile.js" "%DEPLOYMENT_TARGET%"
+IF EXIST "%DEPLOYMENT_TARGET%\gulpfile.js" (
 echo D2
 	 pushd "%DEPLOYMENT_TARGET%"
 	 call .\node_modules\.bin\gulp build
