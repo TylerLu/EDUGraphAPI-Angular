@@ -112,11 +112,13 @@ echo C
 
 echo D
 
-  call :ExecuteCmd !NPM_CMD! install --production
+  call :ExecuteCmd !NPM_CMD! install
 
 
   :: 4. Gulp
-IF EXIST "Gulpfile.js" (
+IF EXIST "gulpfile.js" (
+
+echo D2
  pushd "%DEPLOYMENT_TARGET%"
  call .\node_modules\.bin\gulp imagemin
  IF !ERRORLEVEL! NEQ 0 goto error
