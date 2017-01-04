@@ -119,7 +119,8 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 echo D
 
 :: 4. Gulp
-	IF EXIST "gulpfile.js" (
+	IF EXIST ""%DEPLOYMENT_TARGET%\gulpfile.js" (
+echo D2
 	 pushd "%DEPLOYMENT_TARGET%"
 	 call .\node_modules\.bin\gulp build
 	 IF !ERRORLEVEL! NEQ 0 goto error
