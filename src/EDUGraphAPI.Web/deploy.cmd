@@ -86,17 +86,16 @@ goto :EOF
 :: ----------
 
 :Deployment
-echo Handling node.js deployment.333
-echo 4444
+echo Handling node.js deployment.
  
 :: 1. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  echo 555
   echo %DEPLOYMENT_SOURCE%
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%\src\EDUGraphAPI.Web" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
+  echo 666
   IF !ERRORLEVEL! NEQ 0 goto error
 )
-
+echo 777
 :: 2. Select node version
 call :SelectNodeVersion
 
