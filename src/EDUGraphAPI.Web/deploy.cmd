@@ -94,47 +94,28 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
-echo A
-
 :: 2. Select node version
 call :SelectNodeVersion
 
 
-echo B
-
 :: 3. Install npm packages
 IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 
-echo C
-
   pushd "%DEPLOYMENT_TARGET%"
-
-
-echo D
-
   call :ExecuteCmd !NPM_CMD! install
-
-
-  :: 4. Gulp
-IF EXIST "gulpfile.js" (
-
-echo D2
- pushd "%DEPLOYMENT_TARGET%"
- call .\node_modules\.bin\gulp imagemin
- IF !ERRORLEVEL! NEQ 0 goto error
- popd
- 
- )
-
-
-echo E
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
 )
 
+:: 4. Gulp
+	IF EXIST "gulpfile.js" (
+	 pushd "%DEPLOYMENT_TARGET%"
+	 call .\node_modules\.bin\gulp build
+	 IF !ERRORLEVEL! NEQ 0 goto error
+	 popd
+)
 
 echo F
-
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
