@@ -124,7 +124,7 @@ export class UsersComponent implements OnInit {
         this.view = view;
     }
 
-    changePage(userType: string, model: UsersViewModel, id: string, isNext: boolean) {
+    changePage(userType: string, model: UsersViewModel, isNext: boolean) {
         let usersGetter: (id: string, nextLink: string) => any;
         switch (userType) {
             case "users":

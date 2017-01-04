@@ -2,14 +2,12 @@
 var https = require("https");
 var cookieSession = require('cookie-session');
 var express = require("express");
-//var expressSession = require("express-session");
 var passport = require("passport");
 var path = require("path");
 var favicon = require("serve-favicon");
 var logger = require("morgan");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
-var azureADAuthSrv = require('./services/azureADAuthService');
 import { TokenCacheService } from './services/tokenCacheService';
 
 var fs = require("fs");
@@ -20,6 +18,7 @@ var config = require('./config');
 
 var meRoute = require("./routes/me");
 var usersRoute = require("./routes/users");
+var registerRoute = require("./routes/register");
 var schoolsRoute = require("./routes/schools");
 var linkRoute = require("./routes/link");
 var localauthRoute = require("./routes/localauth");
@@ -109,7 +108,7 @@ passport.use(new OIDCStrategy({
     if (params.resource.toLowerCase() == windowsGraphResourceUrl.toLowerCase()) {
         tokenCache.updateMSGToken(profile.oid, access_token, refresh_token, params.expires_on * 1000);
     }
-    if (params.resource.toLowerCase() == AADGraphResourceUrl) {
+    if (params.resource.toLowerCase() == AADGraphResourceUrl.toLowerCase()) {
         tokenCache.updateAADGToken(profile.oid, access_token, refresh_token, params.expires_on * 1000);
     }
     // asynchronous verification, for effect...
@@ -145,9 +144,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // APIs
 app.use('/api/me', ensureAuthenticated, meRoute);
 app.use('/api/users', ensureAuthenticated, usersRoute);
+app.use('/api/register', registerRoute);
 app.use('/api/schools', ensureAuthenticated, schoolsRoute);
 app.use('/api/link', ensureAuthenticated, linkRoute);
-app.post('/api/authenticate/:action', localauthRoute);
 
 //-----------------------------------------------------------------------------
 // Set up the route controller
@@ -162,7 +161,6 @@ app.post('/api/authenticate/:action', localauthRoute);
 //-----------------------------------------------------------------------------
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        res.setHeader("client-authenticate-flag", "authenticated");
         return next();
     }
     else if (req.baseUrl.startsWith("/api/")) {
@@ -171,10 +169,6 @@ function ensureAuthenticated(req, res, next) {
     res.redirect('/');
 }
 
-// '/account' is only available to logged in user
-app.get('/account', ensureAuthenticated, function (req, res) {
-    res.render('account', { user: req.user });
-});
 var option_windowsGraph = {
     resourceURL: windowsGraphResourceUrl,
     customState: 'my_state',
@@ -185,14 +179,11 @@ var option_windowsGraph = {
     failureRedirect: '/'
 };
 app.get('/o365login', function (req, res) {
+    req.session.authtokentype = 'aadgraph';
     res.redirect('/o365login/aadgraph');
 });
-app.get('/o365login/aadgraph', passport.authenticate('azuread-openidconnect', option_AAdGraph), function (req, res) {
-    res.redirect('/o365login/windowsgraph');
-});
-app.get('/o365login/windowsgraph', passport.authenticate('azuread-openidconnect', option_windowsGraph), function (req, res) {
-    res.redirect('/');
-});
+app.get('/o365login/aadgraph', passport.authenticate('azuread-openidconnect', option_AAdGraph));
+app.get('/o365login/windowsgraph', passport.authenticate('azuread-openidconnect', option_windowsGraph));
 // 'GET returnURL'
 // `passport.authenticate` will try to authenticate the content returned in
 // query (such as authorization code). If authentication fails, user will be
@@ -205,14 +196,13 @@ app.get('/auth/openid/return', passport.authenticate('azuread-openidconnect', { 
 // body (such as authorization code). If authentication fails, user will be
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
 app.post('/auth/openid/return', passport.authenticate('azuread-openidconnect', { failureRedirect: '/' }), function (req, res) {
-    var resource = getQueryString('resource', querystring.unescape(url.parse(req.headers['referer']).query));
-    if (resource == AADGraphResourceUrl) {
+    if (req.session.authtokentype == 'aadgraph') {
+        req.session.authtokentype = null;
         res.redirect('/o365login/windowsgraph');
     }
-    if (resource == windowsGraphResourceUrl) {
+    else {
         res.redirect('/');
     }
-    res.redirect('/');
 });
 // 'logout' route, logout from passport, and destroy the session with AAD.
 app.get('/logout', function (req, res) {
@@ -221,57 +211,30 @@ app.get('/logout', function (req, res) {
     req.session = null;
     res.redirect(config.destroySessionUrl + req.protocol + '://' + req.get('host'));
 });
+// 'Local auth' route
+app.post('/account/login', localauthRoute);
 
 //web api for get access token
 app.get('/api/getaccesstoken', function (req, res) {
     if (req.isAuthenticated()) {
         let oid = req.user.oid;
-        tokenCache.getTokenCacheByOID(oid)
-            .then((tokenObject) => {
-                switch (req.query["resource"]) {
-                    case windowsGraphResourceUrl:
-                        if ((new Date()).getTime() < tokenObject.msgExpires - 5 * 60 * 1000) {
-                            res.json({
-                                accesstoken: tokenObject.msgAccessToken,
-                                expires: tokenObject.msgExpires
-                            });
-                        }
-                        else {
-                            azureADAuthSrv.getAccessToeknViaRefreshToken(tokenObject.msgRefreshgToken).then((result) => {
-                                tokenObject.msgAccessToken = result.access_token;
-                                tokenObject.msgExpires = result.expires_on * 1000;
-                                tokenObject.save();
-                                res.json({
-                                    accesstoken: tokenObject.msgAccessToken,
-                                    expires: tokenObject.msgExpires
-                                });
-                            });
-                        }
-                        break;
-                    case AADGraphResourceUrl:
-                        if ((new Date()).getTime() < tokenObject.aadgExpires - 5 * 60 * 1000) {
-                            res.json({
-                                accesstoken: tokenObject.aadgAccessToken,
-                                expires: tokenObject.aadgExpires
-                            });
-                        }
-                        else {
-                            azureADAuthSrv.getAccessToeknViaRefreshToken(tokenObject.aadgRefreshgToken).then((result) => {
-                                tokenObject.aadgAccessToken = result.access_token;
-                                tokenObject.aadgExpires = result.expires_on * 1000;
-                                tokenObject.save();
-                                res.json({
-                                    accesstoken: tokenObject.aadgAccessToken,
-                                    expires: tokenObject.aadgExpires
-                                });
-                            });
-                        }
-                        break;
-                    default:
-                        res.json({ error: "resource is invalid" });
-                        break;
-                }
-            });
+        switch (req.query["resource"]) {
+            case windowsGraphResourceUrl:
+                tokenCache.getMSAccessToken(oid)
+                    .then((result) => {
+                        res.json(result);
+                    });
+                break;
+            case AADGraphResourceUrl:
+                tokenCache.getAADAccessToken(oid)
+                    .then((result) => {
+                        res.json(result);
+                    });
+                break;
+            default:
+                res.json({ error: "resource is invalid" });
+                break;
+        }
     }
     else {
         res.json({ error: "401 unauthorized" });

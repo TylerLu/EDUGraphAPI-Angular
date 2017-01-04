@@ -32,10 +32,10 @@ export class LinkService {
 
 
     linkLocalUser(email:string,password:string) {
-        var body = this.getPostBodyWithParams({
+        var body = {
             email: email,
-            password:password  
-        });
+            password: password
+        };
         return this.http.post(this.linkUrl + "/ExistingLocalUser", body)
             .map((response: Response) => response.json());
     }

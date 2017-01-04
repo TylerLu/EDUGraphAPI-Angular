@@ -14,17 +14,13 @@ import { UrlHelper } from '../utils/urlHelper';
 })
 
 export class AdminComponent implements OnInit {
-    
     me: AdminModel;
     IsAdminConsented: boolean;
-
-
-    public error: string;
-    public message: string;
+    error: string;
+    message: string;
 
     constructor( @Inject('adminService') private adminService: AdminService, private router: Router,
-        @Inject('auth') private auth
-    ) {
+        @Inject('auth') private auth) {
 
     }
 
@@ -56,7 +52,16 @@ export class AdminComponent implements OnInit {
     }
 
     addAppRoleAssignments() {
-        this.adminService.addAppRoleAssignments();
+        this.adminService.addAppRoleAssignments().then((result) => {
+            if (result.ok) {
+                this.message = result.message;
+            }
+            else {
+                this.error = result.message;
+            }
+        }).catch((result) => {
+            this.error = result.message;
+        });
     }
 
     private initMessage() {
@@ -71,7 +76,4 @@ export class AdminComponent implements OnInit {
             this.message = 'Admin consented successfully!';
 
     }
-
-
-
 }

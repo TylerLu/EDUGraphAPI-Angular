@@ -3,7 +3,7 @@ import https = require('https');
 import querystring = require('querystring');
 var config = require('../config');
 
-export function getAccessToeknViaRefreshToken(refreshToken: string): Promise<string> {
+export function getAccessTokenViaRefreshToken(refreshToken: string): Promise<string> {
     return new Promise<any>((resolve, reject) => {
         var postData = querystring.stringify({
             refresh_token: refreshToken,
@@ -15,7 +15,7 @@ export function getAccessToeknViaRefreshToken(refreshToken: string): Promise<str
         var options = {
             hostname: 'login.microsoftonline.com',
             port: 443,
-            path: '/canvizEDU.onmicrosoft.com/oauth2/token',
+            path: '/common/oauth2/token',
             method: 'POST',
             headers:
             {
@@ -30,11 +30,9 @@ export function getAccessToeknViaRefreshToken(refreshToken: string): Promise<str
                 result += chunk;
             });
             res.on('end', function () {
-                console.log(JSON.parse(result).access_token);
                 resolve(JSON.parse(result));
             });
             res.on('error', function (err) {
-                console.log(err);
                 reject(err);
             })
         });

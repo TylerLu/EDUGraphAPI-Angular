@@ -69,7 +69,11 @@ export class MyClassesComponent implements OnInit {
     hideDetail(classEntity) {
         classEntity.UIHoverShowDetail = false;
     }
-
+    gotoDetail(objectId: string) {
+        setTimeout(() => {
+            this.router.navigate(['/classdetail', this.schoolGuId, objectId]);
+        }, 100);
+    }
     gotoAllClasses() {
         this.router.navigate(['classes', this.schoolGuId, this.schoolId]);
     }

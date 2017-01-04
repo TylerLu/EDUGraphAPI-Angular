@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../node_modules/bingmaps/scripts/MicrosoftMaps/Microsoft.Maps.d.ts" />
 /// <reference path="../../node_modules/@types/jquery/index.d.ts" />
-import { Component, OnInit, Inject, OnDestroy, AfterViewChecked  } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, AfterViewChecked, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SchoolModel } from './school'
 import { MapUtils } from '../services/jsonhelper'
@@ -19,7 +19,7 @@ import * as moment from 'moment';
     styleUrls: []
 })
 
-export class ClassDetailComponent implements OnInit, AfterViewChecked  {
+export class ClassDetailComponent implements OnInit, AfterContentInit  {
     schoolGuId: string;
     private sub: any;
     school: SchoolModel;
@@ -49,6 +49,7 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
         this.sub = this.route.params.subscribe(params => {
             this.iniData(params);
         });
+       
     }
 
     iniData(params) {
@@ -164,8 +165,13 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
         this.router.navigate(['classes', school.ObjectId, school.SchoolId]);
     }
 
-    ngAfterViewChecked() {
-        this.iniTiles();
+    ngAfterContentInit() {
+        var interval = setInterval(() => {
+            if (this.classEntity && this.classEntity.Students && this.classEntity.Students.length > 0) {
+                this.iniTiles();
+                clearInterval(interval);
+            }
+        },1000);
     }
     iniTiles() {
         $(".deskcontainer:not([ng-reflect-position='0']").each(function () {
@@ -173,9 +179,7 @@ export class ClassDetailComponent implements OnInit, AfterViewChecked  {
             var tile = $(".desktile[ng-reflect-position='" + position + "']")
             $(this).appendTo(tile);
         });
-
-
-    }
+     }
     editseats() {
         this.isEditing = true;
         this.enableDragAndDrop();

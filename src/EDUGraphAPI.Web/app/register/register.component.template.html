@@ -16,13 +16,13 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="Email">Email</label>
                     <div class="col-md-10">
-                        <input [(ngModel)]="model.email" #email="ngModel" class="form-control" id="Email" name="Email" email required>
+                        <input [(ngModel)]="model.UserInfo.email" #email="ngModel" class="form-control" id="Email" name="Email" email required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="Password">Password</label>
                     <div class="col-md-10">
-                        <input [(ngModel)]="model.password" #password="ngModel" class="form-control" id="Password" name="Password" type="password" minlength="6" maxlength="100" required>
+                        <input [(ngModel)]="model.UserInfo.password" #password="ngModel" class="form-control" id="Password" name="Password" type="password" minlength="6" maxlength="100" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="FavoriteColor">Favorite color</label>
                     <div class="col-md-10">
-                        <select name="FavoriteColor" id="FavoriteColor" class="form-control" [(ngModel)]="model.favoriteColor">
+                        <select name="FavoriteColor" id="FavoriteColor" class="form-control" [(ngModel)]="model.UserInfo.favoriteColor">
                             <option *ngFor="let color of model.FavoriteColors" [value]="color.Value">{{color.DisplayName}}</option>
                         </select>
                     </div>

@@ -6,7 +6,7 @@ import { UserService } from '../services/userService';
 
 var userService = new UserService();
 
-router.post('/ExstingLocalUser', function (req, res) {
+router.post('/ExistingLocalUser', function (req, res) {
     var u = req.user;
     if (u.authType == 'O365') {
         var localUser = req.body;
@@ -18,7 +18,7 @@ router.post('/ExstingLocalUser', function (req, res) {
 
     }
     else {
-        res.json(500, { error: "Wrong TBD!!" });
+        res.json(500, { error: "Invalid login attempt." });
     }
 });
 

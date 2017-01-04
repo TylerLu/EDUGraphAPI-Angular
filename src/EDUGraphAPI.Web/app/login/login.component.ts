@@ -5,6 +5,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import { AuthenticationHelper } from '../utils/authenticationHelper';
+import { UserInfo } from '../models/common/userInfo'
 
 
 @Component({
@@ -48,8 +49,13 @@ import { AuthenticationHelper } from '../utils/authenticationHelper';
 
 export class Login implements OnInit {
 
-    private files = [];
-    constructor( @Inject('auth') private auth, private router: Router, private activatedRoute: ActivatedRoute) {
+    model: UserInfo = new UserInfo();
+
+    constructor( @Inject('auth') private auth, private router: Router, private activatedRoute: ActivatedRoute,
+        @Inject('user') private userService
+    ) {
+        this.model.email = "";
+        this.model.password = "";
 
     }
 
@@ -83,12 +89,15 @@ export class Login implements OnInit {
     login() {
         this.auth.login();
 
-        //AuthenticationHelper.loginAsync().then(() => {
-        //    var idToken = AuthenticationHelper.getIdToken();
-        //    console.log('id_token' + idToken);
-        //});
     }
-
+    localLogin() {
+        this.userService.localLogin(this.model)
+            .subscribe((result) => {
+                if (result.ok) {
+                    
+                }
+            });
+    }
     gotoRegister() {
         this.router.navigate(["register"]);
     }

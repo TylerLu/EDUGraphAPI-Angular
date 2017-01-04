@@ -1,6 +1,8 @@
 ﻿import { DbContext, TokenCacheInstance } from '../data/dbContext';
 import * as Promise from "bluebird";
 
+var azureADAuthSrv = require('./azureADAuthService');
+
 export class TokenCacheService {
     private dbContext = new DbContext();
 
@@ -72,5 +74,57 @@ export class TokenCacheService {
                     });
                 }
             });
+    }
+
+    public getMSAccessToken(oid: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.getTokenCacheByOID(oid)
+                .then((tokenObject) => {
+                    if ((new Date()).getTime() > tokenObject.msgExpires - 5 * 60 * 1000) {
+                        resolve({
+                            accesstoken: tokenObject.msgAccessToken,
+                            expires: tokenObject.msgExpires
+                        });
+                    }
+                    else {
+                        azureADAuthSrv.getAccessTokenViaRefreshToken(tokenObject.msgRefreshgToken).then((result) => {
+                            tokenObject.msgAccessToken = result.access_token;
+                            tokenObject.msgExpires = result.expires_on * 1000;
+                            tokenObject.save();
+                            resolve({
+                                accesstoken: tokenObject.msgAccessToken,
+                                expires: tokenObject.msgExpires
+                            });
+                        });
+                    }
+                })
+                .catch(reject);
+            });
+    }
+
+    public getAADAccessToken(oid: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.getTokenCacheByOID(oid)
+                .then((tokenObject) => {
+                    if ((new Date()).getTime() < tokenObject.aadgExpires - 5 * 60 * 1000) {
+                        resolve({
+                            accesstoken: tokenObject.aadgAccessToken,
+                            expires: tokenObject.aadgExpires
+                        });
+                    }
+                    else {
+                        azureADAuthSrv.getAccessTokenViaRefreshToken(tokenObject.aadgRefreshgToken).then((result) => {
+                            tokenObject.aadgAccessToken = result.access_token;
+                            tokenObject.aadgExpires = result.expires_on * 1000;
+                            tokenObject.save();
+                            resolve({
+                                accesstoken: tokenObject.aadgAccessToken,
+                                expires: tokenObject.aadgExpires
+                            });
+                        });
+                    }
+                })
+                .catch(reject);
+        });
     }
 }

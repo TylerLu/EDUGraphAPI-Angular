@@ -78,7 +78,11 @@
                                             <th colspan="5" class="header"></th>
                                         </tr>
                                     </thead>
-
+                                    <tbody *ngIf="!documents || documents.length == 0">
+                                        <tr class="tr-content">
+                                            <td class="space-holder center" colspan="6"> There is no data available for this page at this time.</td>
+                                        </tr>
+                                    </tbody>
                                     <tbody *ngIf="documents">
 
                                         <tr class="tr-content" *ngFor="let doc of documents">
@@ -99,9 +103,14 @@
                         </tab>
                         <tab tabTitle="Conversations">
                             <div id="conversations" class="tab-pane ">
-                                <table id="stuconv" class="table  table-green table-student" *ngIf="conversations && classEntity">
-                                    <tbody>
-                                        <tr class="tr-content" *ngFor="let conversation of conversations">
+                                <table id="stuconv" class="table  table-green table-student" *ngIf="classEntity">
+                                    <tbody *ngIf="!conversations || conversations.length == 0">
+                                        <tr class="tr-content" >
+                                            <td class="space-holder center" colspan="4"> There is no data available for this page at this time.</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="conversations">
+                                        <tr class="tr-content"  *ngFor="let conversation of conversations">
                                             <td class="border-holder"></td>
                                             <td class="space-holder left"></td>
                                             <td>
@@ -109,6 +118,8 @@
                                             </td>
                                             <td class="space-holder right"></td>
                                         </tr>
+
+
                                     </tbody>
                                 </table>
                                 <span class="see-more" *ngIf="classEntity"><a target="_blank" href="https://outlook.office.com/owa/?path=/group/{{classEntity.Email}}/mail&amp;exsvurl=1&amp;ispopout=0">See More</a></span>

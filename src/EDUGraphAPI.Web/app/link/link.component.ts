@@ -49,7 +49,7 @@ export class Link implements OnInit {
     }
 
     loginO365() {
-        console.log('login365');
+        this.linkService.linkO365User();
     }
 
     createLocalAccount() {

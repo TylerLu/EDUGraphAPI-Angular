@@ -50,7 +50,6 @@
     "jquery": "^3.1.1",
     "kurvejs": "*",
     "morgan": "^1.7.0",
-    "msgraph-sdk-javascript": "^0.3.0",
     "ng2-validation": "^3.1.2",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",

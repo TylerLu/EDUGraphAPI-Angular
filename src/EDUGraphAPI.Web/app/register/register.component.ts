@@ -15,17 +15,17 @@ export class Register implements OnInit {
 
     constructor( @Inject('user') private userService
         , private router: Router, private activatedRoute: ActivatedRoute) {
-        this.model.email = "";
-        this.model.password = "";
+        this.model.UserInfo.email = "";
+        this.model.UserInfo.password = "";
+        this.model.UserInfo.favoriteColor = this.model.FavoriteColors[0].Value;
         this.model.ConfirmPassword = "";
-        this.model.favoriteColor = this.model.FavoriteColors[0].Value;
     }
 
     ngOnInit() {
     }
 
     createLocalUser() {
-        this.userService.createLocalAccount(this.model)
+        this.userService.createLocalAccount(this.model.UserInfo)
             .subscribe((result) => {
                 if (result.ok) {
                     this.router.navigate(["link"]);

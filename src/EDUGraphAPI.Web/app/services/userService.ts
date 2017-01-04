@@ -6,6 +6,8 @@ import { UserInfo } from '../models/common/userInfo';
 export class UserService {
 
     private usersAPIUrl = 'api/users';
+    private loginUrl = '/account/login';
+    private registerAPIUrl = 'api/register';
     private authToken: string;
 
     constructor(private _http: Http, @Inject('auth') private authService) {
@@ -25,7 +27,12 @@ export class UserService {
     } 
 
     public createLocalAccount(userInfo: UserInfo) {
-        return this._http.post(this.usersAPIUrl, userInfo)
+        return this._http.post(this.registerAPIUrl, userInfo)
+            .map((response: Response) => response);
+    }
+
+    public localLogin(userInfo: UserInfo) {
+        return this._http.post(this.loginUrl, userInfo)
             .map((response: Response) => response);
     }
 }

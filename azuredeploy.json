@@ -159,9 +159,12 @@
             "[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]"
           ],
           "properties": {
+            "WEBSITE_NODE_DEFAULT_VERSION": "6.9.2",
+            "WEBSITE_NPM_DEFAULT_VERSION": "3.10.8",
             "ida:ClientId": "[parameters('clientId')]",
             "ida:ClientSecret": "[parameters('clientSecret')]",
-            "SourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]"
+            "SourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]",
+            "command": "src\\EDUGraphAPI.Web\\deploy.cmd"
           }
         },
         {

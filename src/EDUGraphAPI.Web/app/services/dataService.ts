@@ -54,20 +54,6 @@ export class DataService {
          return activeProject;
     }
 
-    public getWithMsToken(actionUrl: string, options?: any) {
-        let activeProject: ReplaySubject<any> = new ReplaySubject(1);
-        this.authService.getMSAccessToken()
-            .subscribe((result) => {
-                options = options || {};
-                options.headers = this.getHeader(result.accesstoken);
-                this._http.get(actionUrl, { headers: this.getHeader(result.accesstoken) })
-                    .subscribe((data) => {
-                        activeProject.next(data);
-                    });
-            });
-        return activeProject;
-    }
-
     public post(actionUrl: string, data: any) {
         return this._http.post(actionUrl, data, { headers: this.getHeaderWithoutToken() });
     }

@@ -3,13 +3,10 @@ import * as Sequelize from 'sequelize';
 import { DbContext, UserInstance } from '../data/dbContext';
 import * as uuid from "node-uuid";
 import * as Promise from "bluebird";
-import * as Models from '../data/models';
 import * as bcrypt from 'bcryptjs';
 
-import * as request from 'superagent';
-import * as MicrosoftGraph from "microsoft-graph-typings"
-
 import { TokenCacheService } from '../services/TokenCacheService';
+import { MSGraphClient } from "../services/msGraphClient";
 
 export class UserService {
 
@@ -44,12 +41,14 @@ export class UserService {
         });
     }
 
-    public validUser(email: string, password: string): Promise<boolean> {
-        let isValid: boolean;
+    public validUser(email: string, password: string): Promise<any> {
         return this.dbContext.User
             .findOne({ where: { email: email } })
-            .then(user => isValid = user != null && bcrypt.hashSync(password, user.salt) == user.passwordHash)
-            .thenReturn(isValid);
+            .then((user) => {
+                let isValid = user != null && bcrypt.hashSync(password, user.salt) == user.passwordHash;
+                if (isValid) return user;
+                else throw 'Invalid User';
+            })
     }
 
     public getUserById(userId: string): Promise<UserInstance> {
@@ -184,55 +183,58 @@ export class UserService {
     }
 
     public getAccessTokenByUserId(userId: string): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            let tokenService = new TokenCacheService();
-            tokenService.getTokenCacheByOID(userId)
-                .then((cach) => {
-                    resolve(cach.msgAccessToken);
-                })
-                .catch(reject);
-        });
+        let tokenService = new TokenCacheService();
+        return tokenService.getTokenCacheByOID(userId)
+            .then((cach) => {
+                if (cach != null && cach.msgAccessToken != null) {
+                    return cach.msgAccessToken;
+                }
+                else {
+                    throw ("Access Token Is Null")
+                }
+            })
     }
 
-    public linkExstingLocalUser(o386User:any, localEmail: string, localPassword: string): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
-
-            this.dbContext.User
-                .findOne({ where: { email: localEmail } })
-                .then(user => {
-                    if (user != null && bcrypt.hashSync(localPassword, user.salt) == user.passwordHash) {
-                        if (user.o365UserId != null && user.o365UserId.length > 0) {
-                            reject("The local account has already been linked to another Office 365 account.")
-                        }
-                        else {
-                            this.getAccessTokenByUserId(o386User.oid)
-                                .then((accessToken) => {
-                                    //let client = GraphClient.init({
-                                    //    authProvider: (done) => {
-                                    //        done(null, accessToken);
-                                    //    }
-                                    //});
-                                    //client.api("/me")
-                                    //    .get((err, user: MicrosoftGraph.User) => {
-                                    //        if (err) reject(err);
-
-                                    //    })
-
-                                })
-                                //.catch()
-                        }
+    public linkExstingLocalUser(o365User:any, localEmail: string, localPassword: string): Promise<any> {
+        let localUserId: string;
+        return this.dbContext.User
+            .findOne({ where: { email: localEmail } })
+            .then(user => {
+                if (user != null && bcrypt.hashSync(localPassword, user.salt) == user.passwordHash) {
+                    if (user.o365UserId != null && user.o365UserId.length > 0) {
+                        throw "The local account has already been linked to another Office 365 account.";
                     }
                     else {
-                        reject("Invalid login attempt.")
+                        localUserId = user.id;
+                        return this.getAccessTokenByUserId(o365User.oid);
                     }
-                })
-                .catch((erro) => {
-                    reject(erro);
-                })
-        });
+                }
+                else {
+                    throw "Invalid login attempt."
+                }
+            })
+            .then((accessToken) => {
+                let msgraphClient: MSGraphClient = new MSGraphClient(accessToken);
+                return msgraphClient.getO365UserInfo(o365User._json.tid)
+            })
+            .then((o365UserInfo) => {
+                let userInfo = {
+                    firstName: o365UserInfo.user.givenName,
+                    lastName: o365UserInfo.user.surname,
+                    o365UserId: o365UserInfo.user.id,
+                    o365Email: o365UserInfo.user.mail == null ? o365UserInfo.user.userPrincipalName : o365UserInfo.user.mail,
+                    organization: o365UserInfo.organization == null ? null : {
+                        tenantId: o365UserInfo.organization.id,
+                        name: o365UserInfo.organization.displayName,
+                        isAdminConsented: false
+                    },
+                    roles: o365UserInfo.roles
+                };
+                return this.updateUser(localUserId, userInfo);
+            })
     }
 
-    public linkCreateLocalUser(o386User: any, localEmail: string, localPassword: string): Promise<any> {
+    public linkCreateLocalUser(o365User: any, localEmail: string, localPassword: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
 
         });

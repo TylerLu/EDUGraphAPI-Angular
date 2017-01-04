@@ -31,7 +31,8 @@ export class LinkLoginO365Requried implements OnInit {
     }
 
     reLoginO365() {
-        console.log('relogin 0365');
+        //this.linkService.linkO365User();
+        console.log('ReLoginO365');
     }
 
 }
