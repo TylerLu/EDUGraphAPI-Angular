@@ -21,7 +21,10 @@ IF %ERRORLEVEL% NEQ 0 (
 setlocal enabledelayedexpansion
 
 SET ARTIFACTS=%~dp0%..\artifacts
-SET DEPLOYMENT_SOURCE=%~dp0%\src\EDUGraphAPI.Web
+
+IF NOT DEFINED DEPLOYMENT_SOURCE (
+  SET DEPLOYMENT_SOURCE=%~dp0%.
+)
 
 IF NOT DEFINED DEPLOYMENT_TARGET (
   SET DEPLOYMENT_TARGET=%ARTIFACTS%\wwwroot
@@ -88,6 +91,8 @@ echo Handling node.js deployment.
 
 echo A
 
+echo %DEPLOYMENT_SOURCE%
+
 :: 1. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
@@ -116,7 +121,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 echo D
 
 :: 4. Gulp
-:: COPY "%DEPLOYMENT_SOURCE%\gulpfile.js" "%DEPLOYMENT_TARGET%"
+COPY "%DEPLOYMENT_SOURCE%\gulpfile.js" "%DEPLOYMENT_TARGET%"
 IF EXIST "%DEPLOYMENT_TARGET%\gulpfile.js" (
 echo D2
 	 pushd "%DEPLOYMENT_TARGET%"
