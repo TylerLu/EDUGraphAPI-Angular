@@ -19,9 +19,7 @@ gulp.task('ts-server', () => {
         .pipe(gulp.dest('./'));
 });
 
-
 // build and bundle client side ts and html
-
 var appDev = 'app';
 var appProd = 'dist';
 
