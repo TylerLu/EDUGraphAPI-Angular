@@ -88,15 +88,23 @@ goto :EOF
 :Deployment
 echo Handling node.js deployment.
 
+
+echo A
+
 :: 1. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
+
+echo B
+
 :: 2. Select node version
 call :SelectNodeVersion
 
+
+echo C
 
 :: 3. Install npm packages
 IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
@@ -106,6 +114,9 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
 )
+
+
+echo D
 
 :: 4. Gulp
 	IF EXIST "gulpfile.js" (
