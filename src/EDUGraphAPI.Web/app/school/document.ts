@@ -1,4 +1,4 @@
-﻿import { JsonProperty } from '../services/jsonhelper'
+﻿import { JsonProperty } from '../utils/jsonhelper'
 import { UserModel} from './user'
 export class Document {
     @JsonProperty("name")

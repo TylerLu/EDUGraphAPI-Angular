@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { CustomFormsModule } from 'ng2-validation'
 
-import { AppComponent }   from './app.component';
+import { AppComponent } from './app.component';
 import { Login } from './login/login.component';
 import { Header } from './header/header.component';
 import { DemoHelper } from './demoHelper/demoHelper.component';
@@ -15,7 +15,7 @@ import { AuthHelper } from "./authHelper/authHelper";
 import { DataService} from "./services/dataService";
 import { UserService} from "./services/userService";
 import { MeService} from "./services/meService";
-import { JsonProperty, MapUtils } from "./services/jsonHelper";
+import { JsonProperty, MapUtils } from "./utils/jsonHelper";
 import { SchoolModule } from './school/school.module';
 import { AdminModule } from './admin/admin.module';
 import { LinkModule } from './link/link.module';

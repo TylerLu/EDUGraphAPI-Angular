@@ -5,7 +5,7 @@ import 'rxjs/add/operator/mergeMap';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute  } from '@angular/router';
 import { Inject } from '@angular/core';
-import { MapUtils } from './services/jsonhelper';
+import { MapUtils } from './utils/jsonhelper';
 import { AuthenticationHelper } from './utils/authenticationHelper';
 
 

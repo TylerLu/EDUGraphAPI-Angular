@@ -3,7 +3,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { SvcConsts } from '../SvcConsts/SvcConsts';
 
-export class BingMapService {
+export class BingMapHelper {
     /**
      * Retrieves longitude and latitude by address.
      * Reference URL: 

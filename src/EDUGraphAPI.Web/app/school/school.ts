@@ -1,4 +1,4 @@
-﻿import { JsonProperty } from '../services/jsonhelper'
+﻿import { JsonProperty } from '../utils/jsonhelper'
 
 export class SchoolModel {
     @JsonProperty("extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId")

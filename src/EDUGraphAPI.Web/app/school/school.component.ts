@@ -5,8 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { SchoolModel} from './school'
 import { SchoolService } from './school.service';
-import { BingMapService } from '../services/bingMapService'
-import { MapUtils } from '../services/jsonhelper'
+import { BingMapHelper } from '../utils/bingMapHelper'
+import { MapUtils } from '../utils/jsonhelper'
 import { UserModel } from './user'
 import { SvcConsts } from '../SvcConsts/SvcConsts'
 
@@ -25,7 +25,6 @@ export class SchoolComponent implements OnInit {
     schools: SchoolModel[];
     me: UserModel;
     mySchool: SchoolModel;
-    tempSchools: SchoolModel[] = [];
     areAccountsLinked: boolean;
     isLocalAccount: boolean;
     showNoData: boolean = false;
@@ -53,7 +52,7 @@ export class SchoolComponent implements OnInit {
                             if (!school.PrincipalName || school.PrincipalName == "") {
                                 school.PrincipalName = "-";
                             }
-                            BingMapService.getLatitudeAndLongitude(school.State, school.City, school.Address).then((location) => {
+                            BingMapHelper.getLatitudeAndLongitude(school.State, school.City, school.Address).then((location) => {
                                 school.Latitude = location.Latitude;
                                 school.Longitude = location.Longitude;
                             });

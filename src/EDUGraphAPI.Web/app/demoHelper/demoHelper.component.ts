@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { DemoHelperPage } from './demoHelperPage';
 import { DemoHelperService } from './demoHelperService';
-import { MapUtils } from '../services/jsonhelper';
+import { MapUtils } from '../utils/jsonhelper';
 
 
 @Component({

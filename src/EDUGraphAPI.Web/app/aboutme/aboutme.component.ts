@@ -4,7 +4,7 @@ import { Inject } from '@angular/core';
 import { UserInfo } from '../models/common/userInfo';
 import { AboutMeModel } from './aboutme';
 import { ClassesModel } from '../school/classes';
-import { MapUtils } from '../services/jsonhelper';
+import { MapUtils } from '../utils/jsonhelper';
 import { SvcConsts } from '../SvcConsts/SvcConsts';
 
 

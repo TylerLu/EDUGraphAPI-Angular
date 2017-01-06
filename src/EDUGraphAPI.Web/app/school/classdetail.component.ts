@@ -3,7 +3,7 @@
 import { Component, OnInit, Inject, OnDestroy, AfterViewChecked, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SchoolModel } from './school'
-import { MapUtils } from '../services/jsonhelper'
+import { MapUtils } from '../utils/jsonhelper'
 import { UserModel } from './user'
 import { ClassesModel } from './classes';
 import { Document, OneDrive } from './document';

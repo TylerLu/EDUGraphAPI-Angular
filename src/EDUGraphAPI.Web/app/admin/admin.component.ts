@@ -1,7 +1,6 @@
 ﻿import { Component, OnInit, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AdminModel } from './admin';
-import { MapUtils } from '../services/jsonhelper';
+import { MapUtils } from '../utils/jsonhelper';
 import { AdminService } from './admin.service';
 import { UrlHelper } from '../utils/urlHelper';
 
@@ -14,7 +13,6 @@ import { UrlHelper } from '../utils/urlHelper';
 })
 
 export class AdminComponent implements OnInit {
-    me: AdminModel;
     IsAdminConsented: boolean;
     error: string;
     message: string;

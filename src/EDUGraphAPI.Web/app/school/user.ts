@@ -1,4 +1,4 @@
-﻿import { JsonProperty } from '../services/jsonhelper'
+﻿import { JsonProperty } from '../utils/jsonhelper'
 export class UserModel {
     @JsonProperty("mail")
     public Email: string;

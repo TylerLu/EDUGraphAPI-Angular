@@ -2,7 +2,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { SchoolModel } from './school'
 import { UserModel, StudentModel, TeacherModel } from './user'
-import { MapUtils } from '../services/jsonhelper'
+import { MapUtils } from '../utils/jsonhelper'
 
 class UsersViewModel {
     private static cache = {};

@@ -1,4 +1,4 @@
-﻿import { JsonProperty } from '../services/jsonhelper'
+﻿import { JsonProperty } from '../utils/jsonhelper'
 export class Conversation {
     @JsonProperty("topic")
     public topic: string;

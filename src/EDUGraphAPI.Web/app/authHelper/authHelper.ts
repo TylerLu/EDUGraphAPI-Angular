@@ -2,8 +2,7 @@ import { Injectable, Inject } from "@angular/core";
 import { SvcConsts } from "../svcConsts/svcConsts";
 import { Cookie } from '../services/cookieService';
 import { Http, Headers, Response } from '@angular/http';
-import { MapUtils } from '../services/jsonhelper'
-import { JsonProperty } from '../services/jsonhelper'
+import { MapUtils, JsonProperty } from '../utils/jsonhelper'
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 
 @Injectable()

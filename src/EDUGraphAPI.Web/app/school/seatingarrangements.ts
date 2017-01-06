@@ -1,4 +1,4 @@
-﻿import { JsonProperty } from '../services/jsonhelper'
+﻿import { JsonProperty } from '../utils/jsonhelper'
 export class SeatingArrangement {
     @JsonProperty("position")
     position: string;

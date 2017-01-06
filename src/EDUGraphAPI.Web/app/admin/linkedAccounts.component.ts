@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { MapUtils } from '../services/jsonhelper';
+import { MapUtils } from '../utils/jsonhelper';
 import { UserInfo } from '../models/common/userInfo'
 import { AdminService } from './admin.service';
 
