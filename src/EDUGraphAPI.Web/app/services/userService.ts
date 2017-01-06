@@ -1,6 +1,7 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { UserInfo } from '../models/common/userInfo';
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class UserService {
@@ -31,8 +32,8 @@ export class UserService {
             .map((response: Response) => response);
     }
 
-    public localLogin(userInfo: UserInfo) {
+    public localLogin(userInfo: UserInfo): Promise<any>{
         return this._http.post(this.loginUrl, userInfo)
-            .map((response: Response) => response);
+            .toPromise();
     }
 }

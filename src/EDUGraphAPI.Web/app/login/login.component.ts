@@ -92,16 +92,21 @@ export class Login implements OnInit {
         this.auth.login();
 
     }
+
     localLogin() {
         this.userService.localLogin(this.model)
-            .subscribe((result) => {
+            .then((result) => {
                 if (result.status == "200") {
                     window.location.href = "/schools";
                 } else {
                     this.showLoginFailed = true;
                 }
+            })
+            .catch((erro) => {
+                this.showLoginFailed = true;
             });
     }
+
     gotoRegister() {
         window.location.href = "/register";
     }

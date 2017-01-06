@@ -229,27 +229,74 @@ The bottom layers contains the three data sources.
 * Education data exposed by REST APIs.
 * Azure AD data exposed by Graph APIs.
 
-**EDUGraphAPI.Web - Server**
+### **EDUGraphAPI.Web - Server**
 
-The server side app is based on Node.js and implement with Typescript.
+The server side app is based on Node.js and implemented with Typescript.
 
-Passport and its 2 plugins are used to enable local and O365 authentications. 
+**Authentications**
 
-The following files were created by the MVC template, and only minor changes were made:
+Passport and its 2 plugins are used to enable local and O365 authentications:
 
-1. **/App_Start/Startup.Auth.Identity.cs** (The original name is Startup.Auth.cs)
-2. **/Controllers/AccountController.cs**
+* **[passport-azure-ad](https://github.com/AzureAD/passport-azure-ad)**: a collection of [Passport](http://passportjs.org/) Strategies to help you integrate with Azure Active Directory. It includes OpenID Connect, WS-Federation, and SAML-P authentication and authorization. These providers let you integrate your Node app with Microsoft Azure AD so you can use its many features, including web single sign-on (WebSSO), Endpoint Protection with OAuth, and JWT token issuance and validation.
+* **[passport-local](https://github.com/jaredhanson/passport-local)**: this module lets you authenticate using a username and password in your Node.js applications. By plugging into Passport, local authentication can be easily and unobtrusively integrated into any application or framework that supports [Connect](http://www.senchalabs.org/connect/)-style middleware, including [Express](http://expressjs.com/).
 
-This sample project uses **[ASP.NET Identity](https://www.asp.net/identity)** and **[Owin](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/owin)**. These two technologies make different methods of authentication coexist easily. Familiarity with these components, in addition to ASP.NET MVC, is essential to understanding this sample.
+**Web APIs**
+
+The server app expose several Web APIs:
+
+| Path                                  | Method   | Description                              |
+| ------------------------------------- | -------- | ---------------------------------------- |
+| /me                                   | GET      | Return the current user and the user's organization and roles |
+| /me/favoriteColor                     | POST     | Update current user's favorite color     |
+| /me/accesstoken                       | GET      | Get current user's access token          |
+| /tenant                               | POST     | Update information (isAdminConsented) of current user's tenant |
+| /tenant/unlinkAllUsers                | POST     | Unlink all users in current user's tenant |
+| /users/linked                         | GET      | Get all linked users                     |
+| /users/:userId/unlink                 | POST     | Unlink the specified u                   |
+| /schools/seatingArrangements/:classId | GET/POST | Get or set the seating arrangement of the specified class |
+
+**Data Access and Data Models**
+
+ASP.NET Identity uses [Entity Framework Code First](https://msdn.microsoft.com/en-us/library/jj193542(v=vs.113).aspx) to implement all of its persistence mechanisms. Package [Microsoft.AspNet.Identity.EntityFramework](https://www.nuget.org/packages/Microsoft.AspNet.Identity.EntityFramework/) is consumed for this. 
+
+In this sample, **ApplicationDbContext** is created for access to a SQL Server Database. It inherited from **IdentityDbContext** which is defined in the NuGet package mentioned above.
+
+Below are the important Data Models (and their important properties) that used in this sample:
+
+**ApplicationUsers**
+
+Inherited from **IdentityUser**. 
+
+| Property      | Description                              |
+| ------------- | ---------------------------------------- |
+| Organization  | The tenant of the user. For local unlinked user, its value is null |
+| O365UserId    | Used to link with an Office 365 account  |
+| O365Email     | The Email of the linked Office 365 account |
+| JobTitle      | Used for demonstrating differential query |
+| Department    | Used for demonstrating differential query |
+| Mobile        | Used for demonstrating differential query |
+| FavoriteColor | Used for demonstrating local data        |
+
+**Organizations**
+
+A row in this table represents a tenant in AAD.
+
+| Property         | Description                          |
+| ---------------- | ------------------------------------ |
+| TenantId         | Guid of the tenant                   |
+| Name             | Name of the tenant                   |
+| IsAdminConsented | Is the tenant consented by any admin |
+
+
 
 Below are important class files used in this web project:
 
-| File                              | Description                              |
-| --------------------------------- | ---------------------------------------- |
-| /App_Start/Startup.Auth.AAD.cs    | Integrates with Azure Active Directory authentication |
-| /Controllers/AdminController.cs   | Contains the administrative actions: <br>admin consent, manage linked accounts and install the app. |
-| /Controllers/LinkController.cs    | Contains the actions to link AD and local user accounts |
-| /Controllers/SchoolsController.cs | Contains the actions to present education data |
+| File | Description |
+| ---- | ----------- |
+|      |             |
+|      |             |
+|      |             |
+|      |             |
 
 This web application is a **multi-tenant app**. In the AAD, we enabled the option:
 
@@ -285,37 +332,9 @@ The table below shows the folders in the project:
 
 This project encapsulates the **[Schools REST API](https://msdn.microsoft.com/en-us/office/office365/api/school-rest-operations)** client. The core class in this project is **EducationServiceClient**.
 
-### Data Access and Data Models
+### 
 
-ASP.NET Identity uses [Entity Framework Code First](https://msdn.microsoft.com/en-us/library/jj193542(v=vs.113).aspx) to implement all of its persistence mechanisms. Package [Microsoft.AspNet.Identity.EntityFramework](https://www.nuget.org/packages/Microsoft.AspNet.Identity.EntityFramework/) is consumed for this. 
 
-In this sample, **ApplicationDbContext** is created for access to a SQL Server Database. It inherited from **IdentityDbContext** which is defined in the NuGet package mentioned above.
-
-Below are the important Data Models (and their important properties) that used in this sample:
-
-**ApplicationUsers**
-
-Inherited from **IdentityUser**. 
-
-| Property      | Description                              |
-| ------------- | ---------------------------------------- |
-| Organization  | The tenant of the user. For local unlinked user, its value is null |
-| O365UserId    | Used to link with an Office 365 account  |
-| O365Email     | The Email of the linked Office 365 account |
-| JobTitle      | Used for demonstrating differential query |
-| Department    | Used for demonstrating differential query |
-| Mobile        | Used for demonstrating differential query |
-| FavoriteColor | Used for demonstrating local data        |
-
-**Organizations**
-
-A row in this table represents a tenant in AAD.
-
-| Property         | Description                          |
-| ---------------- | ------------------------------------ |
-| TenantId         | Guid of the tenant                   |
-| Name             | Name of the tenant                   |
-| IsAdminConsented | Is the tenant consented by any admin |
 
 ### Authentication Flows
 
