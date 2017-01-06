@@ -18,24 +18,27 @@ router.route('/')
                 .then(user => {
                     if (user == null) {
                         return userService.getO365User(u.oid, u._json.tid)
+                            .then(user => {
+                                user.areAccountsLinked = false;
+                                user.authType = u.authType;
+                                retUser = user;
+                                return userService.validUserHasSameEmail(retUser.o365Email);
+                            })
+                            .then((ret) => {
+                                retUser.hasSameNameLocalAccount = ret;
+                                return retUser;
+                            })
                     }
                     else {
                         user.areAccountsLinked = true;
                         user.authType = u.authType;
-                        res.json(user);
+                        return user;
                     }
                 })
-                .then(user => {
-                    user.areAccountsLinked = false;
-                    user.authType = u.authType;
-                    retUser = user;
-                    return userService.validUserHasSameEmail(retUser.o365Email);
-                })
-                .then((ret) => {
-                    retUser.hasSameNameLocalAccount = ret;
-                    res.json(retUser);
-                })
-                .catch(error => res.json(500, { error: error }));
+                .then(usermodel => { res.json(usermodel); })
+                .catch(error => {
+                    res.json(500, { error: error })
+                });
         }
         else {
             userService.getUserModel({ id: u.id })

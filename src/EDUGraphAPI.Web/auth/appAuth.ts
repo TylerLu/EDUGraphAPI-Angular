@@ -65,7 +65,9 @@ export class appAuth {
             clientID: Constants.clientId,
             responseType: Constants.responseType,
             responseMode: Constants.responseMode,
-            redirectUrl: this.app.get('env') === 'development' ? 'https://localhost:44380' + Constants.redirectUrl : 'https://edugraphapi2dev.azurewebsites.net' + Constants.redirectUrl,
+            redirectUrl: this.app.get('env') === 'development'
+                ? 'https://localhost:44380' + Constants.redirectUrl
+                : 'https://' + Constants.Host + Constants.redirectUrl,
             allowHttpForRedirectUrl: Constants.allowHttpForRedirectUrl,
             clientSecret: Constants.clientSecret,
             validateIssuer: Constants.validateIssuer,

@@ -231,7 +231,6 @@ SQLServerHost=edugraphapi2dev.database.windows.net</Environment>
     <Content Include="ssl\key.pem" />
     <Content Include="styles.css" />
     <Content Include="tsconfig.json" />
-    <Content Include="views\layout.jade" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config" />
     <Content Include="bin\ChangeConfig.ps1" />
@@ -273,7 +272,6 @@ SQLServerHost=edugraphapi2dev.database.windows.net</Environment>
     <Folder Include="public\" />
     <Folder Include="routes\" />
     <Folder Include="ssl\" />
-    <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="app\utils\urlHelper.ts" />
