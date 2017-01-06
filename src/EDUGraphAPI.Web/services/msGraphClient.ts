@@ -1,4 +1,5 @@
 ﻿import * as request from 'superagent';
+import * as Promise from "bluebird";
 import { Constants, O365ProductLicenses, Roles} from '../constants';
 
 export class MSGraphClient {
@@ -43,7 +44,6 @@ export class MSGraphClient {
                         return reject(err)
                     }
                     resolve(res.body);
-
                 })
         })
 

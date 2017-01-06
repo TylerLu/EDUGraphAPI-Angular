@@ -28,7 +28,7 @@ export class SchoolComponent implements OnInit {
     tempSchools: SchoolModel[] = [];
     areAccountsLinked: boolean;
     isLocalAccount: boolean;
-
+    showNoData: boolean = false;
     constructor( @Inject('schoolService') private schoolService: SchoolService, private router: Router, @Inject('me') private meService) {
     }
 
@@ -42,10 +42,16 @@ export class SchoolComponent implements OnInit {
                     .subscribe((result) => {
                         this.schools = [];
                         result.forEach((school) => { this.schools.push(MapUtils.deserialize(SchoolModel, school)); })
+                        if (this.schools.length == 0) {
+                            this.showNoData = true;
+                        }
                         this.schools.forEach((school) => {
                             if (this.me.SchoolId == school.SchoolId) {
                                 school.IsMySchool = true;
                                 this.mySchool = school;
+                            }
+                            if (!school.PrincipalName || school.PrincipalName == "") {
+                                school.PrincipalName = "-";
                             }
                             BingMapService.getLatitudeAndLongitude(school.State, school.City, school.Address).then((location) => {
                                 school.Latitude = location.Latitude;

@@ -5,7 +5,7 @@
     </div>
     <div class="margin-btm-12">
         <b>Favorite Color:</b>
-        <div *ngIf="model.IsLinked">
+        <div *ngIf="model.IsLinked" class="linkcontrol">
             <select name="favoritecolor" [(ngModel)]="model.MyFavoriteColor">
                 <option *ngFor="let color of model.FavoriteColors" [value]="color.Value">{{color.DisplayName}}</option>
             </select>

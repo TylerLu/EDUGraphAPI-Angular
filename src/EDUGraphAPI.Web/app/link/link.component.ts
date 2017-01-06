@@ -24,7 +24,6 @@ export class Link implements OnInit {
         this.initCurrentUser();
         this.localAccountExistedMessage = '';
         this.initIsLocalAccount();
-        this.initLocalAccountExisted();
         this.userService.getLinkedAccounts()
             .subscribe((result) => {
                 console.log(result);
@@ -37,11 +36,13 @@ export class Link implements OnInit {
             .subscribe((user) => {
                 this.userInfo.readFromJson(user);
                 this.areAccountsLinked = user.areAccountsLinked;
+                this.initLocalAccountExisted(user);
             });
     }
 
-    initLocalAccountExisted() {
-        this.localAccountExisted = (this.localAccountExistedMessage != undefined || this.localAccountExistedMessage != null || this.localAccountExistedMessage != '');
+    initLocalAccountExisted(user: any) {
+        this.localAccountExisted = user.hasSameNameLocalAccount;
+        this.localAccountExistedMessage = 'There is a local account: ' + user.email + ' matching your O365 account.';
     }
 
     initIsLocalAccount() {

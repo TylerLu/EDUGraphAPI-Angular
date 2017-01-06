@@ -27,7 +27,7 @@ export class TenantService {
                     return Promise.all(promises)
                 }
             })
-            .then(() => {
+            .then((ret) => {
                 return tenant.removeUsers();
             })
     }

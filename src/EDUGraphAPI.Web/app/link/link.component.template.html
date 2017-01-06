@@ -14,7 +14,7 @@
             <div class="form-horizontal">
                 <p *ngIf="localAccountExisted">{{localAccountExistedMessage}}</p>
                 <p>
-                    <a class="btn btn-primary" href="/loginLocal">Use Existing Local Account</a>
+                    <a class="btn btn-primary" href="/link-loginLocal">Use Existing Local Account</a>
                     <input type="button" [disabled]="localAccountExisted" value="Create Local Account" class="btn btn-primary" (click)="createLocalAccount(this)" />
                     &nbsp; &nbsp;
                     <a class="btn btn-primary" href="/schools">Cancel</a>

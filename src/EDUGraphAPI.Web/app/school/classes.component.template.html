@@ -18,11 +18,12 @@
                 </div>
                 <div class="infobody" title="Amy Roebuck">
                     <span>{{school.PrincipalName}}</span>
+                    <span *ngIf="!school.PrincipalName">-</span>
                 </div>
             </div>
             <div class="infocontainer">
                 <div class="infoheader">
-                    Grade level
+                    Grade levels
                 </div>
                 <div class="infobody" title="9 - 12">
                     {{school.LowestGrade}} - {{school.HighestGrade}}

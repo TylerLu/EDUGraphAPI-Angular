@@ -48,7 +48,7 @@ export class AdminComponent implements OnInit {
             this.message = message;
         }).catch((message) => {
             this.error = message;
-        });
+            });
     }
 
     linkedAccounts() {

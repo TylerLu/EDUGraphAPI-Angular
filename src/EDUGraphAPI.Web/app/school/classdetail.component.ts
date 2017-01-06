@@ -83,8 +83,8 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                                     .getClassById(this.classObjectId)
                                     .subscribe((result) => {
                                         this.classEntity = MapUtils.deserialize(ClassesModel, result);
-                                        this.classEntity.TermStartDate = moment.utc(this.classEntity.TermStartDate).local().format('MMMM D YYYY');
-                                        this.classEntity.TermEndDate = moment.utc(this.classEntity.TermEndDate).local().format('MMMM D YYYY');
+                                        this.classEntity.TermStartDate = moment.utc(this.classEntity.TermStartDate).local().format('MMM  YYYY');
+                                        this.classEntity.TermEndDate = moment.utc(this.classEntity.TermEndDate).local().format('MMM YYYY');
                                         this.classEntity.IsMyClasses = true;
                                         this.classEntity.Users = [];
                                         result.members.forEach((obj) => {

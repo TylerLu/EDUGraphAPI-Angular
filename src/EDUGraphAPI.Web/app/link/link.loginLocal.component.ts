@@ -46,13 +46,9 @@ export class LinkLoginLocal implements OnInit {
         if (!this.checkValid())
             return;
         this.linkService.linkLocalUser(this.loginLocalModel.email, this.loginLocalModel.password)
-                        .subscribe((result) => {
-                            if (result.success) {
-                                this.router.navigate(["schools"]);
-                            } else {
-                                this.errorMsgs = result.erroMsgs;
-                            }    
-                        });
+            .subscribe(
+            (result) => this.router.navigate(["schools"]),
+            (err) => { this.errorMsgs = [err.json().error]; this.serverCheckValid = false; });
     }
 
 }

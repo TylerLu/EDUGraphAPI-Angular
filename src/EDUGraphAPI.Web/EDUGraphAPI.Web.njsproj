@@ -273,6 +273,7 @@ SQLServerHost=edugraphapi2dev.database.windows.net</Environment>
     <Folder Include="public\" />
     <Folder Include="routes\" />
     <Folder Include="ssl\" />
+    <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="app\utils\urlHelper.ts" />

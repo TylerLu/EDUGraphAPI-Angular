@@ -27,6 +27,9 @@
                     <th>Address</th>
                     <th></th>
                 </tr>
+                <tr *ngIf="showNoData">
+                    <td colspan="5"><div class="nodata" > There is no data available for this page at this time.</div></td>
+                </tr>
                 <tr class="tr-content" [class.td-green]="item.IsMySchool" *ngFor="let item of schools" >
                     <td>{{item.DisplayName }}</td>
                     <td>{{item.PrincipalName }}</td>
@@ -34,8 +37,8 @@
                     <td>
                         <div class="schooladdress">
                             {{item.Address}}
-                            <br />
-                            {{item.City }} {{item.State }} , {{item.Zip }}
+                            <br *ngIf="item.Address"/>
+                            {{item.CompoundAddress }} 
                         </div>
                         <div class="schoolmap">
                             <a class="bingMapLink" href="javascript:void(0)" [attr.longitude]="item.Longitude" [attr.latitude]="item.Latitude"><img [src]="item.IsMySchool ? '/app/Images/icon-map_30x28px-WHT.png' : '/app/Images/icon-map_30x28px-BLU.png'"></a>

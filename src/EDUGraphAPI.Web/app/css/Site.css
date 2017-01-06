@@ -333,6 +333,7 @@ max-width: 140px;
     margin:16px 6px 0 12px;
 }
 #lstproducts li .seated {margin:20px 0 0 0;}
+#lstproducts li {margin-left: 0}
 
 #dvleft .tip{font-weight:600;margin-bottom:20px;}
 
@@ -518,3 +519,4 @@ top: -10px;cursor:pointer;}
 
 .blanktr th{border:none !important;height:20px;visibility:hidden}
 .register .form-group{width:100%;float:left;}
+.linkcontrol select{margin-right:6px;}

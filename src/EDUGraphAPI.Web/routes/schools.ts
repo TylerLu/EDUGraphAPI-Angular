@@ -17,7 +17,7 @@ router.route('/seatingArrangements/:classId')
         var classId = req.params.classId as string;
         var schoolService = new SchoolService();
         schoolService.updateSeatingArrangementsAsync(classId, newItems)
-            .then(() => res.end())
+            .then((ret) => res.end())
             .catch(error => res.json(500, { error: error }));
     });
 

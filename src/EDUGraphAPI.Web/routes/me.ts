@@ -13,6 +13,7 @@ router.route('/')
     .get(function (req, res) {
         var u = req.user;
         if (u.authType == 'O365') {
+            var retUser;
             userService.getUserModel({ o365UserId: u.oid })
                 .then(user => {
                     if (user == null) {
@@ -24,10 +25,15 @@ router.route('/')
                         res.json(user);
                     }
                 })
-                .then(O365User => {
-                    O365User.areAccountsLinked = false;
-                    O365User.authType = u.authType;
-                    res.json(O365User);
+                .then(user => {
+                    user.areAccountsLinked = false;
+                    user.authType = u.authType;
+                    retUser = user;
+                    return userService.validUserHasSameEmail(retUser.o365Email);
+                })
+                .then((ret) => {
+                    retUser.hasSameNameLocalAccount = ret;
+                    res.json(retUser);
                 })
                 .catch(error => res.json(500, { error: error }));
         }

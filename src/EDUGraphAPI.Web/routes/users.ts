@@ -13,7 +13,7 @@ router.get('/linked', function (req, res, next) {
 router.post('/:userId/unlink', function (req, res) {
     var userId = req.params.userId;
     userService.unlinkUser(userId)
-        .then(() => res.end())
+        .then((ret) => res.end())
         .catch(error => res.json(500, { error: error }));
 });
 

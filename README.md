@@ -31,6 +31,20 @@ Download and install the following tools to run, build and/or develop this appli
 
 Ensure your Nodejs is v6.9.2 or above and NPM is v3.10.8 or above.
 
+Configure Visual Studio to use the global external web tools instead of the tools that ship with Visual Studio.
+
+* Open the Options dialog with **Tools | Options**.
+
+* In the tree on the left, select **Projects and Solutions | External Web Tools**.
+
+* On the right, move the `$(PATH)` entry above the `$(DevEnvDir)` entries. 
+
+  > This tells Visual Studio to use the external tools (such as npm) found in the global path before using its own version of the external tools.
+
+* Click **OK** to close the dialog.
+
+* Restart Visual Studio for this change to take effect.
+
 **GitHub Authorization**
 
 1. Generate Token
@@ -204,17 +218,22 @@ Ensure your Nodejs is v6.9.2 or above and NPM is v3.10.8 or above.
 
 ![](Images/solution-component-diagram.png)
 
-The top layer of the solution contains a web application and a WebJob console application.
+The top layer of the solution contains the two parts of the EDUGraphAPI.Web project:
 
-The middle layer contains two class library projects. 
+* The server side Node.js app.
+* The client side Angular 2 app.
 
 The bottom layers contains the three data sources.
 
-**EDUGraphAPI.Web**
+* The EDUGraphAPI database.
+* Education data exposed by REST APIs.
+* Azure AD data exposed by Graph APIs.
 
-This web application is based on an ASP.NET MVC project template with the **Individual User Accounts** option selected. 
+**EDUGraphAPI.Web - Server**
 
-![](Images/mvc-auth-individual-user-accounts.png)
+The server side app is based on Node.js and implement with Typescript.
+
+Passport and its 2 plugins are used to enable local and O365 authentications. 
 
 The following files were created by the MVC template, and only minor changes were made:
 

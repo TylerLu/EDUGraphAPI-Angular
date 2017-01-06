@@ -59,6 +59,22 @@ export class SchoolModel {
 
     public IsMySchool: boolean = false;
 
+    public get CompoundAddress(): string {
+        if (!this.City && !this.State && !this.Zip) {
+            return "-";
+        }
+        if (this.Zip) {
+            if (this.City || this.State) {
+                return this.City + " " + this.State + ", " + this.Zip;
+            }
+            if (!this.City && !this.State) {
+                return this.Zip;
+            }
+        } else {
+            return this.City + " " + this.State
+        }
+    };
+
     @JsonProperty("extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType")
     public EducationObjectType: string;
 
