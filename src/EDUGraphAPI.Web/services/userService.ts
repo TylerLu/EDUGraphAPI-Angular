@@ -111,7 +111,7 @@ export class UserService {
             .then((user) => {
                 let isValid = user != null && bcrypt.hashSync(password, user.salt) == user.passwordHash;
                 if (isValid) return user;
-                else throw 'Invalid User';
+                else throw 'Invalid Username or password';
             })
     }
     //valid user is admin or not

@@ -1,9 +1,9 @@
 import { ColorEntity } from './models/common/colorEntity'
-
+import { Cookie } from './services/cookieService';
 export class Constants {
 
-    public static readonly CientId = "%CientId%";
-    public static readonly TenantId = "canvizEDU.onmicrosoft.com";
+    public static readonly ClientId = Cookie.get("AppClientId");
+    public static readonly TenantId = Cookie.get("UserTenantId");
     public static readonly AADInstance = "https://login.microsoftonline.com/";
     public static readonly Authority = Constants.AADInstance + "common/";
     public static readonly TokenProcessorUrl = "https://localhost:44380/node_modules/kurvejs/dist/login.html";
@@ -12,7 +12,7 @@ export class Constants {
     public static COOKIE_TOKEN: string = "user_token_ad";
     public static MS_COOKIE_TOKEN: string = "user_token_ms";
     public static LOGIN_TOKEN = "authType";
-    public static BING_MAP_KEY: string = "%BingMapKey%";
+    public static BING_MAP_KEY: string = Cookie.get("AppBingMapKey"); 
     public static FavoriteColors: ColorEntity[] = [new ColorEntity("Blue", "#2F19FF"), new ColorEntity("Green", "#127605"), new ColorEntity("Grey", "#535353")];
 }
 export class Roles {

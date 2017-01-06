@@ -74,7 +74,7 @@ export class Login implements OnInit {
             .subscribe((event) => {
                 if (this.auth.IsLogin()) {
                     if (this.router.url != '/link')
-                        this.router.navigate(['schools']);
+                        window.location.href = "/schools";
                 }
                 else {
                     if (this.router.url != "/register") {
@@ -96,13 +96,13 @@ export class Login implements OnInit {
         this.userService.localLogin(this.model)
             .subscribe((result) => {
                 if (result.status == "200") {
-                    this.router.navigate(["schools"]);
+                    window.location.href = "/schools";
                 } else {
                     this.showLoginFailed = true;
                 }
             });
     }
     gotoRegister() {
-        this.router.navigate(["register"]);
+        window.location.href = "/register";
     }
 }

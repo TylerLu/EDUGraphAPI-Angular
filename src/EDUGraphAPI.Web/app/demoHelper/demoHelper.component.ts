@@ -1,5 +1,5 @@
 ﻿import { Component, Input, OnInit, Injectable, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 import { DemoHelperPage } from './demoHelperPage';
 import { DemoHelperService } from './demoHelperService';
@@ -18,13 +18,24 @@ export class DemoHelper implements OnInit {
     DemoPage: DemoHelperPage;
     Collapsed: boolean;
 
-    constructor(private router: Router, private http: Http, @Inject('demoHelperService') private demoHelperService: DemoHelperService) { }
+    constructor(private router: Router, private http: Http, @Inject('demoHelperService') private demoHelperService: DemoHelperService, private activatedRoute: ActivatedRoute) { }
 
     ngOnInit() {
         this.HasDemo = true;
         this.Collapsed = true;
         this.DemoPage = new DemoHelperPage();
-        this.GetDemoPage();
+        this.router.events
+            .filter(event => event instanceof NavigationEnd)
+            .map(() => this.activatedRoute)
+            .map(route => {
+                while (route.firstChild) route = route.firstChild;
+                return route;
+            })
+            .filter(route => route.outlet === 'primary')
+            .mergeMap(route => route.data)
+            .subscribe((event) => {
+                this.GetDemoPage();
+            });
     }
 
     showDemoHelper() {

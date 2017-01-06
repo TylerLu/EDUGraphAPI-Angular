@@ -133,7 +133,7 @@ export class AdminService {
 
     private getServicePrincipal(authHeaders: RequestOptionsArgs): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._http.get(`${this.aadBaseUrl}/servicePrincipals?api-version=1.6&$filter=appId%20eq%20'${Constants.CientId}'`, authHeaders)
+            this._http.get(`${this.aadBaseUrl}/servicePrincipals?api-version=1.6&$filter=appId%20eq%20'${Constants.ClientId}'`, authHeaders)
                 .subscribe((response: Response) => {
                     if (response) {
                         var data = response.json();

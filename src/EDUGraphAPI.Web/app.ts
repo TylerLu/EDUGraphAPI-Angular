@@ -13,6 +13,7 @@ var fs = require("fs");
 var url = require("url");
 var querystring = require("querystring");
 var dbContext_1 = require("./data/dbContext");
+var msGraphClient = require("./services/msGraphClient");
 
 var meRoute = require("./routes/me");
 var usersRoute = require("./routes/users");
@@ -27,11 +28,6 @@ var app = express();
 var auth = new appAuth(app);
 
 // Angular 2
-app.get("/app/constants.js", function (req, res) {
-    fs.readFile(path.join(__dirname, 'app/constants.js'), 'utf8', function (err, data) {
-        res.send(data.replace('%CientId%', process.env.clientId).replace('%BingMapKey%', process.env.BingMapKey));
-    });
-});
 app.use("/app", express.static(path.join(__dirname, 'app')));
 app.use("/dist", express.static(path.join(__dirname, 'dist')));
 app.use("/node_modules", express.static(path.join(__dirname, 'node_modules'), { maxAge: 1000 * 60 * 60 * 24 }));
@@ -79,6 +75,15 @@ auth.initAuthRoute(app);
 
 var indexPage = app.get('env') === 'development' ? 'index.html' : 'index.prod.html';
 app.get('/*', function (req, res) {
+    if (req.cookies['AppClientId'] == null || req.cookies['AppClientId'] != process.env.clientId) {
+        res.cookie('AppClientId', process.env.clientId);
+    }
+    if (req.cookies['AppBingMapKey'] == null || req.cookies['AppBingMapKey'] != process.env.BingMapKey) {
+        res.cookie('AppBingMapKey', process.env.BingMapKey);
+    }
+    if (req.user && req.user._json && req.user._json.tid != req.cookies['UserTenantId']) {
+        res.cookie('UserTenantId', req.user._json.tid);
+    }
     res.sendfile(path.join(__dirname, indexPage));
 });
 

@@ -63,16 +63,11 @@ export class SchoolModel {
         if (!this.City && !this.State && !this.Zip) {
             return "-";
         }
-        if (this.Zip) {
-            if (this.City || this.State) {
-                return this.City + " " + this.State + ", " + this.Zip;
-            }
-            if (!this.City && !this.State) {
-                return this.Zip;
-            }
-        } else {
-            return this.City + " " + this.State
+        let city: string = "";
+        if (this.City) {
+            city = `${this.City},`
         }
+        return `${city}${this.State} ${this.Zip}`;
     };
 
     @JsonProperty("extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType")

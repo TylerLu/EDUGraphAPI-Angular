@@ -117,6 +117,9 @@ export class appAuth {
                         } else {
                             done(null);
                         }
+                    })
+                    .catch(err => {
+                        done(null);
                     });
             });
     }

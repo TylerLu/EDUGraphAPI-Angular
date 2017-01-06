@@ -4,7 +4,7 @@ import { Identity, IdToken } from 'kurvejs';
 
 export class AuthenticationHelper {
 
-    private static Identity = new Identity(Constants.CientId, Constants.TokenProcessorUrl);
+    private static Identity = new Identity(Constants.ClientId, Constants.TokenProcessorUrl);
 
     public static loginAsync(): Promise<any> {
         return new Promise((resolve, reject) => {
