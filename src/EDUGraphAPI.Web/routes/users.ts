@@ -1,6 +1,4 @@
 ﻿import express = require('express');
-import * as Storage from '../data/dbContext';
-import * as Sequelize from 'sequelize';
 import { UserService } from '../services/userService';
 
 var router = express.Router();
@@ -18,4 +16,5 @@ router.post('/:userId/unlink', function (req, res) {
         .then(() => res.end())
         .catch(error => res.json(500, { error: error }));
 });
+
 export = router;

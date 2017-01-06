@@ -1,5 +1,5 @@
-﻿/// <reference path="../../node_modules/bingmaps/scripts/MicrosoftMaps/Microsoft.Maps.d.ts" />
-/// <reference path="../../node_modules/@types/jquery/index.d.ts" />
+﻿/// <reference path="../../node_modules/@types/jquery/index.d.ts" />
+
 import { Component, OnInit, Inject, OnDestroy, AfterViewChecked, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SchoolModel } from './school'
@@ -27,7 +27,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
     me: UserModel;
     classEntity: ClassesModel;
     documents: Document[] = [];
-     favoriteColor: string = "";
+    favoriteColor: string = "";
     oneDriveURL: string = "";
     conversations: Conversation[] = [];
     seatingArrangements: SeatingArrangement[] = [];
@@ -91,7 +91,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                                             var user = MapUtils.deserialize(UserModel, obj);
                                             this.userPhotoService.getUserPhotoUrl(user.O365UserId)
                                                 .then(url => user.Photo = url);
-                                            this.classEntity.Users.push(user);                                            
+                                            this.classEntity.Users.push(user);
                                             if (user.ObjectType == "Teacher") {
                                                 this.classEntity.Teachers.push(user);
                                             }
@@ -106,12 +106,13 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                                                     stu.SeatingClass = "seated hideitem";
                                                     if (stu.SeatingArrangment != "0") {
                                                         stu.IsSeated = true;
-                                                        stu.ContainerClass = "white";
+                                                        stu.ContainerClass = "deskcontainer white";
                                                         stu.SeatingClass = "seated";
                                                     }
 
                                                     if (this.me.O365UserId == stu.O365UserId) {
-                                                        stu.ContainerClass = this.favoriteColor;
+                                                        stu.ContainerClass = "deskcontainer green";
+                                                        stu.BackgroundColor = this.favoriteColor;
                                                     }
                                                 }
                                             });
@@ -161,6 +162,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
     ngOnDestroy() {
         this.sub.unsubscribe();
     }
+
     gotoClasses(school: SchoolModel) {
         this.router.navigate(['classes', school.ObjectId, school.SchoolId]);
     }
@@ -173,13 +175,15 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             }
         },1000);
     }
+
     iniTiles() {
         $(".deskcontainer:not([ng-reflect-position='0']").each(function () {
             var position = $(this).attr("ng-reflect-position");
             var tile = $(".desktile[ng-reflect-position='" + position + "']")
             $(this).appendTo(tile);
         });
-     }
+    }
+
     editseats() {
         this.isEditing = true;
         this.enableDragAndDrop();
@@ -236,26 +240,26 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             $("#" + id).find(".seated").addClass("hideitem");
             $("#hidtiles").append($(this));
         });
-    $("#hidtiles .deskcontainer:not(.unsaved)").each(function (i, e) {
-        //$e = $(e);
-        var position = $(this).attr("ng-reflect-prev-position");
-        $(this).attr("ng-reflect-position", position).removeAttr("ng-reflect-prev-position");
-        var id = $(this).attr("ng-reflect-userid");
-        $(".desktile[ng-reflect-position=" + position + "]").append($(this));
-        $("#" +id ).find(".seated").removeClass("hideitem");
-    });
-    $(".desktile .deskcontainer[ng-reflect-prev-position]").each(function (i, e) {
-        var prevPosition = $(this).attr("ng-reflect-prev-position");
-        if (prevPosition == $(this).attr("ng-reflect-position")) {
-            return;
-        }
-        $(this).attr("ng-reflect-position", prevPosition).removeAttr("ng-reflect-prev-position");
-        $(".desktile[ng-reflect-position=" + prevPosition + "]").append($(this));
-    });
-    $("#lstproducts li").attr("draggable", "false");
-    $(".deskcontainer").attr("draggable", "false");
+        $("#hidtiles .deskcontainer:not(.unsaved)").each(function (i, e) {
+            //$e = $(e);
+            var position = $(this).attr("ng-reflect-prev-position");
+            $(this).attr("ng-reflect-position", position).removeAttr("ng-reflect-prev-position");
+            var id = $(this).attr("ng-reflect-userid");
+            $(".desktile[ng-reflect-position=" + position + "]").append($(this));
+            $("#" +id ).find(".seated").removeClass("hideitem");
+        });
+        $(".desktile .deskcontainer[ng-reflect-prev-position]").each(function (i, e) {
+            var prevPosition = $(this).attr("ng-reflect-prev-position");
+            if (prevPosition == $(this).attr("ng-reflect-position")) {
+                return;
+            }
+            $(this).attr("ng-reflect-position", prevPosition).removeAttr("ng-reflect-prev-position");
+            $(".desktile[ng-reflect-position=" + prevPosition + "]").append($(this));
+        });
+        $("#lstproducts li").attr("draggable", "false");
+        $(".deskcontainer").attr("draggable", "false");
 
-}
+    }
 
     enableDragAndDrop() {
         var lstProducts = $('#lstproducts li');
@@ -428,4 +432,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         }
     }
 
+    setSelected(event) {
+        $(event.target || event.srcElement || event.currentTarget).closest("tr.tr-content").addClass("selected").siblings().removeClass("selected");
+    }
 }

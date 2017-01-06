@@ -20,6 +20,7 @@ export class MyClassesComponent implements OnInit {
     classesArray: ClassesModel[]=[];
     myClassesArray: ClassesModel[]=[];
     school: SchoolModel;
+    showNoData: boolean = false;
 
     constructor( @Inject('schoolService') private schoolService
         , private route: ActivatedRoute, private router: Router) {
@@ -40,6 +41,9 @@ export class MyClassesComponent implements OnInit {
                 .subscribe((result) => {
                     this.myClassesArray = [];
                     result.forEach((obj) => { this.myClassesArray.push(MapUtils.deserialize(ClassesModel, obj)); });
+                    if (this.myClassesArray.length == 0) {
+                        this.showNoData = true;
+                    }
                     this.myClassesArray.forEach((obj) => {
                         obj.IsMyClasses = true;
                         this.schoolService

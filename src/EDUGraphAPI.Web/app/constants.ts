@@ -8,3 +8,8 @@ export class Constants {
     public static readonly MSGraphResource = "https://graph.microsoft.com";
     public static readonly AADGraphResource = "https://graph.windows.net";
 }
+export class Roles {
+    public static readonly Admin = "Admin";
+    public static readonly Faculty = "Faculty";
+    public static readonly Student = "Student";
+}

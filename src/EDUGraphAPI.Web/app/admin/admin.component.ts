@@ -44,23 +44,22 @@ export class AdminComponent implements OnInit {
     }
 
     unconsent() {
-        this.adminService.unconsent();
+        this.adminService.unconsent().then((message) => {
+            this.message = message;
+        }).catch((message) => {
+            this.error = message;
+        });
     }
 
     linkedAccounts() {
         this.router.navigate(["linkedAccounts"]);
     }
-
+    
     addAppRoleAssignments() {
-        this.adminService.addAppRoleAssignments().then((result) => {
-            if (result.ok) {
-                this.message = result.message;
-            }
-            else {
-                this.error = result.message;
-            }
-        }).catch((result) => {
-            this.error = result.message;
+        this.adminService.addAppRoleAssignments().then((message) => {
+            this.message = message;
+        }).catch((message) => {
+            this.error = message;
         });
     }
 
@@ -72,8 +71,12 @@ export class AdminComponent implements OnInit {
         }
 
         var idToken = UrlHelper.getQueryValue('id_token')
-        if (idToken != null && idToken.length > 0)
-            this.message = 'Admin consented successfully!';
-
+        if (idToken != null && idToken.length > 0) {
+            this.adminService.setIsAdminConsented().then(() => {
+                this.message = 'Admin consented successfully!';
+            }).catch((error) => {
+                this.error = error; 
+            });
+        }
     }
 }

@@ -28,7 +28,8 @@ export class UserModel {
 
     public IsSeated: boolean = false;
     public SeatingClass: string = "seated hideitem";
-    public ContainerClass: string = "unsaved";
+    public ContainerClass: string = "deskcontainer unsaved";
+    public BackgroundColor: string = "";
     public SeatingArrangment: string = "0";
 
     constructor() {

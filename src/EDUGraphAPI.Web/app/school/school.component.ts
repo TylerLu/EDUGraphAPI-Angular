@@ -4,8 +4,11 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { SchoolModel} from './school'
+import { SchoolService } from './school.service';
+import { BingMapService } from '../services/bingMapService'
 import { MapUtils } from '../services/jsonhelper'
 import { UserModel } from './user'
+import { SvcConsts } from '../SvcConsts/SvcConsts'
 
 
 @Component({
@@ -19,18 +22,17 @@ import { UserModel } from './user'
 })
 
 export class SchoolComponent implements OnInit {
-
     schools: SchoolModel[];
     me: UserModel;
     mySchool: SchoolModel;
-    tempSchools: SchoolModel[]=[];
+    tempSchools: SchoolModel[] = [];
+    areAccountsLinked: boolean;
+    isLocalAccount: boolean;
 
-    constructor( @Inject('schoolService') private schoolService, private router: Router) {
-        
-     }
+    constructor( @Inject('schoolService') private schoolService: SchoolService, private router: Router, @Inject('me') private meService) {
+    }
 
     ngOnInit() {
-
         this.schoolService
             .getMe()
             .subscribe((result) => {
@@ -42,37 +44,43 @@ export class SchoolComponent implements OnInit {
                         result.forEach((school) => { this.schools.push(MapUtils.deserialize(SchoolModel, school)); })
                         this.schools.forEach((school) => {
                             if (this.me.SchoolId == school.SchoolId) {
-                                school.isMySchool = true;
-                                school.mySchoolClass = "td-green";
+                                school.IsMySchool = true;
                                 this.mySchool = school;
-                            } else {
-                                this.tempSchools.push(school);
                             }
+                            BingMapService.getLatitudeAndLongitude(school.State, school.City, school.Address).then((location) => {
+                                school.Latitude = location.Latitude;
+                                school.Longitude = location.Longitude;
+                            });
                         });
-                        this.schools = [];
-                        if (this.mySchool){
-                            this.schools.push(this.mySchool);
-                        }
-                        this.tempSchools.sort((n1, n2) => {
-                            if (n1.DisplayName > n2.DisplayName) {
-                                return 1;
-                            }
-                            if (n1.DisplayName < n2.DisplayName) {
+                        this.schools.sort((n1, n2) => {
+                            if (n1.IsMySchool) {
                                 return -1;
                             }
-
-                            return 0;
-                        }).forEach((school) => {
-                            this.schools.push(school);
+                            if (n2.IsMySchool) {
+                                return 1;
+                            }
+                            return n1.DisplayName > n2.DisplayName ? 1 : (n1.DisplayName < n2.DisplayName ? -1 : 0);
                         });
                     });
             });
+        this.initLocalAndLinkedState();
     }
+
+    initLocalAndLinkedState() {
+        this.meService.getCurrentUser()
+            .subscribe((user) => {
+                this.areAccountsLinked = user.areAccountsLinked;
+            });
+
+        this.isLocalAccount = this.meService.isLocalAccount();
+    }
+
     gotoClasses(school: SchoolModel) {
         setTimeout(() => {
             this.router.navigate(['classes', school.ObjectId, school.SchoolId]);
         }, 100);
     }
+
     gotoUsers(school: SchoolModel) {
         setTimeout(() => {
             this.router.navigate(['users', school.ObjectId, school.SchoolId]);
@@ -92,13 +100,12 @@ export class SchoolComponent implements OnInit {
             return;
         }
 
-        const lat: string = element.attr("lat");
-        const lon: string = element.attr("lon");
-        const key: string = $(".schools input#BingMapKey").val();
-        if (lat && lon && key) {
+        const latitude: string = element.attr("latitude");
+        const longitude: string = element.attr("longitude");
+        if (latitude && longitude) {
             var map = new Microsoft.Maps.Map(myMap[0], {
-                credentials: key,
-                center: new Microsoft.Maps.Location(lat, lon),
+                credentials: SvcConsts.BING_MAP_KEY,
+                center: new Microsoft.Maps.Location(latitude, longitude),
                 mapTypeId: Microsoft.Maps.MapTypeId.road,
                 showMapTypeSelector: false,
                 zoom: 10

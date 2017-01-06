@@ -78,7 +78,7 @@ export class ClassesModel {
     public get CombinedCourseNumber(): string {
         var result = this.CourseName.substring(0, 3).toUpperCase();
         var regexp = new RegExp(/\d+/);
-        var dd = this.CourseName.match(regexp);
+        var dd = this.CourseNumber.match(regexp);
         if (dd != null) result += dd[0];
         return result;
     }

@@ -30,10 +30,9 @@
                         <span id="termdate">{{classEntity.TermEndDate}}</span>
                     </div>
                     <div class="col-md-6">
-                        <span>Teacher:</span>
-                         <label class="lbteachers" *ngFor="let user of classEntity.Teachers">
-                            {{user.DisplayName}}
-                        </label>
+                        <div *ngFor="let user of classEntity.Teachers">
+                            <span>Teacher:</span> {{user.DisplayName}}
+                        </div>
                     </div>
                 </div>
                 <div style="clear:both;"></div>
@@ -85,7 +84,7 @@
                                     </tbody>
                                     <tbody *ngIf="documents">
 
-                                        <tr class="tr-content" *ngFor="let doc of documents">
+                                        <tr class="tr-content" *ngFor="let doc of documents" (click)="setSelected($event)">
                                             <td class="border-holder"></td>
                                             <td class="space-holder left"></td>
                                             <td>
@@ -110,7 +109,7 @@
                                         </tr>
                                     </tbody>
                                     <tbody *ngIf="conversations">
-                                        <tr class="tr-content"  *ngFor="let conversation of conversations">
+                                        <tr class="tr-content"  *ngFor="let conversation of conversations" (click)="setSelected($event)">
                                             <td class="border-holder"></td>
                                             <td class="space-holder left"></td>
                                             <td>
@@ -142,7 +141,7 @@
                                     </ul>
 
                                     <div id="hidtiles" class="hideitem" *ngIf="classEntity">
-                                        <div *ngFor="let stu of classEntity.Students" [position]="stu.SeatingArrangment" [userid]="stu.O365UserId" class="deskcontainer " [style.background-color]="stu.ContainerClass">
+                                        <div *ngFor="let stu of classEntity.Students" [position]="stu.SeatingArrangment" [userid]="stu.O365UserId" [class]="stu.ContainerClass" [style.background-color]="stu.BackgroundColor">
                                             <div class="deskclose" [hidden]="!isEditing"><img src="/app/Images/close.png"></div>
                                             <div class="deskicon">
                                                 <img [src]="stu.Photo || 'app/images/header-default.jpg'" />

@@ -36,7 +36,7 @@ export class Link implements OnInit {
         this.linkService.getCurrentUser()
             .subscribe((user) => {
                 this.userInfo.readFromJson(user);
-                this.areAccountsLinked = false;//this.userInfo.areAccountsLinked();
+                this.areAccountsLinked = user.areAccountsLinked;
             });
     }
 

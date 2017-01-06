@@ -23,6 +23,7 @@ export class ClassesComponent implements OnInit {
     school: SchoolModel;
     nextLink: string;
     isGettingData: boolean = false;
+    showNoData: boolean = false;
 
     constructor( @Inject('schoolService') private schoolService
         , private route: ActivatedRoute, private router: Router) {
@@ -82,6 +83,9 @@ export class ClassesComponent implements OnInit {
                     this.classesArray = [];
                 }
                 result.value.forEach((obj) => { this.classesArray.push(MapUtils.deserialize(ClassesModel, obj)); });
+                if (this.classesArray.length == 0){
+                    this.showNoData = true;
+                }
                 this.schoolService.getMyClasses(this.schoolId)
                     .subscribe((result) => {
                         if (this.myClassesArray === undefined) {

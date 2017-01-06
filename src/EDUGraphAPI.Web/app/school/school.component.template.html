@@ -1,85 +1,62 @@
-﻿
-
-        <div class="row schools">
-            <div class="tophero">
-                <div class="col-md-6">
-                    <div class="a-heading schoolname">
-                        ALL SCHOOLS
-                    </div>
-                </div>
-                <div class="col-md-6 schooltiles" *ngIf="me">
-                    <div class="infocontainer" *ngIf="me.ObjectType=='Student' || me.ObjectType=='Teacher'">
-
-                        <div class="infoheader" >
-                            <span >
-                                {{me.ObjectType}}
-                            </span>
-                             Id
-                        </div>
-                        <div class="infobody">
-                            {{me.TeacherId}}{{me.StudentId}}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="container myschool">
-                    <div class="schoolenrolled">
-                        Current school(s) enrolled
-                    </div>
-                    <div class="greenicon"></div>
-                </div>
-
-                <div style="clear:both;">
-                </div>
-                <table class="table  table-green table-schools">
-                    
-                        <tr class="table-green-header">
-                            <th class="tdleft">
-                                School Name
-                            </th>
-                            <th>
-                                Principal
-                            </th>
-                            <th>
-                                Grade Levels
-                            </th>
-                            <th>
-                                Address
-                            </th>
-                            <th></th>
-
-                        </tr>
-                    <tbody *ngIf="schools">
-                        <tr class="tr-content" *ngFor="let item of schools" >
-                            <td [class]="item.mySchoolClass">{{item.DisplayName }}</td>
-                            <td [class]="item.mySchoolClass">{{item.PrincipalName }}</td>
-                            <td [class]="item.mySchoolClass">{{item.LowestGrade }} - {{item.HighestGrade }}</td>
-                            <td [class]="item.mySchoolClass">
-                                <div class="schooladdress">
-                                    {{item.City }}
-
-                                    <br>
-                                    {{item.State }} , {{item.Zip }}
-
-                                </div>
-                                <div class="schoolmap">
-                                    <a class="bingMapLink" lat="47.642520904541" lon="-122.13060760498" href="javascript:void(0)"><img *ngIf="!item.isMySchool" src="/app/Images/icon-map_30x28px-BLU.png">
-                                    <img *ngIf="item.isMySchool" src="/app/Images/icon-map_30x28px-WHT.png"></a>
-                                </div>
-                            </td>
-                            <td [class]="item.mySchoolClass">
-                                
-                                <a class="btnlink"  (click)="gotoClasses(item);false">
-                                    Classes
-                                </a>
-                                
-                                <a class="btnlink" (click)="gotoUsers(item);false">Teachers/students</a>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
+﻿<div class="row schools"  *ngIf="areAccountsLinked">
+    <div class="tophero">
+        <div class="col-md-6">
+            <div class="a-heading schoolname">
+                ALL SCHOOLS
             </div>
-            <div id="myMap" style="top: 0px; left: 0px; display: none;"></div>
-            <footer></footer>
         </div>
+        <div class="col-md-6 schooltiles" *ngIf="me">
+            <div class="infocontainer" *ngIf="me.ObjectType=='Student' || me.ObjectType=='Teacher'">
+                <div class="infoheader" >
+                    <span>{{me.ObjectType}}</span> Id
+                </div>
+                <div class="infobody">{{me.TeacherId}}{{me.StudentId}}</div>
+            </div>
+        </div>
+        <div class="container myschool">
+            <div class="schoolenrolled">Current school(s) enrolled</div>
+            <div class="greenicon"></div>
+        </div>
+        <div style="clear:both;"></div>
+        <table class="table  table-green table-schools">
+            <tbody *ngIf="schools">
+                <tr class="table-green-header">
+                    <th class="tdleft">School Name</th>
+                    <th>Principal</th>
+                    <th>Grade Levels</th>
+                    <th>Address</th>
+                    <th></th>
+                </tr>
+                <tr class="tr-content" [class.td-green]="item.IsMySchool" *ngFor="let item of schools" >
+                    <td>{{item.DisplayName }}</td>
+                    <td>{{item.PrincipalName }}</td>
+                    <td>{{item.LowestGrade }} - {{item.HighestGrade }}</td>
+                    <td>
+                        <div class="schooladdress">
+                            {{item.Address}}
+                            <br />
+                            {{item.City }} {{item.State }} , {{item.Zip }}
+                        </div>
+                        <div class="schoolmap">
+                            <a class="bingMapLink" href="javascript:void(0)" [attr.longitude]="item.Longitude" [attr.latitude]="item.Latitude"><img [src]="item.IsMySchool ? '/app/Images/icon-map_30x28px-WHT.png' : '/app/Images/icon-map_30x28px-BLU.png'"></a>
+                        </div>
+                    </td>
+                    <td>
+                        <a class="btnlink" (click)="gotoClasses(item);false">Classes</a>
+                        <a class="btnlink" (click)="gotoUsers(item);false">Teachers/students</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="myMap" style="top: 0px; left: 0px; display: none;"></div>
+</div>
+<div class="row schools" *ngIf="areAccountsLinked==false">
+    <br />
+    <p *ngIf="isLocalAccount==false">
+        You will need to link your O365 and local accounts in order to use the functionality of this demo application. Please click on the browser 'Back' button to go back and link your existing local account or create a local account.
+    </p>
+    <p *ngIf="isLocalAccount">
+        You will need to link your O365 and local account together in order to use the functionality of this demo application. Please click on the browser 'Back' button to go back and link your existing O365 account.
+    </p>
+</div>

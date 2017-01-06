@@ -10,6 +10,7 @@
                 <option *ngFor="let color of model.FavoriteColors" [value]="color.Value">{{color.DisplayName}}</option>
             </select>
             <input type="button" value="Save" (click)="updateFavoriteColor()">
+            <span class="saveresult" *ngIf="model.SaveSucceeded">Favorite color has been updated!</span>
         </div>
     </div>
     <div class="margin-btm-12 ">

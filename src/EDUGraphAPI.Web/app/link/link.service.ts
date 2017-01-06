@@ -12,11 +12,6 @@ export class LinkService {
     constructor(private http: Http, @Inject('auth') private authService, @Inject('me') private meService, @Inject('user') private userService) { }
 
 
-    areAccountsLinked(): boolean {
-        return true;
-    }
-
-
     isLocalAccount() {
         return this.meService.isLocalAccount();
     }
@@ -41,11 +36,11 @@ export class LinkService {
     }
 
     createLocalUser(email: string, password: string, favoriteColor:string) {
-        var body = this.getPostBodyWithParams({
+        var body = {
             email: email,
             password: password,
             favoriteColor: favoriteColor
-        });
+        };
         return this.http.post(this.linkUrl + "/CreateLocalUser", body)
             .map((response: Response) => response.json()); 
     }
@@ -53,7 +48,7 @@ export class LinkService {
     linkO365User() {
         var redirectUrl = `${window.location.protocol}//${window.location.host}/api/link/O365User`;
         var url = AuthorizationHelper.getUrl(
-            'code',
+            'code+id_token',
             redirectUrl,
             AuthorizationHelper.generateNonce(),
             SvcConsts.MS_GRAPH_RESOURCE,

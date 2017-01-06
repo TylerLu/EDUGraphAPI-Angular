@@ -1,5 +1,6 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 import { GraphHelper } from '../utils/graphHelper'
 import { SchoolModel } from '../school/school';
@@ -14,11 +15,8 @@ import { SeatingArrangement } from './seatingarrangements'
 export class SchoolService {
     private files = [];
     private urlBase: string = SvcConsts.AAD_Graph_RESOURCE + '/' + SvcConsts.TENANT_ID;
-    private bingMapUrl: string = "http://dev.virtualearth.net/REST/v1/Locations/US/{0}/{1}/{2}?output=json&key=" + SvcConsts.BING_MAP_KEY;
 
-    constructor(private http: Http, @Inject('auth') private authService,
-        @Inject('data') private dataService) {
-
+    constructor(private http: Http, @Inject('auth') private authService, @Inject('data') private dataService) {
     }
 
 
@@ -32,15 +30,24 @@ export class SchoolService {
     }
 
     /**
-    * Retrieves longitude and latitude by address.
-    * Reference URL: 
-    */
-    getLongitudeAndLatitude(state: string, city: string, address: string): any {
-        return this.dataService.get(this.bingMapUrl.replace("{0}", state).replace("{1}", city).replace("{2}", address))
-            .map((response: Response): any => {
-                var j = response.json();
-                return j;
-            });
+     * Retrieves longitude and latitude by address.
+     * Reference URL: 
+     */
+    getLatitudeAndLongitude(state: string, city: string, address: string): Observable<any> {
+        return this.dataService.jsonpGetWithoutToken(`//dev.virtualearth.net/REST/v1/Locations/US/${state}/${city}/${address}?output=json&key=${SvcConsts.BING_MAP_KEY}`).map((response: Response) => {
+            var data = response.json();
+            if (data && (data["resourceSets"] instanceof Array) && data["resourceSets"].length > 0) {
+                var resourceSet = data["resourceSets"][0];
+                if (resourceSet && (resourceSet["resources"] instanceof Array) && resourceSet["resources"].length > 0) {
+                    var resource = resourceSet["resources"][0];
+                    if (resource["point"] && resource["point"]["coordinates"]) {
+                        var coordinates = resource["point"]["coordinates"];
+                        return{ Latitude: coordinates[0], Longitude: coordinates[1] };
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     /**

@@ -30,11 +30,11 @@ export class AuthHelper {
     }
 
     public getAccessToken() {
-        return this.get("/api/getaccesstoken?resource=https%3A%2F%2Fgraph.windows.net")
+        return this.get("/api/me/accesstoken?resource=https%3A%2F%2Fgraph.windows.net")
             .map((response: Response) => <TokenEntity>response.json());
     }
     public getMSAccessToken() {
-        return this.get("/api/getaccesstoken?resource=https%3A%2F%2Fgraph.microsoft.com")
+        return this.get("/api/me/accesstoken?resource=https%3A%2F%2Fgraph.microsoft.com")
             .map((response: Response) => <TokenEntity>response.json());
     }
 

@@ -30,7 +30,7 @@ export class AboutMe implements OnInit {
                 let user: UserInfo = new UserInfo();
                 user.readFromJson(data);
                 this.model.UserName = (user.firstName + " " + user.lastName).trim();
-                this.model.MyFavoriteColor = user.favoriteColor;
+                this.model.MyFavoriteColor = user.favoriteColor || this.model.FavoriteColors[0].Value;
                 this.model.IsLinked = user.areAccountsLinked();
             });
 
@@ -48,6 +48,8 @@ export class AboutMe implements OnInit {
     }
 
     updateFavoriteColor() {
-        this.aboutMeservice.updateFavoriteColor(this.model.MyFavoriteColor).then((response) => { });
+        this.aboutMeservice.updateFavoriteColor(this.model.MyFavoriteColor).then((response) => {
+            this.model.SaveSucceeded = response.ok;
+        });
     }
 }

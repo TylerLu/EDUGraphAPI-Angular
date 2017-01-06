@@ -156,7 +156,7 @@ textarea {
 .schooltiles{margin:20px 0 20px 0; padding-right: 0;}
 .schooltiles .infocontainer{margin-right:0;}
 
-.table-green { border:none;background-color:white}
+.table-green { border:none;background-color:white;font-size:14px;}
 .table-green tr.tr-content:nth-child(2n+1){background-color:#f8f8f8}
 .table-green> tbody > tr > th{ border:none; padding:20px 0 20px 6px;}
 .table-green .table-green-header{ background:#127605;color:white; }
@@ -185,7 +185,7 @@ textarea {
 .schools .table-schools tr td:nth-child(3){width:16%;}
 .schools .table-schools tr td:nth-child(4){width:23%;}
 .schools .table-schools tr td:nth-child(5){width:26%;}
-.schools .table-schools .table-green-header th {font-family: 'Helvetica Neue LT Std Bold';}
+.schools .table-schools .table-green-header th {font-family: 'Helvetica Neue LT Std Bold';font-size:14px;font-weight:normal;}
 
 .ignore{display:none;}
 .container>div.row{background-color:#fff;}
@@ -202,11 +202,11 @@ textarea {
 .sections .tophero .usericon .icon.my-class{margin-left:12px; background:-prefix-linear-zgradient(top, #4E9F42, #B8E2B2); background:linear-gradient(to bottom, #4E9F42, #B8E2B2);}
 .sections .tophero .mysection{width:48%; float:right;font-family:'Helvetica Neue LT Std Bold'}
 .sections .tophero .mysection :not(.current){font-family:'Helvetica Neue LT Std Roman'}
-.filterlink-container{text-align:right;margin-top:10px;}
+.filterlink-container{text-align:right;margin-top:10px;font-weight:bold;}
 .section-tiles{padding-left:15px; background-color:white;}
 .section-tiles .tile-container{margin-right: 18px;float: left;margin-bottom: 5px;margin-top: 12px;position:relative;}
 .section-tiles .tile-container:nth-child(6n){margin-right:0;}
-.section-tiles .tile{display:inline-block;width:170px;height:170px;border:1px solid #C2C2C2;border-radius:5px;-moz-border-radius:5px;background: -prefix-linear-zgradient(top, #434345, #BBBBBB); background: linear-gradient(to bottom, #434345, #BBBBBB); color:#fff;}
+.section-tiles .tile{display:inline-block;width:175px;height:175px;border:1px solid #C2C2C2;border-radius:5px;-moz-border-radius:5px;background: -prefix-linear-zgradient(top, #434345, #BBBBBB); background: linear-gradient(to bottom, #434345, #BBBBBB); color:#fff;}
 .mysectionlink .tile{border:1px solid #C2C2C2;border-radius:5px;-moz-border-radius:5px;background: -prefix-linear-zgradient(top, #4E9F42, #B8E2B2); background: linear-gradient(to bottom, #4E9F42, #B8E2B2); }
 a.mysectionlink{cursor:pointer;}
 .section-tiles .tile>h5{text-align: center;margin: 60px 5px 0 5px;font-size:14px;font-style: normal;font-variant: normal;}
@@ -229,7 +229,7 @@ a.mysectionlink{cursor:pointer;}
 .b-title{font-size:24px;color:#666565;}
 .class-details .b-title{font-family:'Helvetica Neue LT Std Th'}
 .coursedetail .col-md-6{padding:12px 0 6px 0;}
-.coursedetail .col-md-6 span{font-family:'Helvetica Neue LT Std Bold'}
+.coursedetail .col-md-6 span:not(#termdate):not(#termdate-separator){font-family:'Helvetica Neue LT Std Bold'}
 .coursedetail .col-md-6:last-child{padding:12px 0 6px 0;}
 .coursedetail .col-md-6:last-child > b{color:#F7F7F7;}
 .coursedetail .col-md-6:last-child > b:first-child{color:#333;}
@@ -249,7 +249,7 @@ a.mysectionlink{cursor:pointer;}
 .students   ul > li>a{font-family:'Helvetica Neue LT Std Th'; color:#ABABAB; height:56px; font-size:18px; text-transform:uppercase; background-color:#fff; border-radius:0 0 0 0; padding-top:15px;}
 .students   ul > li.active > a,.students   ul > li.active > a:hover,.students   ul > li.active > a:focus {font-family:'Helvetica Neue LT Std Bold'; background-color:#127605; color:white;}
 .students .table-green .table-green-header{border-bottom:1px solid #127605;background-color:#127605;}
-.students .table-green .table-green-header th {background-color:#127605;border-bottom:1px solid #127605; padding-top:15px; padding-bottom:15px}
+.students .table-green .table-green-header th {background-color:#127605;border-bottom:1px solid #127605; padding-top:15px; padding-bottom:15px;font-size:14px;font-weight:normal;}
 .students .table-green .tdleft{border-left-color:#ABABAB;}
 .students .table-green tbody tr{font-family:'Helvetica Neue LT Std Roman'; font-size:18px; color:#000000}
 .students #students .table-green tbody tr{font-size:14px}
@@ -510,9 +510,9 @@ top: -10px;cursor:pointer;}
 .tablesorter .header{background-image:url('../Images/arrow-all.png');background-repeat:no-repeat;background-position-y:center;background-size:10px;}
 .tablesorter .headerSortDown{background-image:url('../Images/arrow-up.png');background-repeat:no-repeat;background-position-y:center;background-size:10px;}
 .tablesorter .headerSortUp{background-image:url('../Images/arrow-down.png');background-repeat:no-repeat;background-position-y:center;background-size:10px;}
-.tablesorter .header:nth-child(1){background-position-x:137px;}
+.tablesorter .header:nth-child(1){background-position-x:124px;}
 .tablesorter .header:nth-child(2){background-position-x:69px;}
-#studoc .header:nth-child(3){background-position-x:150px;}
+#studoc .header:nth-child(3){background-position-x:145px;}
 #studoc .header:nth-child(4){background-position-x:90px;}
 #studoc .header:nth-child(5){background-position-x:115px;}
 

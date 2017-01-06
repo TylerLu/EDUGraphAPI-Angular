@@ -1,4 +1,4 @@
-﻿export class DemoPage {
+﻿export class DemoHelperPage {
     component: string;
     action: string;
     links: string[];

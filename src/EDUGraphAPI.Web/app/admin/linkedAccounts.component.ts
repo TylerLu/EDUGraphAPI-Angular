@@ -15,7 +15,7 @@ import { AdminService } from './admin.service';
 export class LinkedAccountsComponent implements OnInit {
     accounts: UserInfo[] = new Array<UserInfo>();
 
-    constructor( @Inject('user') private userService, private router: Router,
+    constructor(private router: Router,
         @Inject('auth') private auth, @Inject('adminService') private adminService: AdminService) {
     }
 
@@ -28,7 +28,7 @@ export class LinkedAccountsComponent implements OnInit {
                 if (!this.adminService.isAdmin(result)) {
                     this.auth.reLogin();
                 } else {
-                    this.userService.getLinkedAccounts()
+                    this.adminService.getLinkedAccounts()
                         .subscribe((users) => {
                             users.forEach((user) => {
                                 let account: UserInfo = new UserInfo();
@@ -43,7 +43,7 @@ export class LinkedAccountsComponent implements OnInit {
 
     unlink(account: UserInfo, index: number) {
         if (confirm(`Are you sure you want to unlink ${account.email} with Office 365 account ${account.o365Email}?`)) {
-            this.userService.unlinkAccount(account.id)
+            this.adminService.unlinkAccount(account.id)
                 .subscribe((status) => {
                     if (status === true) {
                         this.accounts.splice(index, 1);

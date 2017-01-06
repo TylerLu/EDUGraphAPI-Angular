@@ -12,7 +12,7 @@
                                         <li [hidden]="!password.errors?.minlength || (password.pristine && !form.submitted)">The Password must be at least 6 characters long.</li>
                                         <li [hidden]="!password.errors?.maxlength || (password.pristine && !form.submitted)">The Password must be at most 100 characters long.</li>
                                         <li [hidden]="!password.errors?.required || (password.pristine && !form.submitted)">The Password field is required.</li>
-
+                                        <li [hidden]="!showLoginFailed">Your account or password is incorrect.  </li>
                                     </ul>
                                 </div>
 

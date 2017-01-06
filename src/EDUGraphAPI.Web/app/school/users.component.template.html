@@ -38,7 +38,7 @@
     </div>
     <div class="users-container tiles-root-container">
         <div id="users" class="tiles-secondary-container" [hidden]="view !== 'users'">
-            <div *ngIf="!usersModel.users || usersModel.users.length === 0" class="nodata"> There is no data available for this page at this time.</div>
+            <div *ngIf="showNoData" class="nodata"> There is no data available for this page at this time.</div>
             <div *ngIf="usersModel.users && usersModel.users.length > 0">
                 <div class="content">
                     <div class="element" *ngFor="let user of usersModel.users; let i = index" [hidden]="i < (usersModel.curPage - 1) * 12 || i >= usersModel.curPage * 12" [ngClass]="user.ObjectType === 'Teacher' ? 'teacher-bg' : 'student-bg'">

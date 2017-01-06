@@ -50,7 +50,7 @@ import { UserInfo } from '../models/common/userInfo'
 export class Login implements OnInit {
 
     model: UserInfo = new UserInfo();
-
+    showLoginFailed: boolean = false;
     constructor( @Inject('auth') private auth, private router: Router, private activatedRoute: ActivatedRoute,
         @Inject('user') private userService
     ) {
@@ -93,8 +93,10 @@ export class Login implements OnInit {
     localLogin() {
         this.userService.localLogin(this.model)
             .subscribe((result) => {
-                if (result.ok) {
-                    
+                if (result.status == "200") {
+                    this.router.navigate(["schools"]);
+                } else {
+                    this.showLoginFailed = true;
                 }
             });
     }

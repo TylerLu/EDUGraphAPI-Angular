@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as Sequelize from 'sequelize';
 import * as Promise from "bluebird";
 
+import { Constants } from '../constants';
+
 // User
 export interface UserAttributes {
     id?: string;
@@ -21,15 +23,8 @@ export interface UserInstance extends Sequelize.Instance<UserAttributes>, UserAt
     createOrganization: Sequelize.BelongsToCreateAssociationMixin<OrganizationAttributes>;
 
     getUserRoles: Sequelize.HasManyGetAssociationsMixin<UserRoleInstance>;
-    //setUserRoles: Sequelize.HasManySetAssociationsMixin<UserRoleAttributes, number>;
-    //addUserRoles: Sequelize.HasManyAddAssociationsMixin<UserRoleAttributes, number>;
-    //addUserRole: Sequelize.HasManyAddAssociationMixin<UserRoleAttributes, number>;
     createUserRole: Sequelize.HasManyCreateAssociationMixin<UserRoleAttributes>;
     removeUserRole: Sequelize.HasManyRemoveAssociationMixin<UserRoleAttributes, number>;
-    //removeUserRoles: Sequelize.HasManyRemoveAssociationsMixin<UserRoleInstance, number>;
-    //hasUserRole: Sequelize.HasManyHasAssociationMixin<UserRoleAttributes, number>;
-    //hasUserRoles: Sequelize.HasManyHasAssociationsMixin<UserRoleAttributes, number>;
-    //countUserRoles: Sequelize.HasManyCountAssociationsMixin;
 }
 export interface UserModel extends Sequelize.Model<UserInstance, UserAttributes> { }
 
@@ -41,6 +36,8 @@ export interface OrganizationAttributes {
     created: Date;
 }
 export interface OrganizationInstance extends Sequelize.Instance<OrganizationAttributes>, OrganizationAttributes {
+    getUsers: Sequelize.HasManyGetAssociationsMixin<UserInstance>;
+    removeUsers: Sequelize.HasManyRemoveAssociationsMixin<UserInstance, string>;
 }
 export interface OrganizationModel extends Sequelize.Model<OrganizationInstance, OrganizationAttributes> { }
 
@@ -55,15 +52,6 @@ export interface UserRoleInstance extends Sequelize.Instance<UserRoleAttributes>
 }
 export interface UserRoleModel extends Sequelize.Model<UserRoleInstance, UserRoleAttributes > { }
 
- //User Claims
-export interface UserClaimAttributes {
-    claimType?: string;
-    claimValue?: string;
-}
-
-export interface UserClaimInstance extends Sequelize.Instance<UserClaimAttributes>, UserClaimAttributes {
-}
-export interface UserClaimModel extends Sequelize.Model<UserClaimInstance, UserClaimAttributes> { }
 
 //ClassroomSeatingArrangements
 export interface ClassroomSeatingArrangementAttributes {
@@ -96,7 +84,6 @@ export class DbContext {
     public User: UserModel;
     public Organization: OrganizationModel;
     public UserRole: UserRoleModel;
-    public UserClaim: UserClaimModel;
     public ClassroomSeatingArrangement: ClassroomSeatingArrangementModel;
     public TokenCache: TokenCacheModel;
 
@@ -109,9 +96,9 @@ export class DbContext {
     }
 
     private init() {
-        this.sequelize = new Sequelize('EDUGraphAPI2DEV', 'EduGraphAPI', 'EDRF8Uu6PVG6UVi', {
+        this.sequelize = new Sequelize(Constants.SQLServerDatabase, Constants.SQLServerUsername, Constants.SQLServerPassword, {
             dialect: 'mssql',
-            host: 'edugraphapi2dev.database.windows.net',
+            host: Constants.SQLServerHost,
             dialectOptions: {
                 encrypt: true
             }
@@ -149,7 +136,7 @@ export class DbContext {
                 tableName: "Organizations"
             });
         this.User.belongsTo(this.Organization);
-        // this.Organization.hasMany(this.User);
+        this.Organization.hasMany(this.User);
 
         this.UserRole = this.sequelize.define<UserRoleInstance, UserRoleAttributes>('UserRole',
             {
@@ -160,17 +147,6 @@ export class DbContext {
                 tableName: "UserRoles"
             });
         this.User.hasMany(this.UserRole);
-
-        this.UserClaim = this.sequelize.define<UserClaimInstance, UserClaimAttributes>('UserClaim',
-            {
-                claimType: Sequelize.STRING,
-                claimValue: Sequelize.STRING
-            },
-            {
-                timestamps: false,
-                tableName: "UserClaims"
-            });
-        this.UserClaim.belongsTo(this.User);
 
         this.ClassroomSeatingArrangement = this.sequelize.define<ClassroomSeatingArrangementInstance, ClassroomSeatingArrangementAttributes>('ClassroomSeatingArrangement',
             {

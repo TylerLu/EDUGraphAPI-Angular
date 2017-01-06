@@ -8,7 +8,8 @@ export class MSGraphClient {
         this.accessToken = accessToken;
     }
 
-    public getO365UserInfo(tenantId: string): Promise<any> {
+    //basic, roles, organization
+    public getO365User(tenantId: string): Promise<any> {
         let o365UserInfo = {
             user: null,
             roles: [],
@@ -21,7 +22,11 @@ export class MSGraphClient {
             })
             .then((roles) => {
                 o365UserInfo.roles = roles;
-                return this.getTenant(tenantId)
+                if (tenantId == null) {
+                    o365UserInfo.organization = null;
+                    return o365UserInfo;
+                }
+                return this.getOrganization(tenantId)
             })
             .then((org) => {
                 o365UserInfo.organization = org;
@@ -43,7 +48,7 @@ export class MSGraphClient {
         })
 
     }
-    public getTenant(tenantID: string): Promise<any> {
+    public getOrganization(tenantID: string): Promise<any> {
         return new Promise((resolve, reject) => {
             request
                 .get(Constants.MSGraphResource + "/v1.0/organization/" + tenantID +"?$select=id,displayName")

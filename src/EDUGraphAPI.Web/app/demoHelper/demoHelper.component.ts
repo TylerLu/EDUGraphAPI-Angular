@@ -1,29 +1,29 @@
 ﻿import { Component, Input, OnInit, Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http } from '@angular/http';
-import { DemoPage } from './demoPage';
-import { DemoService } from './demoService';
+import { DemoHelperPage } from './demoHelperPage';
+import { DemoHelperService } from './demoHelperService';
 import { MapUtils } from '../services/jsonhelper';
 
 
 @Component({
     moduleId: module.id,
-    selector: 'demo',
-    templateUrl: 'demo.component.template.html'
+    selector: 'demohelper',
+    templateUrl: 'demoHelper.component.template.html'
 })
 
-export class Demo implements OnInit {
+export class DemoHelper implements OnInit {
 
     HasDemo: boolean;
-    DemoPage: DemoPage;
+    DemoPage: DemoHelperPage;
     Collapsed: boolean;
 
-    constructor(private router: Router, private http: Http, @Inject('demoService') private demoService: DemoService) { }
+    constructor(private router: Router, private http: Http, @Inject('demoHelperService') private demoHelperService: DemoHelperService) { }
 
     ngOnInit() {
         this.HasDemo = true;
         this.Collapsed = true;
-        this.DemoPage = new DemoPage();
+        this.DemoPage = new DemoHelperPage();
         this.GetDemoPage();
     }
 
@@ -32,7 +32,7 @@ export class Demo implements OnInit {
     }
 
     GetDemoPage() {
-        this.demoService.GetDemoData()
+        this.demoHelperService.GetDemoData()
             .subscribe(res => {
                 this.DemoPage = res;
                 this.HasDemo = this.DemoPage != {};

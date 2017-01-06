@@ -1,7 +1,9 @@
 ﻿import express = require('express');
 import * as Storage from '../data/dbContext';
 import * as Sequelize from 'sequelize';
+import { Constants } from '../constants';
 import { UserService } from '../services/userService';
+import { TokenCacheService } from '../services/tokenCacheService';
 
 var router = express.Router();
 var userService = new UserService();
@@ -14,39 +16,68 @@ router.route('/')
             userService.getUserModel({ o365UserId: u.oid })
                 .then(user => {
                     if (user == null) {
-                        user = {
-                            firstName: u.name.givenName,
-                            lastName: u.name.familyName,
-                            o365UserId: u.oid,
-                            o365email: u.upn
-                        };
+                        return userService.getO365User(u.oid, u._json.tid)
                     }
-                    user.authType = u.authType;
-                    res.json(user);
+                    else {
+                        user.areAccountsLinked = true;
+                        user.authType = u.authType;
+                        res.json(user);
+                    }
+                })
+                .then(O365User => {
+                    O365User.areAccountsLinked = false;
+                    O365User.authType = u.authType;
+                    res.json(O365User);
                 })
                 .catch(error => res.json(500, { error: error }));
         }
         else {
-            var userId = '39080da7-2091-4e82-9954-5d427802aa20';
-            userService.getUserModel({ id: userId })
-                .then(user => res.json(user))
+            userService.getUserModel({ id: u.id })
+                .then(user => {
+                    user.areAccountsLinked =
+                        user.o365UserId != null && user.o365UserId != ''
+                        && user.o365email != null && user.o365email != '';
+                    res.json(user);
+                })
                 .catch(error => res.json(500, { error: error }));
         }
 
     })
-    .post(function (req, res) {
-        var user = req.body;
-        var userId = '39080da7-2091-4e82-9954-5d427802aa20'; //TODO: Tyler get current user id
-        userService.updateUser(userId, user)
-            .then(() => res.end())
-            .catch(error => res.json(500, { error: error }));
-    });
-
-router.get('/accessToken/:resource', function (req, res) {
-    var resource = req.param['resource'] as string;
-    userService.getAccessToken(resource)
-        .then(token => res.json(token))
+router.post('/favoriteColor', function (req, res) {
+    var user = req.body;
+    userService.updateFavoriteColor(user.id, user.favoriteColor)
+        .then((user) => {
+            res.json(user);
+        })
         .catch(error => res.json(500, { error: error }));
+});
+
+
+router.get('/accesstoken', function (req, res) {
+    if (req.isAuthenticated()) {
+        let oid = req.user.oid;
+        var tokenCache = new TokenCacheService();
+        switch (req.query["resource"]) {
+            case Constants.MSGraphResource:
+                tokenCache.getMSAccessToken(oid)
+                    .then((result) => {
+                        res.json(result);
+                    });
+                break;
+            case Constants.AADGraphResource:
+                tokenCache.getAADAccessToken(oid)
+                    .then((result) => {
+                        res.json(result);
+                    });
+                break;
+            default:
+                res.json({ error: "resource is invalid" });
+                break;
+        }
+    }
+    else {
+        res.json({ error: "401 unauthorized" });
+    }
 });
 
 export = router;

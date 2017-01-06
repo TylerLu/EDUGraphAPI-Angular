@@ -161,9 +161,13 @@
           "properties": {
             "WEBSITE_NODE_DEFAULT_VERSION": "6.9.2",
             "WEBSITE_NPM_DEFAULT_VERSION": "3.10.8",
-            "ida:ClientId": "[parameters('clientId')]",
-            "ida:ClientSecret": "[parameters('clientSecret')]",
-            "SourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]",
+            "clientId": "[parameters('clientId')]",
+            "clientSecret": "[parameters('clientSecret')]",
+            "sourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]",
+            "SQLServerHost": "[reference(concat('Microsoft.Sql/servers/', variables('sqlServerName'))).fullyQualifiedDomainName]",
+            "SQLServerUsername": "[parameters('sqlAdministratorLoginUsername')]",
+            "SQLServerPassword": "[parameters('sqlAdministratorLoginPassword')]",
+            "SQLServerDatabase": "[variables('sqlDatabaseName')]",
             "command": "src\\EDUGraphAPI.Web\\deploy.cmd"
           }
         },

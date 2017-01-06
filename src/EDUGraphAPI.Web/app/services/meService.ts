@@ -15,7 +15,6 @@ import { SvcConsts } from "../svcConsts/svcConsts"
 export class MeService {
 
     private meAPIUrl = 'api/me';
-    private usersAPIUrl = 'api/users';
 
     constructor(private _http: Http, @Inject('auth') private authService) {
     }
@@ -30,7 +29,7 @@ export class MeService {
             this.getCurrentUser()
                 .subscribe((user) => {
                     user.favoriteColor = favoriteColor;
-                    this._http.post(this.meAPIUrl, user)
+                    this._http.post('api/me/favoriteColor', user)
                         .subscribe((response) => resolve(response));
                 });
         });
@@ -40,7 +39,7 @@ export class MeService {
         let authType = Cookie.get(SvcConsts.LOGIN_TOKEN);
         if (authType == null || authType == undefined)
             return true;
-        return authType.toLowerCase() == "o365";
+        return authType.toLowerCase() == "local";
     }
 
     public isO365Account() {

@@ -11,7 +11,7 @@ import { AuthenticationHelper } from './utils/authenticationHelper';
 
 @Component({
     moduleId: module.id,
-    selector: 'my-app',
+    selector: 'app',
     templateUrl: 'app.component.template.html',
     styleUrls: ['../app/app.component.css']
 })

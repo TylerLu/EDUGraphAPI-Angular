@@ -12,6 +12,8 @@ export class AboutMeModel {
 
     public ShowFavoriteColor: boolean;
 
+    public SaveSucceeded: boolean = false;
+
     constructor() {
         this.UserName = undefined;
         this.IsLinked = undefined;

@@ -1,14 +1,14 @@
 ﻿import { Injectable, Inject } from '@angular/core';
-import { DemoPage } from './demoPage';
+import { DemoHelperPage } from './demoHelperPage';
 import { Http,Response} from '@angular/http';
 
 @Injectable()
-export class DemoService {
+export class DemoHelperService {
 
     constructor(private http: Http) {}
 
-    GetMappedDemoPage(pages: DemoPage[]) {
-        let result = new DemoPage();
+    GetMappedDemoPage(pages: DemoHelperPage[]) {
+        let result = new DemoHelperPage();
         let component = window.location.pathname.split('/')[1];
         for (var i = 0; i < pages.length; i++) {
             let page = pages[i];
@@ -21,7 +21,7 @@ export class DemoService {
     }
 
     GetDemoData(){
-        return this.http.get('app/demo/demo-pages.json')
+        return this.http.get('app/demoHelper/demoHelper-pages.json')
             .map((response: Response) => {
                 return this.GetMappedDemoPage(response.json());
             });

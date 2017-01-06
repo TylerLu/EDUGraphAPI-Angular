@@ -1,4 +1,5 @@
-﻿import { JsonProperty} from '../services/jsonhelper'
+﻿import { JsonProperty } from '../services/jsonhelper'
+
 export class SchoolModel {
     @JsonProperty("extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId")
     public SchoolId: string;
@@ -56,13 +57,10 @@ export class SchoolModel {
 
     public Longitude: string;
 
-    public isMySchool: boolean = false;
-    public mySchoolClass: string = "";
+    public IsMySchool: boolean = false;
 
     @JsonProperty("extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType")
     public EducationObjectType: string;
-
-    
 
     constructor() {
         this.SchoolId = undefined;
@@ -83,6 +81,5 @@ export class SchoolModel {
         this.AnchorId = undefined;
         this.StateId = undefined;
         this.EducationObjectType = undefined;
-
     }
 }
