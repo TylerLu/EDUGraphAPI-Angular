@@ -17,7 +17,9 @@ router.post('/ExistingLocalUser', function (req, res) {
             .then(() => {
                 res.json(200);
             })
-            .catch(error => res.json(500, { error: error }))
+            .catch(error => {
+                res.json(500, { error: error })
+            })
 
     }
     else {
@@ -65,8 +67,8 @@ function getAccessToken(code: string, tenantId: string, resource: string): Promi
         request.post(url)
             .accept('application/json')
             .send('resource=' + encodeURI(resource))
-            .send('client_id=' + Constants.clientId)
-            .send('client_secret=' + Constants.clientSecret)
+            .send('client_id=' + Constants.ClientId)
+            .send('client_secret=' + Constants.ClientSecret)
             .send('grant_type=authorization_code')
             .send('code=' + code)
             .send('redirect_uri=' + encodeURI(redirectUri))

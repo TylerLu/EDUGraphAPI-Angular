@@ -4,8 +4,7 @@ import { LinkService } from './link.service';
 import { UserInfo } from '../models/common/userinfo';
 import { LoginLocalModel } from './link';
 import { ColorEntity } from '../models/common/colorEntity';
-import { SvcConsts } from '../SvcConsts/SvcConsts';
-
+import { Constants } from '../constants';
 
 @Component({
     moduleId: module.id,

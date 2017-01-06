@@ -168,6 +168,7 @@
             "SQLServerUsername": "[parameters('sqlAdministratorLoginUsername')]",
             "SQLServerPassword": "[parameters('sqlAdministratorLoginPassword')]",
             "SQLServerDatabase": "[variables('sqlDatabaseName')]",
+            "BingMapKey": "[parameters('bingMapKey')]",
             "command": "src\\EDUGraphAPI.Web\\deploy.cmd"
           }
         },

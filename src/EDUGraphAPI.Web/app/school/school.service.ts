@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { GraphHelper } from '../utils/graphHelper'
 import { SchoolModel } from '../school/school';
-import { SvcConsts } from '../SvcConsts/SvcConsts'
+import { Constants } from '../constants';
 import { UserModel, StudentModel, TeacherModel } from '../school/user';
 import { ClassesModel, ClassesModelWithPagination } from '../school/classes';
 import { Document, OneDrive } from './document';
@@ -14,7 +14,7 @@ import { SeatingArrangement } from './seatingarrangements'
 @Injectable()
 export class SchoolService {
     private files = [];
-    private urlBase: string = SvcConsts.AAD_Graph_RESOURCE + '/' + SvcConsts.TENANT_ID;
+    private urlBase: string = Constants.AADGraphResource + '/' + Constants.TenantId;
 
     constructor(private http: Http, @Inject('auth') private authService, @Inject('data') private dataService) {
     }
@@ -34,7 +34,7 @@ export class SchoolService {
      * Reference URL: 
      */
     getLatitudeAndLongitude(state: string, city: string, address: string): Observable<any> {
-        return this.dataService.jsonpGetWithoutToken(`//dev.virtualearth.net/REST/v1/Locations/US/${state}/${city}/${address}?output=json&key=${SvcConsts.BING_MAP_KEY}`).map((response: Response) => {
+        return this.dataService.jsonpGetWithoutToken(`//dev.virtualearth.net/REST/v1/Locations/US/${state}/${city}/${address}?output=json&key=${Constants.BING_MAP_KEY}`).map((response: Response) => {
             var data = response.json();
             if (data && (data["resourceSets"] instanceof Array) && data["resourceSets"].length > 0) {
                 var resourceSet = data["resourceSets"][0];
@@ -158,13 +158,13 @@ export class SchoolService {
      * Reference URL: https://dev.onedrive.com/items/list.htm.
      */
     getDocuments(classId: string) {
-        var url = SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/groups/" + classId + "/drive/root/children";
+        var url = Constants.MSGraphResource + "/v1.0/groups/" + classId + "/drive/root/children";
         return this.dataService.get(url)
             .map((response: Response) => <Document[]>response.json().value);
     }
 
     getOneDriveWebURl(classId: string) {
-        var url = SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/groups/" + classId + "/drive/root";
+        var url = Constants.MSGraphResource + "/v1.0/groups/" + classId + "/drive/root";
         return this.dataService.get(url)
             .map((response: Response) => <OneDrive>response.json());
     }
@@ -175,7 +175,7 @@ export class SchoolService {
      * Reference URL: https://graph.microsoft.io/en-us/docs/api-reference/v1.0/api/group_list_threads.
      */
     getConversation(classId: string) {
-        var url = SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/" + SvcConsts.TENANT_ID + "/groups/" + classId + "/conversations";
+        var url = Constants.MSGraphResource + "/v1.0/" + Constants.TenantId + "/groups/" + classId + "/conversations";
         return this.dataService.get(url)
             .map((response: Response) => <Conversation[]>response.json().value);
     }

@@ -1,7 +1,7 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Http, Headers, Response, URLSearchParams} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { SvcConsts } from '../SvcConsts/SvcConsts'
+import { Constants } from '../constants';
 import { UserModel } from '../school/user';
 import { AuthorizationHelper, Prompt } from '../utils/AuthorizationHelper';
 
@@ -51,7 +51,7 @@ export class LinkService {
             'code+id_token',
             redirectUrl,
             AuthorizationHelper.generateNonce(),
-            SvcConsts.MS_GRAPH_RESOURCE,
+            Constants.MSGraphResource,
             '',
             AuthorizationHelper.generateNonce(),
             'form_post'

@@ -3,18 +3,17 @@ import { Http, Headers, Response, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { SchoolModel } from '../school/school';
-import { SvcConsts } from '../SvcConsts/SvcConsts'
 import { UserModel } from '../school/user';
 import { AuthorizationHelper, Prompt } from '../utils/AuthorizationHelper';
-import { Constants } from '../constants'
+import { Constants } from '../constants';
 import { GraphHelper } from '../utils/graphHelper'
 import { Roles } from '../constants';
 
 @Injectable()
 export class AdminService {
-    private getMeUrl = SvcConsts.AAD_Graph_RESOURCE + '/' + SvcConsts.TENANT_ID + "/me?api-version=1.5";
+    private getMeUrl = Constants.AADGraphResource + '/' + Constants.TenantId + "/me?api-version=1.5";
     private getAdminUrl = '/api/me';
-    private aadBaseUrl = SvcConsts.AAD_Graph_RESOURCE + '/' + SvcConsts.TENANT_ID;
+    private aadBaseUrl = Constants.AADGraphResource + '/' + Constants.TenantId;
     
     constructor(private _http: Http, @Inject('auth') private authService, @Inject('user') private userService, @Inject('data') private dataService) { }
 
@@ -134,7 +133,7 @@ export class AdminService {
 
     private getServicePrincipal(authHeaders: RequestOptionsArgs): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._http.get(`${this.aadBaseUrl}/servicePrincipals?api-version=1.6&$filter=appId%20eq%20'${SvcConsts.CLIENT_ID}'`, authHeaders)
+            this._http.get(`${this.aadBaseUrl}/servicePrincipals?api-version=1.6&$filter=appId%20eq%20'${Constants.CientId}'`, authHeaders)
                 .subscribe((response: Response) => {
                     if (response) {
                         var data = response.json();

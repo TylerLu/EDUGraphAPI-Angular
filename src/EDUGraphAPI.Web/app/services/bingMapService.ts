@@ -1,9 +1,8 @@
 ﻿/// <reference path="../../node_modules/@types/jquery/index.d.ts" />
 
 import { Injectable, Inject } from '@angular/core';
-import { Constants } from '../Constants';
-
-export class BingMapHelper {
+import { Constants } from '../constants';
+export class BingMapService {
     /**
      * Retrieves longitude and latitude by address.
      * Reference URL: 

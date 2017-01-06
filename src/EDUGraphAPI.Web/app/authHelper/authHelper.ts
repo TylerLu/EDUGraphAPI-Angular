@@ -1,5 +1,5 @@
 import { Injectable, Inject } from "@angular/core";
-import { SvcConsts } from "../svcConsts/svcConsts";
+import { Constants } from '../constants';
 import { Cookie } from '../services/cookieService';
 import { Http, Headers, Response } from '@angular/http';
 import { MapUtils, JsonProperty } from '../utils/jsonhelper'
@@ -15,7 +15,7 @@ export class AuthHelper {
     }
 
     public IsLogin(): boolean {
-        var token = Cookie.get(SvcConsts.LOGIN_TOKEN);
+        var token = Cookie.get(Constants.LOGIN_TOKEN);
         if (token && token != "undefined")
             return true;
         else {
@@ -24,16 +24,16 @@ export class AuthHelper {
     }
 
     public reLogin() {
-        Cookie.delete(SvcConsts.LOGIN_TOKEN);
+        Cookie.delete(Constants.LOGIN_TOKEN);
         this.router.navigate(['login']);
     }
 
     public getAccessToken() {
-        return this.get("/api/me/accesstoken?resource=https%3A%2F%2Fgraph.windows.net")
+        return this.get("/api/me/accesstoken?resource=" + Constants.AADGraphResource.replace("://", "%3A%2F%2F"))
             .map((response: Response) => <TokenEntity>response.json());
     }
     public getMSAccessToken() {
-        return this.get("/api/me/accesstoken?resource=https%3A%2F%2Fgraph.microsoft.com")
+        return this.get("/api/me/accesstoken?resource=" + Constants.MSGraphResource.replace("://", "%3A%2F%2F"))
             .map((response: Response) => <TokenEntity>response.json());
     }
 

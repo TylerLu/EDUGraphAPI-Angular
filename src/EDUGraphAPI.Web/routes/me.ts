@@ -45,7 +45,7 @@ router.route('/')
                 .then(user => {
                     user.areAccountsLinked =
                         user.o365UserId != null && user.o365UserId != ''
-                        && user.o365email != null && user.o365email != '';
+                        && user.o365Email != null && user.o365Email != '';
                     res.json(user);
                 })
                 .catch(error => res.json(500, { error: error }));
@@ -71,13 +71,15 @@ router.get('/accesstoken', function (req, res) {
                 tokenCache.getMSAccessToken(oid)
                     .then((result) => {
                         res.json(result);
-                    });
+                    })
+                    .catch(error => res.json(500, { error: error }));
                 break;
             case Constants.AADGraphResource:
                 tokenCache.getAADAccessToken(oid)
                     .then((result) => {
                         res.json(result);
-                    });
+                    })
+                    .catch(error => res.json(500, { error: error }));
                 break;
             default:
                 res.json({ error: "resource is invalid" });

@@ -1,3 +1,5 @@
+import { ColorEntity } from './models/common/colorEntity'
+
 export class Constants {
 
     public static readonly CientId = "37443f61-5fe1-4a1b-8778-e251b3df885b";
@@ -7,9 +9,16 @@ export class Constants {
     public static readonly TokenProcessorUrl = "https://localhost:44380/node_modules/kurvejs/dist/login.html";
     public static readonly MSGraphResource = "https://graph.microsoft.com";
     public static readonly AADGraphResource = "https://graph.windows.net";
+    public static COOKIE_TOKEN: string = "user_token_ad";
+    public static MS_COOKIE_TOKEN: string = "user_token_ms";
+    public static LOGIN_TOKEN = "authType";
+    public static BING_MAP_KEY: string = "AgWV4amBPg2dzbgGPB8Ya5GDfGqBnueTJUfu1oAAilDje_vXB0RpKGF4mDabOmwB";
+    public static FavoriteColors: ColorEntity[] = [new ColorEntity("Blue", "#2F19FF"), new ColorEntity("Green", "#127605"), new ColorEntity("Grey", "#535353")];
+
 }
 export class Roles {
     public static readonly Admin = "Admin";
     public static readonly Faculty = "Faculty";
     public static readonly Student = "Student";
 }
+

@@ -1,14 +1,14 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 
-import { SvcConsts } from '../SvcConsts/SvcConsts'
+import { Constants } from '../constants';
 import { AboutMeModel } from './aboutme';
 import { ClassesModel } from '../school/classes';
 import { ColorEntity } from '../models/common/colorEntity';
 
 @Injectable()
 export class AboutMeService {
-    private graphUrlBase: string = SvcConsts.AAD_Graph_RESOURCE + '/' + SvcConsts.TENANT_ID;
+    private graphUrlBase: string = Constants.AADGraphResource + '/' + Constants.TenantId;
 
     constructor(private http: Http, @Inject('me') private meService, @Inject('data') private dataService) {
     }

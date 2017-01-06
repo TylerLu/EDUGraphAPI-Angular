@@ -2,50 +2,46 @@
 
     public static readonly Host: string = process.env.WEBSITE_HOSTNAME as string;
 
-    public static readonly clientId: string = process.env.clientId as string;
-    public static readonly clientSecret: string = process.env.clientSecret as string;
+    public static readonly ClientId: string = process.env.clientId as string;
+    public static readonly ClientSecret: string = process.env.clientSecret as string;
 
     public static readonly AADInstance: string = "https://login.microsoftonline.com/";
     public static readonly Authority: string = Constants.AADInstance + "common/";
+    public static readonly IdentityMetadata: string = Constants.Authority + '.well-known/openid-configuration';
 
     public static readonly MSGraphResource: string = "https://graph.microsoft.com";
     public static readonly AADGraphResource: string = "https://graph.windows.net";
 
-    public static readonly sourceCodeRepositoryUrl: string = process.env.sourceCodeRepositoryUrl as string;
+    public static readonly SourceCodeRepositoryUrl: string = process.env.sourceCodeRepositoryUrl as string;
 
     public static readonly AADCompanyAdminRoleName: string = "Company Administrator";
 
-    public static readonly identityMetadata: string = 'https://login.microsoftonline.com/common/.well-known/openid-configuration';
-
     //Required, must be 'code', 'code id_token', 'id_token code' or 'id_token' 
-    public static readonly responseType: string = 'code';
+    public static readonly ResponseType: string = 'code';
 
     // Required
-    public static readonly responseMode: string = 'form_post';
+    public static readonly ResponseMode: string = 'form_post';
 
     // Required, the reply URL registered in AAD for your app
-    public static readonly redirectUrl: string = '/auth/openid/return';
+    public static readonly RedirectUrl: string = '/auth/openid/return';
 
     // Required if we use http for redirectUrl
-    public static readonly allowHttpForRedirectUrl: boolean = true;
+    public static readonly AllowHttpForRedirectUrl: boolean = true;
 
     // Required  to set to false if you don't want to validate issuer
-    public static readonly validateIssuer: boolean = false;
+    public static readonly ValidateIssuer: boolean = false;
 
     // Required to set to true if the `verify` function has 'req' as the first parameter
-    public static readonly passReqToCallback: boolean = true;
-
-    // Optional. The additional scope you want besides 'openid', for example: ['email', 'profile'].
-    public static readonly scope: Array<string> = null;
+    public static readonly PassReqToCallback: boolean = true;
 
     // Optional, 'error', 'warn' or 'info'
-    public static readonly loggingLevel: string = 'info';
+    public static readonly LoggingLevel: string = 'info';
 
     // Optional. The lifetime of nonce in session, the default value is 3600 (seconds).
-    public static readonly nonceLifetime: number = null;
+    public static readonly NonceLifetime: number = null;
 
     // The url you need to go to destroy the session with AAD
-    public static readonly destroySessionUrl: string = 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=';
+    public static readonly DestroySessionUrl: string = Constants.Authority + 'oauth2/logout?post_logout_redirect_uri=';
 
     //SQL config 
     public static readonly SQLServerDatabase: string = 'EDUGraphAPI2DEV';

@@ -1,11 +1,11 @@
 ﻿import { ColorEntity } from '../models/common/colorEntity'
-import { SvcConsts } from '../SvcConsts/SvcConsts';
+import { Constants } from '../constants';
 
 export class CreateLocalModel {
     public password: string;
     public confirmPassword: string;
 
-    public favoriteColors: ColorEntity[] = SvcConsts.FavoriteColors;
+    public favoriteColors: ColorEntity[] = Constants.FavoriteColors;
 
     public favoriteColor: string;
 }

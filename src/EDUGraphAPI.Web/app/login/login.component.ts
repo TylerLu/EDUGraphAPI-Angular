@@ -43,6 +43,7 @@ import { UserInfo } from '../models/common/userInfo'
         .logincontrol{width:380px !important;height:36px;max-width:380px;}
         .loginbody .row .col-md-5:nth-child(2){margin-left:85px;}
         .loginbody .row .col-md-5:nth-child(1){margin-left:65px;}
+        .container > .navbar-header, .container > .navbar-collapse {width: 1120px!important; margin:auto auto; float:none;}
 
             `]
 })
@@ -72,7 +73,8 @@ export class Login implements OnInit {
             .mergeMap(route => route.data)
             .subscribe((event) => {
                 if (this.auth.IsLogin()) {
-                    this.router.navigate(['schools']);
+                    if (this.router.url != '/link')
+                        this.router.navigate(['schools']);
                 }
                 else {
                     if (this.router.url != "/register") {

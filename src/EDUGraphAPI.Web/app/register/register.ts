@@ -1,9 +1,9 @@
 ﻿import { ColorEntity } from '../models/common/colorEntity'
-import { SvcConsts } from '../SvcConsts/SvcConsts';
+import { Constants } from '../constants';
 import { UserInfo } from '../models/common/userInfo'
 
 export class RegisterModel{
     public ConfirmPassword: string;
-    public FavoriteColors: ColorEntity[] = SvcConsts.FavoriteColors;
+    public FavoriteColors: ColorEntity[] = Constants.FavoriteColors;
     public UserInfo: UserInfo = new UserInfo();
 }

@@ -4,8 +4,8 @@ import { Inject } from '@angular/core';
 import { UserInfo } from '../models/common/userInfo';
 import { AboutMeModel } from './aboutme';
 import { ClassesModel } from '../school/classes';
-import { MapUtils } from '../utils/jsonhelper';
-import { SvcConsts } from '../SvcConsts/SvcConsts';
+import { MapUtils } from '../utils/jsonHelper';
+import { Constants } from '../constants';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class AboutMe implements OnInit {
 
     constructor(@Inject('aboutMeService') private aboutMeservice
         , private route: ActivatedRoute, private router: Router) {
-        this.model.FavoriteColors = SvcConsts.FavoriteColors;
+        this.model.FavoriteColors = Constants.FavoriteColors;
     }
 
     ngOnInit() {

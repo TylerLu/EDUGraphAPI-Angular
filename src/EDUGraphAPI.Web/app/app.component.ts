@@ -20,7 +20,7 @@ import { AuthenticationHelper } from './utils/authenticationHelper';
 export class AppComponent implements OnInit{
 
 
-    constructor(private router: Router, @Inject('auth') private auth, private activatedRoute: ActivatedRoute,) {
+    constructor(private router: Router, @Inject('auth') private auth, private activatedRoute: ActivatedRoute, @Inject('me') private meService) {
       
     }
 
@@ -40,8 +40,19 @@ export class AppComponent implements OnInit{
                 //    this.router.navigate([this.router.url]);
                 //}
                 if (this.auth.IsLogin()) {
-                    var url = this.router.url == '/' ? 'schools' : this.router.url;
-                    this.router.navigate([url]);
+                    this.meService.getCurrentUser()
+                        .subscribe((user) => {
+                            let url = this.router.url;
+                            if (user.areAccountsLinked) {
+                                if (url == '/')
+                                    url = 'schools';
+                            } else {
+                                url = 'link';
+                            }
+                            if (this.router.url != '/' + url && this.router.url != "/login")
+                                this.router.navigate([url])
+                    });
+                    
                 }
                 else {
                     if (this.router.url != "/register") {
@@ -54,6 +65,7 @@ export class AppComponent implements OnInit{
             });
     
     }
+
       
     integrateJson() {
         MapUtils.deserialize(Object, {});

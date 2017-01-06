@@ -6,10 +6,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { SchoolModel} from './school'
 import { SchoolService } from './school.service';
 import { BingMapHelper } from '../utils/bingMapHelper'
-import { MapUtils } from '../utils/jsonhelper'
+import { MapUtils } from '../utils/jsonHelper'
 import { UserModel } from './user'
-import { SvcConsts } from '../SvcConsts/SvcConsts'
-
+import { Constants } from '../constants';
 
 @Component({
     moduleId: module.id,
@@ -109,7 +108,7 @@ export class SchoolComponent implements OnInit {
         const longitude: string = element.attr("longitude");
         if (latitude && longitude) {
             var map = new Microsoft.Maps.Map(myMap[0], {
-                credentials: SvcConsts.BING_MAP_KEY,
+                credentials: Constants.BING_MAP_KEY,
                 center: new Microsoft.Maps.Location(latitude, longitude),
                 mapTypeId: Microsoft.Maps.MapTypeId.road,
                 showMapTypeSelector: false,

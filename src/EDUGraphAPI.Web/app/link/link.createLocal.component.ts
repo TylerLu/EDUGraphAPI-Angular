@@ -4,8 +4,7 @@ import { LinkService } from './link.service';
 import { UserInfo } from '../models/common/userinfo';
 import { CreateLocalModel } from './link';
 import { ColorEntity } from '../models/common/colorEntity';
-import { SvcConsts } from '../SvcConsts/SvcConsts';
-
+import { Constants } from '../constants';
 
 @Component({
     moduleId: module.id,
@@ -26,7 +25,7 @@ export class LinkCreateLocal implements OnInit {
     ngOnInit() {
         this.localModel = new CreateLocalModel();
         this.initCurrentUser();
-        this.favoriteColors = SvcConsts.FavoriteColors;
+        this.favoriteColors = Constants.FavoriteColors;
     }
 
     initCurrentUser() {

@@ -61,21 +61,20 @@ export class appAuth {
     //-----------------------------------------------------------------------------
     constructOIDCStrategy() {
         return new this.OIDCStrategy({
-            identityMetadata: Constants.identityMetadata,
-            clientID: Constants.clientId,
-            responseType: Constants.responseType,
-            responseMode: Constants.responseMode,
+            identityMetadata: Constants.IdentityMetadata,
+            clientID: Constants.ClientId,
+            responseType: Constants.ResponseType,
+            responseMode: Constants.ResponseMode,
             redirectUrl: this.app.get('env') === 'development'
-                ? 'https://localhost:44380' + Constants.redirectUrl
-                : 'https://' + Constants.Host + Constants.redirectUrl,
-            allowHttpForRedirectUrl: Constants.allowHttpForRedirectUrl,
-            clientSecret: Constants.clientSecret,
-            validateIssuer: Constants.validateIssuer,
+                ? 'https://localhost:44380' + Constants.RedirectUrl
+                : 'https://' + Constants.Host + Constants.RedirectUrl,
+            allowHttpForRedirectUrl: Constants.AllowHttpForRedirectUrl,
+            clientSecret: Constants.ClientSecret,
+            validateIssuer: Constants.ValidateIssuer,
             isB2C: false,
-            passReqToCallback: Constants.passReqToCallback,
-            scope: Constants.scope,
-            loggingLevel: Constants.loggingLevel,
-            nonceLifetime: Constants.nonceLifetime,
+            passReqToCallback: Constants.PassReqToCallback,
+            loggingLevel: Constants.LoggingLevel,
+            nonceLifetime: Constants.NonceLifetime,
         }, function (req, iss, sub, profile, jwtClaims, access_token, refresh_token, params, done) {
             if (!profile.oid) {
                 return done(new Error("No oid found"), null);
@@ -197,7 +196,7 @@ export class appAuth {
             req.logOut();
             req.session = null;
             if (authType == 'O365')
-                res.redirect(Constants.destroySessionUrl + req.protocol + '://' + req.get('host'));
+                res.redirect(Constants.DestroySessionUrl + req.protocol + '://' + req.get('host'));
             else
                 res.redirect('/');
         });
@@ -214,8 +213,8 @@ export function getAccessTokenViaRefreshToken(refreshToken: string): Promise<str
     return new Promise<any>((resolve, reject) => {
         var postData = querystring.stringify({
             refresh_token: refreshToken,
-            client_id: Constants.clientId,
-            client_secret: Constants.clientSecret,
+            client_id: Constants.ClientId,
+            client_secret: Constants.ClientSecret,
             grant_type: "refresh_token"
         });
 

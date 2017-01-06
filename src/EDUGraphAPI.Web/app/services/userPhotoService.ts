@@ -1,7 +1,7 @@
 ﻿/// <reference path="../../node_modules/@types/jquery/index.d.ts" />
 
 import { Injectable, Inject } from '@angular/core';
-import { SvcConsts } from '../SvcConsts/SvcConsts';
+import { Constants } from '../constants';
 import { ConvertHelper } from '../utils/convertHelper';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class UserPhotoService {
         return new Promise((resolve, reject) => {
             this.authService.getMSAccessToken()
                 .subscribe((result) => {
-                    var url = `${SvcConsts.MS_GRAPH_RESOURCE}/v1.0/${SvcConsts.TENANT_ID}/users/${userId}/photo/$value`;
+                    var url = `${Constants.MSGraphResource}/v1.0/${Constants.TenantId}/users/${userId}/photo/$value`;
                     return $.ajax({
                         url: url,
                         type: 'GET',

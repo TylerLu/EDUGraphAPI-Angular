@@ -192,6 +192,7 @@ textarea {
 .container.body-content{ background-color:#fff;height:auto;}
 .schools{background-color:#fff;padding:0;}
 .schools .toptiles{float:right;padding-left: 15px;}
+.schools .hint {padding: 10px 10px;}
 .hr-green{border: 0;height: 10px;margin-top: 10px;}
 
 /*sections*/
@@ -251,7 +252,7 @@ a.mysectionlink{cursor:pointer;}
 .students .table-green .table-green-header{border-bottom:1px solid #127605;background-color:#127605;}
 .students .table-green .table-green-header th {background-color:#127605;border-bottom:1px solid #127605; padding-top:15px; padding-bottom:15px;font-size:14px;font-weight:normal;}
 .students .table-green .tdleft{border-left-color:#ABABAB;}
-.students .table-green tbody tr{font-family:'Helvetica Neue LT Std Roman'; font-size:18px; color:#000000}
+.students .table-green tbody tr{font-family:'Helvetica Neue LT Std Th'; font-size:18px; color:#000000}
 .students #students .table-green tbody tr{font-size:14px}
 .students #stuconv.table-green tbody tr{font-family:'Helvetica Neue LT Std Th'}
 .students .see-more{margin-left:12px;}

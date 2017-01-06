@@ -6,8 +6,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import { UserInfo } from '../models/common/userinfo';
 import { Cookie } from './cookieService';
-import { SvcConsts } from "../svcConsts/svcConsts"
-
+import { Constants } from '../constants';
 
 
 
@@ -36,7 +35,7 @@ export class MeService {
     }
 
     public isLocalAccount() {
-        let authType = Cookie.get(SvcConsts.LOGIN_TOKEN);
+        let authType = Cookie.get(Constants.LOGIN_TOKEN);
         if (authType == null || authType == undefined)
             return true;
         return authType.toLowerCase() == "local";
