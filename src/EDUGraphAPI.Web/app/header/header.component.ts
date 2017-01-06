@@ -66,9 +66,8 @@ export class Header implements OnInit {
     isClassesPage() {
         let urlParts = this.urlParts();
         //return this.urlParts.length == 3 && this.urlParts[0] == "Schools" && this.urlParts[2] == "Classes"; 
-        return urlParts.length > 0 && urlParts[0].toLowerCase() == "classes";
+        return urlParts.length > 0 && (urlParts[0].toLowerCase() == "classes" || urlParts[0].toLowerCase() == "classdetail");
     }
-
     isTeacherStudentsPage() {
         let urlParts = this.urlParts();
         if (urlParts.length == 0 || (urlParts[0].toLowerCase() != "users"))

@@ -46,7 +46,7 @@ export class AppComponent implements OnInit{
                             if (user.areAccountsLinked) {
                                 if (url == '/')
                                     url = 'schools';
-                            } else {
+                            } else if (url.indexOf('link')<0) {
                                 url = 'link';
                             }
                             if (this.router.url != '/' + url && this.router.url != "/login")

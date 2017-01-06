@@ -40,10 +40,17 @@ export class MyClassesComponent implements OnInit {
             this.schoolService.getMyClasses(this.schoolId)
                 .subscribe((result) => {
                     this.myClassesArray = [];
-                    result.forEach((obj) => { this.myClassesArray.push(MapUtils.deserialize(ClassesModel, obj)); });
+                    let tempArray = [];
+                    result.forEach((obj) => { tempArray.push(MapUtils.deserialize(ClassesModel, obj)); });
+                    tempArray.forEach((obj) => {
+                        if (obj.SchoolId == this.schoolId) {
+                            this.myClassesArray.push(obj);
+                        }
+                    });
                     if (this.myClassesArray.length == 0) {
                         this.showNoData = true;
                     }
+
                     this.myClassesArray.forEach((obj) => {
                         obj.IsMyClasses = true;
                         this.schoolService

@@ -33,6 +33,9 @@ export class LinkCreateLocal implements OnInit {
         this.linkService.getCurrentUser()
             .subscribe((user) => {
                 this.userInfo.readFromJson(user);
+                if (!this.userInfo.email) {
+                    this.userInfo.email = this.userInfo.o365Email;
+                }
                 this.localModel.favoriteColor = this.userInfo.favoriteColor;
             });
     }

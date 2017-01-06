@@ -2,7 +2,7 @@ import { ColorEntity } from './models/common/colorEntity'
 
 export class Constants {
 
-    public static readonly CientId = "37443f61-5fe1-4a1b-8778-e251b3df885b";
+    public static readonly CientId = "%CientId%";
     public static readonly TenantId = "canvizEDU.onmicrosoft.com";
     public static readonly AADInstance = "https://login.microsoftonline.com/";
     public static readonly Authority = Constants.AADInstance + "common/";
@@ -12,9 +12,8 @@ export class Constants {
     public static COOKIE_TOKEN: string = "user_token_ad";
     public static MS_COOKIE_TOKEN: string = "user_token_ms";
     public static LOGIN_TOKEN = "authType";
-    public static BING_MAP_KEY: string = "AgWV4amBPg2dzbgGPB8Ya5GDfGqBnueTJUfu1oAAilDje_vXB0RpKGF4mDabOmwB";
+    public static BING_MAP_KEY: string = "%BingMapKey%";
     public static FavoriteColors: ColorEntity[] = [new ColorEntity("Blue", "#2F19FF"), new ColorEntity("Green", "#127605"), new ColorEntity("Grey", "#535353")];
-
 }
 export class Roles {
     public static readonly Admin = "Admin";

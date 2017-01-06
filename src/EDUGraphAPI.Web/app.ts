@@ -27,6 +27,11 @@ var app = express();
 var auth = new appAuth(app);
 
 // Angular 2
+app.get("/app/constants.js", function (req, res) {
+    fs.readFile(path.join(__dirname, 'app/constants.js'), 'utf8', function (err, data) {
+        res.send(data.replace('%CientId%', process.env.clientId).replace('%BingMapKey%', process.env.BingMapKey));
+    });
+});
 app.use("/app", express.static(path.join(__dirname, 'app')));
 app.use("/dist", express.static(path.join(__dirname, 'dist')));
 app.use("/node_modules", express.static(path.join(__dirname, 'node_modules'), { maxAge: 1000 * 60 * 60 * 24 }));
@@ -37,6 +42,7 @@ app.get("/styles.css", function (req, res) {
 app.get("/systemjs.config.js", function (req, res) {
     res.sendfile(path.join(__dirname, 'systemjs.config.js'));
 });
+
 
 //-----------------------------------------------------------------------------
 // Config the app, include middlewares
