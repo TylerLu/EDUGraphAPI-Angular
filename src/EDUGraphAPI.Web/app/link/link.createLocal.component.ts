@@ -36,7 +36,12 @@ export class LinkCreateLocal implements OnInit {
                 if (!this.userInfo.email) {
                     this.userInfo.email = this.userInfo.o365Email;
                 }
-                this.localModel.favoriteColor = this.userInfo.favoriteColor;
+                if (!this.userInfo.favoriteColor) {
+                    this.localModel.favoriteColor = this.favoriteColors[0].Value;
+                }
+                else {
+                    this.localModel.favoriteColor = this.userInfo.favoriteColor;
+                }
             });
     }
 

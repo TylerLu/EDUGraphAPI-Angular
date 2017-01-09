@@ -29,7 +29,14 @@ export class Register implements OnInit {
     createLocalUser() {
         this.userService.createLocalAccount(this.model.UserInfo)
             .subscribe((result) => {
-                this.router.navigate(["link"]);
+                this.userService.localLogin(this.model.UserInfo)
+                    .then((result) => {
+                        if (result.status == "200") {
+                            window.location.href = "/schools";
+                        } 
+                    });
+                //this.router.navigate(["link"]);
+
             },
             (response: Response) => {
                 const data: any = response.json();

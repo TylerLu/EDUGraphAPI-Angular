@@ -43,10 +43,10 @@ export class AppComponent implements OnInit{
                     this.meService.getCurrentUser()
                         .subscribe((user) => {
                             let url = this.router.url;
-                            if (user.areAccountsLinked) {
+                            if (user.areAccountsLinked || url.indexOf("admin")>=0) {
                                 if (url == '/')
                                     url = 'schools';
-                            } else if (url.indexOf('link')<0) {
+                            } else if (url.indexOf('link') < 0) {
                                 url = 'link';
                             }
                             if (this.router.url != '/' + url && this.router.url != "/login")
