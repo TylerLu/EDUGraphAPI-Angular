@@ -17,11 +17,8 @@ export const appRoutes: Routes = [
     { path: 'link', redirectTo:"link"},
     { path: 'demoHelper', component: DemoHelper },
     { path: 'aboutme', component: AboutMe },
-    {
-        path: '',  // otherwise route.
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-    }
+    { path: '**', redirectTo: '/login'}
+    
 ];
 
 

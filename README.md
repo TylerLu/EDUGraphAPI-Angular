@@ -325,41 +325,36 @@ The client side app which resides in the /app folder is based on Angular 2 and a
 
 Below are the components used in the client app.
 
-| Folder      | Component             | Description                              |
-| ----------- | --------------------- | ---------------------------------------- |
-| /           | App                   |                                          |
-| /aboutme    | AboutMe               | Implements the Aboutme page on which users can update the favorite color. |
-| /admin      | Admin                 | Contains the administrative operations, link consent the tenant.<br> |
-|             | LinkedAccounts        | Implements the manage linked accounts page. |
-| /demoHeoper | DemoHelper            | Used to show users source code files (and their link) used |
-| /header     | Header                | Implements the header.                   |
-| /link       | Link                  | Implements the link home page.           |
-|             | LinkCreateLocal       |                                          |
-|             | LinkLoginLocal        |                                          |
-|             | LinkLoginO365Requried |                                          |
-| /login      | Login                 |                                          |
-| /register   | Register              |                                          |
-| /schools    | School                |                                          |
-|             | Classes               |                                          |
-|             | MyClasses             |                                          |
-|             | ClassDetails          |                                          |
-|             |                       |                                          |
-|             |                       |                                          |
-
-
+| Folder      | Component             |
+| ----------- | --------------------- |
+| /           | App                   |
+| /aboutme    | AboutMe               |
+| /admin      | Admin                 |
+|             | LinkedAccounts        |
+| /demoHeoper | DemoHelper            |
+| /header     | Header                |
+| /link       | Link                  |
+|             | LinkCreateLocal       |
+|             | LinkLoginLocal        |
+|             | LinkLoginO365Requried |
+| /login      | Login                 |
+| /register   | Register              |
+| /schools    | Schools               |
+|             | Classes               |
+|             | MyClasses             |
+|             | ClassDetails          |
 
 **Services**
 
-|      |      |
-| ---- | ---- |
-|      |      |
-|      |      |
-|      |      |
-|      |      |
-
-
-
-
+| Folder      | Name              |
+| ----------- | ----------------- |
+| /aboutme    | AboutMeService    |
+| /admin      | AdminService      |
+| /demoHelper | DemoHelperService |
+| /services   | MeService         |
+|             | UserService       |
+|             | UserPhotoService  |
+|             | DataService       |
 
 **Office 365 Education API**
 
@@ -482,10 +477,6 @@ Note that in AAD Application settings, permissions for each Graph API are config
 
 ![](Images/aad-app-permissions.png) 
 
-### 
-
-
-
 ### Major Classes
 
 **Microsoft.Education**
@@ -592,11 +583,6 @@ Note that in AAD Application settings, permissions for each Graph API are config
   | GetSectionsViewModelAsync       | Get SectionsViewModel of the specified school |
   | GetSectionDetailsViewModelAsync | Get SectionDetailsViewModel of the specified section |
   | GetMyClasses                    | Get my classes                           |
-
-**EDUGraphAPI.SyncData**
-
-* **`Functions`**: contains the `SyncUsersAsync` method which is executed regularly to sync users data.
-* **`Program`**: contains the `Main` method which configure and start the WebJob host.
 
 ## Contributors
 

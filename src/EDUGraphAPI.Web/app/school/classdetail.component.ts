@@ -266,7 +266,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         var detail = this;
         $.each(lstProducts, function (idx, val) {
             var id = $(this).attr("id");
-            detail.dragId = id;
+            //detail.dragId = id;
             var position = $(".deskcontainer[ng-reflect-userid='" + id + "']").attr("ng-reflect-position");
             if (position == '0') {
                 detail.enableDragOnLeft(this, true);
@@ -278,6 +278,9 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
 
         $(".deskcontainer").on('dragstart', function (evt) {
             var id = $(this).attr("ng-reflect-userid");
+            if (id) {
+                detail.dragId = id;
+            }
             $("#" + id).addClass("greenlist");
             var prevPosition = $(this).attr("ng-reflect-prev-position");
             if (!prevPosition) {
