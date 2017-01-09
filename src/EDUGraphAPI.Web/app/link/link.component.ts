@@ -1,6 +1,7 @@
 ﻿import { Component,  OnInit, Inject  } from '@angular/core';
 import { Router } from '@angular/router';
 import { LinkService } from './link.service';
+import { UrlHelper } from '../utils/urlHelper';
 import { UserInfo } from '../models/common/userinfo';
 
 
@@ -16,6 +17,7 @@ export class Link implements OnInit {
     localAccountExisted: boolean;
     localAccountExistedMessage: string;
     userInfo: UserInfo; 
+    error: string;
 
 
     constructor( @Inject('linkService') private linkService: LinkService, private router: Router, @Inject('me') private meService, @Inject('user') private userService) { }
@@ -28,6 +30,7 @@ export class Link implements OnInit {
             .subscribe((result) => {
                 console.log(result);
             });
+        this.initMessage();
     }
 
     initCurrentUser() {
@@ -58,4 +61,10 @@ export class Link implements OnInit {
         this.router.navigate(['link-local']);
     }
 
+    initMessage() {
+        var msg = UrlHelper.getUrlQueryValue('error')
+        if (msg != null && msg.length > 0) {
+            this.error = msg;
+        }
+    }
 }

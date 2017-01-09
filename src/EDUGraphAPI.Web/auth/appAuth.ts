@@ -206,7 +206,11 @@ export class appAuth {
 
         app.post('/account/login', passport.authenticate('localStrategy'),
             function (req, res) {
-                res.cookie('authType', 'Local');
+                if (req.body.remember) {
+                    res.cookie('authType', 'Local', { maxAge: 30 * 24 * 60 * 60 * 1000 });
+                } else {
+                    res.cookie('authType', 'Local');
+                }
                 res.json({ status: 'validate successfully' });
             });
     }

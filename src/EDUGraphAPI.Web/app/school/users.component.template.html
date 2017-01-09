@@ -39,8 +39,8 @@
     </div>
     <div class="users-container tiles-root-container">
         <div id="users" class="tiles-secondary-container" [hidden]="view !== 'users'">
-            <div *ngIf="showNoData" class="nodata"> There is no data available for this page at this time.</div>
-            <div *ngIf="usersModel.users && usersModel.users.length > 0">
+            <div *ngIf="usersModel.showNoData" class="nodata"> There is no data available for this page at this time.</div>
+            <div *ngIf="!usersModel.showNoData">
                 <div class="content">
                     <div class="element" *ngFor="let user of usersModel.users; let i = index" [hidden]="i < (usersModel.curPage - 1) * 12 || i >= usersModel.curPage * 12" [ngClass]="user.ObjectType === 'Teacher' ? 'teacher-bg' : 'student-bg'">
                         <div class="userimg">
@@ -56,8 +56,8 @@
             </div>
         </div>
         <div id="students" class="tiles-secondary-container" [hidden]="view !== 'students'">
-            <div *ngIf="!studentsModel.users || studentsModel.users.length === 0" class="nodata"> There is no data available for this page at this time.</div>
-            <div *ngIf="studentsModel.users && studentsModel.users.length > 0">
+            <div *ngIf="studentsModel.showNoData" class="nodata"> There is no data available for this page at this time.</div>
+            <div *ngIf="!studentsModel.showNoData">
                 <div class="content">
                     <div class="element" *ngFor="let user of studentsModel.users; let i = index" [hidden]="i < (studentsModel.curPage - 1) * 12 || i >= studentsModel.curPage * 12" [ngClass]="user.ObjectType === 'Teacher' ? 'teacher-bg' : 'student-bg'">
                         <div class="userimg">
@@ -73,8 +73,8 @@
             </div>
         </div>
         <div id="teachers" class="tiles-secondary-container" [hidden]="view !== 'teachers'">
-            <div *ngIf="!teachersModel.users || teachersModel.users.length === 0" class="nodata"> There is no data available for this page at this time.</div>
-            <div *ngIf="teachersModel.users && teachersModel.users.length > 0">
+            <div *ngIf="teachersModel.showNoData" class="nodata"> There is no data available for this page at this time.</div>
+            <div *ngIf="!teachersModel.showNoData">
                 <div class="content">
                     <div class="element" *ngFor="let user of teachersModel.users; let i = index" [hidden]="i < (teachersModel.curPage - 1) * 12 || i >= teachersModel.curPage * 12" [ngClass]="user.ObjectType === 'Teacher' ? 'teacher-bg' : 'student-bg'">
                         <div class="userimg">

@@ -56,7 +56,19 @@ router.post('/O365User', function (req, res) {
         .then(() => {
             res.redirect(redirectUrl);
         })
-        .catch(error => res.json(500, { error: error }))//TBD, CLORIS
+        .catch(error => {
+            let errorMsg: String = '';
+            if (typeof error == 'string' || error instanceof String) {
+                errorMsg = error;
+            }
+            else if (error != null && error.hasOwnProperty('message')) {
+                errorMsg = error.message
+            }
+            else {
+                errorMsg = 'unknown error'
+            }
+            res.redirect('/link?error=' + encodeURI(errorMsg as string));
+        });
 })
 
 

@@ -139,6 +139,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                     var doc = MapUtils.deserialize(Document, obj);
                     doc.lastModifiedDateTime = moment(doc.lastModifiedDateTime).utc(true)
                         .local().format('MM/DD/YYYY hh: mm: ss A');
+                    doc.LastModifiedBy = obj.lastModifiedBy.user.displayName+"";
                     this.documents.push(doc);
                 });
             });
@@ -207,14 +208,24 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                 arrangement.o365UserId = userid;
                 arrangement.position = position;
                 detail.newseatingArrangements.push(arrangement);
+                if (position == "0") {
+                    $("#" + userid).find(".seated").addClass("hideitem");
+                }
             }
+        });
+        $("#hidtiles .deskcontainer").each(function (i, e) {
+            $(this).attr("ng-reflect-prev-position","0");
+        });
+        
+        $(".desktile .deskcontainer").each(function (i, e) {
+            $(this).removeClass("unsaved").removeAttr("ng-reflect-prev-position");
         });
         this.schoolService
             .saveSeatingArrangement(this.classObjectId, detail.newseatingArrangements)
             .subscribe();
-        $(".desktile .deskcontainer.unsaved").removeClass("unsaved");
+        $(".deskcontainer.unsaved").removeClass("unsaved");
         $(".desktile .deskcontainer[ng-reflect-prev-position]").removeAttr("ng-reflect-prev-position");
-        $("#hidtiles .deskcontainer:not(.unsaved)").remove();
+        //$("#hidtiles .deskcontainer:not(.unsaved)").remove();
         $('<div id="saveResult"><div>Seating map changes saved.</div></div>')
             .insertBefore($('#dvleft'))
             .fadeIn("slow", function () { $(this).delay(3000).fadeOut("slow"); });
@@ -234,20 +245,31 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
     cancelEditDesk() {
     //var id = $(".desktile .deskcontainer.unsaved").appendTo($("#hidtiles")).attr("position", 0).attr("userid");
         //$("#" + id).find(".seated").addClass("hideitem");
+
+        //new added to seat chart
         $(".desktile .deskcontainer.unsaved").each(function () {
+            var prevId = $(this).attr("ng-reflect-prev-position");
+            if (!prevId) { //to be removed
+
+            }
             $(this).attr("ng-reflect-position", 0)
             var id = $(this).attr("ng-reflect-userid");
             $("#" + id).find(".seated").addClass("hideitem");
             $("#hidtiles").append($(this));
         });
+
+        //deleted
         $("#hidtiles .deskcontainer:not(.unsaved)").each(function (i, e) {
             //$e = $(e);
             var position = $(this).attr("ng-reflect-prev-position");
             $(this).attr("ng-reflect-position", position).removeAttr("ng-reflect-prev-position");
             var id = $(this).attr("ng-reflect-userid");
             $(".desktile[ng-reflect-position=" + position + "]").append($(this));
-            $("#" +id ).find(".seated").removeClass("hideitem");
+            if (position && position !="0")
+                $("#" +id ).find(".seated").removeClass("hideitem");
         });
+
+        //move
         $(".desktile .deskcontainer[ng-reflect-prev-position]").each(function (i, e) {
             var prevPosition = $(this).attr("ng-reflect-prev-position");
             if (prevPosition == $(this).attr("ng-reflect-position")) {
@@ -271,7 +293,9 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             if (position == '0') {
                 detail.enableDragOnLeft(this, true);
             } else {
-                detail.enableDragOnLeft($(this), false).find(".seated").removeClass("hideitem");
+                if (position){
+                    detail.enableDragOnLeft($(this), false).find(".seated").removeClass("hideitem");
+                }
             }
 
         });
@@ -300,7 +324,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                 return;
             $(".greenTileTooltip").remove();
             detail.enableDragOnLeft($("#" + id), false).removeClass("greenlist").find(".seated").removeClass("hideitem");
-            $(".deskcontainer[ng-reflect-userid='" + id + "']").addClass("white").appendTo($(this));
+            $(".deskcontainer[ng-reflect-userid='" + id + "']").addClass("white").addClass("unsaved").appendTo($(this));
             var position = $(this).attr("ng-reflect-position");
             $(this).find(".deskcontainer").attr("ng-reflect-position", position);
         });
@@ -326,7 +350,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             evt.preventDefault();
         });
 
-        $(".deskclose").click(function (evt) {
+        $(".deskclose").unbind().click(function (evt) {
             evt.preventDefault();
             var parent = $(this).closest(".deskcontainer");
             var id = parent.attr("ng-reflect-userid");

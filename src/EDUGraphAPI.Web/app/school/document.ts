@@ -9,13 +9,13 @@ export class Document {
     @JsonProperty("lastModifiedDateTime")
     public lastModifiedDateTime: string;
 
-    public LastModifiedBy: UserModel;
+    public LastModifiedBy: string="";
 
     constructor() {
         this.Name = undefined;
         this.webUrl = undefined;
         this.lastModifiedDateTime = undefined;
-        this.LastModifiedBy = undefined;
+        this.LastModifiedBy = "";
     }
 }
 

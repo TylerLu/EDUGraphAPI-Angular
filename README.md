@@ -260,6 +260,8 @@ Passport and its 2 plugins are used to enable local and O365 authentications:
 * **[passport-azure-ad](https://github.com/AzureAD/passport-azure-ad)**: a collection of [Passport](http://passportjs.org/) Strategies to help you integrate with Azure Active Directory. It includes OpenID Connect, WS-Federation, and SAML-P authentication and authorization. These providers let you integrate your Node app with Microsoft Azure AD so you can use its many features, including web single sign-on (WebSSO), Endpoint Protection with OAuth, and JWT token issuance and validation.
 * **[passport-local](https://github.com/jaredhanson/passport-local)**: this module lets you authenticate using a username and password in your Node.js applications. By plugging into Passport, local authentication can be easily and unobtrusively integrated into any application or framework that supports [Connect](http://www.senchalabs.org/connect/)-style middleware, including [Express](http://expressjs.com/).
 
+The 2 kinds of authentications are implemented in the **/auth/appAuth.ts** file.
+
 **Web APIs**
 
 The server app expose several Web APIs:
@@ -274,6 +276,8 @@ The server app expose several Web APIs:
 | /users/linked                         | GET      | Get all linked users                     |
 | /users/:userId/unlink                 | POST     | Unlink the specified u                   |
 | /schools/seatingArrangements/:classId | GET/POST | Get or set the seating arrangement of the specified class |
+
+These APIs are defined in the **/routes** folder.
 
 **Data Access**
 
@@ -291,6 +295,22 @@ Below are the tables used in this demo:
 | TokenCache                   | Contains the users' access/refresh tokens. |
 | ClassroomSeatingArrangements | Contains the classroom seating arrangements. |
 
+You will find the **DbContext** class and related model interfaces in the **/data/dbContext.ts** file.
+
+**Services**
+
+Below are the services used by the server side app:
+
+| Service           | Description                              |
+| ----------------- | ---------------------------------------- |
+| MSGraphClient     | Contains methods used to access MS Graph APIs |
+| SchoolService     | Contains two methods: get/update seating arrangements |
+| TenantService     | Contains methods that operate tenants in the database |
+| TokenCacheService | Contains method used to get and update cache from the database |
+| UserService       | Contains method used to manipulate users in the database |
+
+The services are in the **/services** folder.
+
 **Multi-tenant app**
 
 This web application is a **multi-tenant app**. In the AAD, we enabled the option:
@@ -302,14 +322,6 @@ Users from any Azure Active Directory tenant can access this app. As this app us
 ![](Images/app-requires-admin-to-consent.png)
 
 For more information, see [Build a multi-tenant SaaS web application using Azure AD & OpenID Connect](https://azure.microsoft.com/en-us/resources/samples/active-directory-dotnet-webapp-multitenant-openidconnect/).
-
-
-
-
-
-Enviroment vaiables
-
-
 
 ### **EDUGraphAPI.Web - Client**
 
@@ -356,7 +368,7 @@ Below are the components used in the client app.
 |             | UserPhotoService  |
 |             | DataService       |
 
-**Office 365 Education API**
+### Office 365 Education API
 
 [Office 365 Education APIs](https://msdn.microsoft.com/office/office365/api/school-rest-operations) help extract data from your Office 365 tenant which has been synced to the cloud by Microsoft School Data Sync. These results provide information about schools, sections, teachers, students and rosters. The Schools REST API provides access to school entities in Office 365 for Education tenants.
 
@@ -366,49 +378,25 @@ In the sample, the **Microsoft.Education** Class Library project was created to 
 
 **Get schools**
 
-~~~c#
-// https://msdn.microsoft.com/office/office365/api/school-rest-operations#get-all-schools
-public async Task<School[]> GetSchoolsAsync()
-{
-    return await HttpGetArrayAsync<School>("administrativeUnits?api-version=beta");
-}
+~~~typescript
+
 ~~~
 
-~~~c#
-// https://msdn.microsoft.com/office/office365/api/school-rest-operations#get-a-school
-public Task<School> GetSchoolAsync(string objectId)
-{
-    return HttpGetObjectAsync<School>($"administrativeUnits/{objectId}?api-version=beta");
-}
+~~~typescript
+
 ~~~
 
 **Get sections**
 
-~~~c#
-// https://msdn.microsoft.com/office/office365/api/school-rest-operations#get-sections-within-a-school
-public Task<Section[]> GetAllSectionsAsync(string schoolId)
-{
-    var relativeUrl = $"/groups?api-version=beta&$expand=members&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Section'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'{schoolId}'";
-    return HttpGetArrayAsync<Section>(relativeUrl);
-}
+~~~typescript
+
 ~~~
 
-```c#
-public async Task<Section[]> GetMySectionsAsync(string schoolId)
-{
-    var me = await HttpGetObjectAsync<SectionUser>("/me?api-version=1.5");
-    var sections = await GetAllSectionsAsync(schoolId);
-    return sections
-        .Where(i => i.Members.Any(j => j.Email == me.Email))
-        .ToArray();
-}
+```typescript
+
 ```
-```c#
-// https://msdn.microsoft.com/office/office365/api/section-rest-operations#get-a-section
-public async Task<Section> GetSectionAsync(string sectionId)
-{
-    return await HttpGetObjectAsync<Section>($"groups/{sectionId}?api-version=beta&$expand=members");
-}
+```typescript
+
 ```
 Below are some screenshots of the sample app that show the education data.
 
@@ -425,11 +413,6 @@ In **EducationServiceClient**, three private methods prefixed with HttpGet were 
 * **HttpGetAsync**: sends a http GET request to the target endpoint,  and returns the JSON response string.  An access token is included in the bearer authentication header.
 * **HttpGetObjectAsync<T>**:  deserializes the JSON string returned by HttpGetAsync to the target type T, and return the result object.
 * **HttpGetArrayAsync<T>**: deserializes the JSON string returned by HttpGetAsync to the target array type T[], and return the array. 
-
-
-
-![](Images/web-app-login-o365-required.png)
-
 
 
 ### Authentication Flows
@@ -469,120 +452,31 @@ There are two distinct Graph APIs used in this sample:
 | End Point    | https://graph.windows.net                | https://graph.microsoft.com              |
 | API Explorer | https://graphexplorer.cloudapp.net/      | https://graph.microsoft.io/graph-explorer |
 
-In this sample we use the classes below, which are based on a common interface, to demonstrate how the APIs are related:  
+Microsoft are investing heavily in the new MS Graph API, and are not investing in the Azure AD Graph API any more (except fixing security issues).
+
+So, please use he new MS Graph API as much as possible.
+
+Below is a piece of code shows how to get "me" from the MS Graph API.
+
+```typescript
+public getMe(): Promise<any> {
+    return new Promise((resolve, reject) => {
+        request
+            .get(Constants.MSGraphResource + "/v1.0/me/?$select=id,givenName,surname,userPrincipalName,assignedLicenses")
+            .set('Authorization', 'Bearer ' + this.accessToken)
+            .end((err, res) => {
+                if (err) { return reject(err) }
+                resolve(res.body);
+            })
+    })
+}
+```
 
 
 
 Note that in AAD Application settings, permissions for each Graph API are configured separately:
 
 ![](Images/aad-app-permissions.png) 
-
-### Major Classes
-
-**Microsoft.Education**
-
-* `EducationServiceClient`: an instance of the class handles building requests, sending them to Office 365 Education API, and processing the responses.
-
-  | Method              | Description                              |
-  | ------------------- | ---------------------------------------- |
-  | GetSchoolsAsync     | Get all schools that exist in the Azure Active Directory tenant |
-  | GetSchoolAsync      | Get a school by using the object id      |
-  | GetAllSectionsAsync | Get sections within a school             |
-  | GetMySectionsAsync  | Get my sections within a school          |
-  | GetSectionAsync     | Get a section by using the object id     |
-  | GetMembersAsync     | Get members within a school              |
-  | GetStudentAsync     | Get the current logged in user as a Student |
-  | GetTeacherAsync     | Get the current logged in user as a Teacher |
-
-**EDUGraphAPI.Common**
-
-* **`Data.ApplicationUser`**: an instance of the class represents a user.
-
-* **`Data.Organization`**: an instance of the class represents a tenant in Azure AD. 
-
-* **`Data.ApplicationDbContext`**: DbContext class used by Entity Framework, inherited from `IdentityDbContext<ApplicationUser>`.
-
-* **`DataSync.User`**: an instance of the class represents a user in Azure AD. Notice that the properties used to track changes are virtual.
-
-* **`DataSync.UserSyncService`**: an instance of the class handles syncing users in local database with differential query. Invoke the `SyncAsync` method to start sync users.
-
-* **`DifferentialQuery.DifferentialQueryService`**: An instance of the class handles building request, sending it to the service endpoint, and processing the responses. Invoke the `QueryAsync` method with a deltaLink to start a differential query. The differential result will be converted to `DeltaResult<Delta<TEntity>>` by `DeltaResultParser` class.
-
-* **`Utils.AuthenticationHelper`**: a static helper class used to get access token, authentication result, authentication context and instances of service client.
-
-  | Method                                 | Description                              |
-  | -------------------------------------- | ---------------------------------------- |
-  | GetActiveDirectoryClientAsync          | Get an instance of ActiveDirectoryClient |
-  | GetGraphServiceClientAsync             | Get an instance of GraphServiceClient    |
-  | GetEducationServiceClientAsync         | Get an instance of EducationServiceClient |
-  | GetActiveDirectoryClient               | Get an instance of ActiveDirectoryClient from the specified AuthenticationResult |
-  | GetGraphServiceClient                  | Get an instance of GraphServiceClient from the specified AuthenticationResult |
-  | GetAccessTokenAsync                    | Get an access token of the specified resource |
-  | GetAuthenticationResult                | Get an AuthenticationResult of the specified resource |
-  | GetAuthenticationContext               | Get an instance of AuthenticationContext |
-  | GetAuthenticationResultAsync           | Get an AuthenticationResult from the specified authorization code |
-  | GetAppOnlyAccessTokenForDaemonAppAsync | Get an App-only access token for a daemon app |
-
-  Most of the methods above have a argument called permission. Its type is `Permissions`, an Enum type with two defined values:
-
-  * `Delegated`: the client accesses the web API as the signed-in user.
-  * `Application`: the client accesses the web API directly as itself (no user context). This type of permission requires administrator consent.
-
-* **`Utils.AuthenticationHelper`**: a static class used to build authorize URL. `GetUrl` is the only method defined in the class.
-
-* **`Constants`**: a static class contains values of app settings and other constant values.
-
-**EDUGraphAPI.Web**
-
-* **`Controllers.AccountController`**: contains actions for user to register, login and change password.
-
-* **`Controllers.AdminController`**: implements the **Admin Login Authentication Flow**. Please check [Authentication Flows](#authentication-flows) section for more details.
-
-* **`Controllers.LinkController`**:  implements the **Local/O365 Login Authentication Flow**. Please check [Authentication Flows](#authentication-flows) section for more details.
-
-* **`Controllers.SchoolsController`**: contains actions to show schools and classes. `SchoolsService` class is mainly used by this controller. Pleae check [Office 365 Education API](#office-365-education-api) section for more details.
-
-* **`Infrastructure.EduAuthorizeAttribute`**: allow the web app to redirect the current user to the proper login page in our multi-authentication-method scenario. Please check [Filters](#filters) section for more details.
-
-* **`Infrastructure.HandleAdalExceptionAttribute`**: handle AdalException and navigate user to the authorize endpoint or /Link/LoginO365Required. Please check [Filters](#filters) section for more details.
-
-* **`Infrastructure.LinkedOrO365UsersOnlyAttribute`**: only allow linked users or Office 365 users to visit the protected controllers/actions. Please check [Filters](#filters) section for more details.
-
-* **`Models.UserContext`**: context for the logged-in user.
-
-* **`Services.GraphClients.AADGraphClient`**: implements `IGraphClient` interface with Azure AD Graph API. Please check [Two Kinds of Graph API](#two-kinds-of-graph-api) section for more details.
-
-* **`Services.GraphClients.MSGraphClient`**: implements `IGraphClient` interface with Microsoft Graph API. Please check [Two Kinds of Graph API](#two-kinds-of-graph-api) section for more details.
-
-* **`Services.ApplicationService.`**: an instance of the class handles getting/updating user/organization.
-
-  | Method                          | Description                              |
-  | ------------------------------- | ---------------------------------------- |
-  | CreateOrUpdateOrganizationAsync | Create or update the organization        |
-  | GetAdminContextAsync            | Get current admin's context              |
-  | GetCurrentUser                  | Get current user                         |
-  | GetCurrentUserAsync             | Get current user                         |
-  | GetUserAsync                    | Get user by id                           |
-  | GetUserContext                  | Get current user's context               |
-  | GetUserContextAsync             | Get current user's context               |
-  | GetLinkedUsers                  | Get linked users with the specified filter |
-  | IsO365AccountLinkedAsync        | Is the specified O365 account linked with an local account |
-  | SaveSeatingArrangements         | Save seating arrangements                |
-  | UnlinkAccountsAsync             | Unlink the specified the account         |
-  | UnlinkAllAccounts               | Unlink all accounts in the specified tenant |
-  | UpdateLocalUserAsync            | Update the local user with O365 user and tenant info |
-  | UpdateOrganizationAsync         | Update organization                      |
-  | UpdateUserFavoriteColor         | Update current user's favorite color     |
-
-* **`Services.SchoolsService`**: a service class used to get education data.
-
-  | Method                          | Description                              |
-  | ------------------------------- | ---------------------------------------- |
-  | GetSchoolsViewModelAsync        | Get SchoolsViewModel                     |
-  | GetSchoolUsersAsync             | Get teachers and students of the specified school |
-  | GetSectionsViewModelAsync       | Get SectionsViewModel of the specified school |
-  | GetSectionDetailsViewModelAsync | Get SectionDetailsViewModel of the specified section |
-  | GetMyClasses                    | Get my classes                           |
 
 ## Contributors
 
@@ -591,9 +485,13 @@ Note that in AAD Application settings, permissions for each Graph API are config
 | Project Lead / Architect / Documentation | Todd Baginski (Microsoft MVP, Canviz Consulting) @tbag |
 | PM                                       | John Trivedi (Canviz Consulting)         |
 | Development Leader / Documentation       | Tyler Lu (Canviz Consulting) @TylerLu    |
-| Developer                                | Benny Zhang (Canviz Consulting)          |
+| Developer (Education pages)              | Benny Zhang (Canviz Consulting)          |
+| Developer (Authentications)              | Theodore Shi (Canviz Consulting)         |
+| Developer (Link)                         | Albert Xie (Canviz Consulting)           |
+| Developer (Web APIs)                     | Cloris Sun (Canviz Consulting)           |
+| Developer (Education pages)              | Luis Lu (Canviz Consulting)              |
 | Testing                                  | Ring Li (Canviz Consulting)              |
-| Testing                                  | Melody She (Canviz Consulting)           |
+| Testing                                  | Cindy Yan (Canviz Consulting)            |
 | UX Design                                | Justin So (Canviz Consulting)            |
 | Code Reviews / Documentation             | Michael Sherman (Canviz Consulting) @canvizsherm |
 | Sponsor / Support                        | TJ Vering (Microsoft) @TJVering          |

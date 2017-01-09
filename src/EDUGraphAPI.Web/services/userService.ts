@@ -149,6 +149,7 @@ export class UserService {
                 return user != null;
             });
     }
+
     public getUserById(userId: string): Promise<UserInstance> {
         return this.dbContext.User.findById(userId);
     }
@@ -321,11 +322,20 @@ export class UserService {
     }
     //local user login and link O365 user
     public linkO365User(accessToken: string, localUserId: string, tenantId: string): Promise<any> {
+        let updateUserInfo; 
         let msgraphClient: MSGraphClient = new MSGraphClient(accessToken)
         return msgraphClient.getO365User(tenantId)
             .then((o365UserInfo) => {
-                let userInfo = this.convertO365UserToLocal(o365UserInfo);
-                return this.updateUser(localUserId, userInfo);
-            });
+                updateUserInfo = this.convertO365UserToLocal(o365UserInfo);
+                return this.dbContext.User.find({ where: { o365UserId: updateUserInfo.o365UserId } });
+            })
+            .then((localUser) => {
+                if (localUser == null) {
+                    return this.updateUser(localUserId, updateUserInfo);
+                }
+                else {
+                    throw `Failed to link accounts. The Office 365 account  ${updateUserInfo.o365Email} is already linked to another local account.`;
+                }
+            })
     }
 }

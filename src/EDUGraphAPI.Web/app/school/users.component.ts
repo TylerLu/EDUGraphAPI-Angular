@@ -18,6 +18,7 @@ class UsersViewModel {
     nextLink: string;
     curPage: number = 1;
     isGettingData: boolean = false;
+    showNoData: boolean = false;
 
     getData(usersGetter: (id: string, nextLink: string) => any) {
         if (this.isGettingData) {
@@ -51,6 +52,7 @@ class UsersViewModel {
                         model.Photo = cachedItem.data;
                     }
                 });
+                this.showNoData = this.users.length == 0;
             },
             (error) => {
                 this.isGettingData = false;
@@ -89,7 +91,6 @@ export class UsersComponent implements OnInit {
     usersModel: UsersViewModel;
     studentsModel: UsersViewModel;
     teachersModel: UsersViewModel;
-    showNoData: boolean = false;
 
     constructor( @Inject('schoolService') private schoolService
         , @Inject('userPhotoService') private userPhotoService
@@ -117,9 +118,6 @@ export class UsersComponent implements OnInit {
             this.usersModel.getData(this.schoolService.getUsers.bind(this.schoolService));
             this.studentsModel.getData(this.schoolService.getStudents.bind(this.schoolService));
             this.teachersModel.getData(this.schoolService.getTeachers.bind(this.schoolService));
-            if ( this.usersModel.users.length == 0) {
-                this.showNoData = true;
-            }
         });
     }
 

@@ -1,4 +1,8 @@
-﻿<div class="link-component">
+﻿<div *ngIf="error" class="message-container bg-danger">
+    <p>{{error}}</p>
+</div> 
+
+<div class="link-component">
     <h2>Link Office 365 & Local Account</h2>
     <div *ngIf="areAccountsLinked==false">
         <p>This page will enable you to link your Office 365 & Local Account together to successfully use the demo application.</p>
