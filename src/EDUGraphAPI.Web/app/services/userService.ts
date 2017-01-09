@@ -29,7 +29,7 @@ export class UserService {
 
     public createLocalAccount(userInfo: UserInfo) {
         return this._http.post(this.registerAPIUrl, userInfo)
-            .map((response: Response) => response);
+            .map((response: Response) => response.json());
     }
 
     public localLogin(userInfo: UserInfo): Promise<any>{

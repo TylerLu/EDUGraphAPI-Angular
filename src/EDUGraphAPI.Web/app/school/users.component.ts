@@ -51,6 +51,9 @@ class UsersViewModel {
                         model.Photo = cachedItem.data;
                     }
                 });
+            },
+            (error) => {
+                this.isGettingData = false;
             });
     }
 

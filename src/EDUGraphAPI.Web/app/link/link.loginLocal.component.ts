@@ -47,7 +47,7 @@ export class LinkLoginLocal implements OnInit {
         this.linkService.linkLocalUser(this.loginLocalModel.email, this.loginLocalModel.password)
             .subscribe(
             (result) => this.router.navigate(["schools"]),
-            (err) => { this.errorMsgs = ["Link failed. Please try it later or change another account."]; this.serverCheckValid = false; });
+            (err) => { this.errorMsgs = ["Link failed. Please try it later or change to another account."]; this.serverCheckValid = false; });
     }
 
 }

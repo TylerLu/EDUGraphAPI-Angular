@@ -44,10 +44,10 @@
     public static readonly DestroySessionUrl: string = Constants.Authority + 'oauth2/logout?post_logout_redirect_uri=';
 
     //SQL config 
-    public static readonly SQLServerDatabase: string = 'EDUGraphAPI2DEV';
-    public static readonly SQLServerUsername: string = 'EduGraphAPI';
-    public static readonly SQLServerPassword: string = 'EDRF8Uu6PVG6UVi';
-    public static readonly SQLServerHost: string = 'edugraphapi2dev.database.windows.net';
+    public static readonly SQLServerDatabase: string = process.env.SQLServerDatabase as string;
+    public static readonly SQLServerUsername: string = process.env.SQLServerUsername as string;
+    public static readonly SQLServerPassword: string = process.env.SQLServerPassword as string;
+    public static readonly SQLServerHost: string = process.env.SQLServerHost as string;
 }
 
 export class O365ProductLicenses {

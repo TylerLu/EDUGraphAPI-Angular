@@ -17,7 +17,10 @@ export class UserPhotoService {
                     return $.ajax({
                         url: url,
                         type: 'GET',
-                        headers: { 'Authorization': 'Bearer ' + result.accesstoken },
+                        headers: {
+                            'Authorization': 'Bearer ' + result.accesstoken,
+                            "If-None-Match": ""
+                        },
                         mimeType: "text/plain; charset=x-user-defined",
                         success: function (data) {
                             var dataUrl = `data:image/jpeg;base64,${ConvertHelper.BinaryToBase64(data)}`;

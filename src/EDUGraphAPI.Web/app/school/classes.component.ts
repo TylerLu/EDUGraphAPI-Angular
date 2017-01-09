@@ -115,6 +115,9 @@ export class ClassesComponent implements OnInit {
                         });
 
                     });
+            },
+            (error) => {
+                this.isGettingData = false;
             });
     }
 }

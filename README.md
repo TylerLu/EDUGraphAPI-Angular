@@ -4,11 +4,6 @@
 
 EDUGraphAPI is a sample that demonstrates:
 
-* Calling Graph APIs, including:
-
-  * [Microsoft Graph API](https://www.nuget.org/packages/Microsoft.Graph/)
-  * [Microsoft Azure Active Directory Graph API](https://www.nuget.org/packages/Microsoft.Azure.ActiveDirectory.GraphClient/)
-
 * Linking locally-managed user accounts and Office 365 (Azure Active Directory) user accounts. 
 
   After linking accounts, users can use either local or Office 365 accounts to log into the sample web site and use it.
@@ -16,6 +11,11 @@ EDUGraphAPI is a sample that demonstrates:
 * Geting schools, sections, teachers, and students from Office 365 Education:
 
   * [Office 365 Schools REST API reference](https://msdn.microsoft.com/office/office365/api/school-rest-operations)
+
+* Calling Graph APIs, including:
+
+  - [Microsoft Graph API](https://www.nuget.org/packages/Microsoft.Graph/)
+  - [Microsoft Azure Active Directory Graph API](https://www.nuget.org/packages/Microsoft.Azure.ActiveDirectory.GraphClient/)
 
 
 EDUGraphAPI is based on NodeJS (the server side) and Angular 2 (the client side).
@@ -210,6 +210,26 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
 4. Click **SAVE**.
 
+**Debug the sample locally**
+
+First you should configure the environment variables. 
+
+For some OS (like Windows 10), you can configure them by right click the EDUGraphAPI.Web project and click **Properties**.
+
+![](images/web-app-properties.png)
+
+Below are all the environments variables used:
+
+* **WEBSITE_HOSTNAME**: the host name of the app, used for the ADAL authentication. For local machine, please use the value: localhost:44380; On a azure website, it will be the default domain name.
+* **Client Id**: use the Client Id of the AAD Application your created earlier.
+* **Client Secret**: use the Key value of the AAD Application your created earlier.
+* **Bing Map Key**: use the key of Bing Map you got earlier.
+* **SQLServerHost**: the host name of the SQL Server.
+* **SQLServerDatabase**: the database name of the SQL database.
+* **SQLServerUsername**: the username of the SQL Server.
+* **SQLServerPassword**: the password of the SQL user.
+* **sourceCodeRepositoryUrl**: the repository URL,  used by the demo helper control. If you fork this repository, you can update it to point to you repository.
+
 ## Documentation
 
 ### Introduction
@@ -255,48 +275,23 @@ The server app expose several Web APIs:
 | /users/:userId/unlink                 | POST     | Unlink the specified u                   |
 | /schools/seatingArrangements/:classId | GET/POST | Get or set the seating arrangement of the specified class |
 
-**Data Access and Data Models**
+**Data Access**
 
-ASP.NET Identity uses [Entity Framework Code First](https://msdn.microsoft.com/en-us/library/jj193542(v=vs.113).aspx) to implement all of its persistence mechanisms. Package [Microsoft.AspNet.Identity.EntityFramework](https://www.nuget.org/packages/Microsoft.AspNet.Identity.EntityFramework/) is consumed for this. 
+[Sequelize](http://docs.sequelizejs.com/en/v3/) is used in this sample to access data from a SQL Database. 
 
-In this sample, **ApplicationDbContext** is created for access to a SQL Server Database. It inherited from **IdentityDbContext** which is defined in the NuGet package mentioned above.
+The **DbContext** is exposed the models and methods that used to access data.
 
-Below are the important Data Models (and their important properties) that used in this sample:
+Below are the tables used in this demo:
 
-**ApplicationUsers**
+| Table                        | Description                              |
+| ---------------------------- | ---------------------------------------- |
+| Users                        | Contains the users information name, email, hased password...<br>*O365UserId* and *O365Email* are used to connect the local user with a O365 user. |
+| UserRoles                    | Contains users' role. Three roles are used in this sample: admin, teacher and student. |
+| Organizations                | A row in this table represents a tenant in AAD.<br>*IsAdminConsented* column records than if the tenant consented by an administrator. |
+| TokenCache                   | Contains the users' access/refresh tokens. |
+| ClassroomSeatingArrangements | Contains the classroom seating arrangements. |
 
-Inherited from **IdentityUser**. 
-
-| Property      | Description                              |
-| ------------- | ---------------------------------------- |
-| Organization  | The tenant of the user. For local unlinked user, its value is null |
-| O365UserId    | Used to link with an Office 365 account  |
-| O365Email     | The Email of the linked Office 365 account |
-| JobTitle      | Used for demonstrating differential query |
-| Department    | Used for demonstrating differential query |
-| Mobile        | Used for demonstrating differential query |
-| FavoriteColor | Used for demonstrating local data        |
-
-**Organizations**
-
-A row in this table represents a tenant in AAD.
-
-| Property         | Description                          |
-| ---------------- | ------------------------------------ |
-| TenantId         | Guid of the tenant                   |
-| Name             | Name of the tenant                   |
-| IsAdminConsented | Is the tenant consented by any admin |
-
-
-
-Below are important class files used in this web project:
-
-| File | Description |
-| ---- | ----------- |
-|      |             |
-|      |             |
-|      |             |
-|      |             |
+**Multi-tenant app**
 
 This web application is a **multi-tenant app**. In the AAD, we enabled the option:
 
@@ -308,80 +303,65 @@ Users from any Azure Active Directory tenant can access this app. As this app us
 
 For more information, see [Build a multi-tenant SaaS web application using Azure AD & OpenID Connect](https://azure.microsoft.com/en-us/resources/samples/active-directory-dotnet-webapp-multitenant-openidconnect/).
 
-**EDUGraphAPI.SyncData**
-
-This is the WebJob used to sync user data. In the **Functions.SyncUsersAsync** method, **UserSyncService** from EDUGraphAPI.Common project is used.
-
-The project was created to demonstrate differential query. Please check [Different query](#differential-query) section for more details.
-
-**EDUGraphAPI.Common**
-
-The class library project is used both the **EDUGraphAPI.Web** and **EDUGraphAPI.SyncData**. 
-
-The table below shows the folders in the project:
-
-| Folder             | Description                              |
-| ------------------ | ---------------------------------------- |
-| /Data              | Contains ApplicationDbContext and entity classes |
-| /DataSync          | Contains the UserSyncSerextensionsvice class which is used by the EDUGraphAPI.SyncData WebJob |
-| /DifferentialQuery | Contains the DifferentialQueryService class which is used to send differential query and parse the result. |
-| /Extensions        | Contains lots of extension methods which simplify coding the make code easy to read |
-| /Utils             | Contains the wide used class AuthenticationHelper.cs |
-
-**Microsoft.Education**
-
-This project encapsulates the **[Schools REST API](https://msdn.microsoft.com/en-us/office/office365/api/school-rest-operations)** client. The core class in this project is **EducationServiceClient**.
-
-### 
 
 
 
-### Authentication Flows
 
-There are 4 authentication flows in this project.
-
-The first 2 flows (Local Login/O365 Login) enable users to login in with either a local account or an Office 365 account, then link to the other type account. This procedure is implemented in the LinkController.
-
-**Local Login Authentication Flow**
-
-![](Images/auth-flow-local-login.png)
-
-**O365 Login Authentication Flow**
-
-![](Images/auth-flow-o365-login.png)
-
-**Admin Login Authentication Flow**
-
-This flow shows how an administrator logs into the system and performs administrative operations.
-
-After logging into the app with an office 365 account,the administrator will be asked to link to local account. This step is not required and can be skipped. 
-
-As we mentioned ealier, the web app is a mutli-tenant app which uses some application permissions, so an administrator of the tenant should consent the tenant first.  
-
-This flow is implemented in AdminController. 
-
-![](Images/auth-flow-admin-login.png)
-
-### Two Kinds of Graph API
-
-There are two distinct Graph APIs used in this sample:
-
-|              | [Azure AD Graph API](https://msdn.microsoft.com/en-us/library/azure/ad/graphInstall-Package) | [Microsoft Graph API](https://graph.microsoft.io/) |
-| ------------ | ---------------------------------------- | ---------------------------------------- |
-| Description  | The Azure Active Directory Graph API provides programmatic access to Azure Active Directory through REST API endpoints. Apps can use the Azure AD Graph API to perform create, read, update, and delete (CRUD) operations on directory data and directory objects, such as users, groups, and organizational contacts | A unified API that also includes APIs from other Microsoft services like Outlook, OneDrive, OneNote, Planner, and Office Graph, all accessed through a single endpoint with a single access token. |
-| Client       | Install-Package [Microsoft.Azure.ActiveDirectory.GraphClient](https://www.nuget.org/packages/Microsoft.Azure.ActiveDirectory.GraphClient/) | Install-Package [Microsoft.Graph](https://www.nuget.org/packages/Microsoft.Graph/) |
-| End Point    | https://graph.windows.net                | https://graph.microsoft.com              |
-| API Explorer | https://graphexplorer.cloudapp.net/      | https://graph.microsoft.io/graph-explorer |
-
-In this sample we use the classes below, which are based on a common interface, to demonstrate how the APIs are related:  
+Enviroment vaiables
 
 
 
-Note that in AAD Application settings, permissions for each Graph API are configured separately:
+### **EDUGraphAPI.Web - Client**
 
-![](Images/aad-app-permissions.png) 
+The client side app which resides in the /app folder is based on Angular 2 and also implemented with Typescript 2.
 
-### Office 365 Education API
+> Note:  getting and using declaration files in TypeScript 2.0 becomes much easier. To get declarations for a library like lodash, all you need is npm:
+>
+> ```
+> npm install --save @types/lodash
+> ```
+
+**Components**
+
+Below are the components used in the client app.
+
+| Folder      | Component             | Description                              |
+| ----------- | --------------------- | ---------------------------------------- |
+| /           | App                   |                                          |
+| /aboutme    | AboutMe               | Implements the Aboutme page on which users can update the favorite color. |
+| /admin      | Admin                 | Contains the administrative operations, link consent the tenant.<br> |
+|             | LinkedAccounts        | Implements the manage linked accounts page. |
+| /demoHeoper | DemoHelper            | Used to show users source code files (and their link) used |
+| /header     | Header                | Implements the header.                   |
+| /link       | Link                  | Implements the link home page.           |
+|             | LinkCreateLocal       |                                          |
+|             | LinkLoginLocal        |                                          |
+|             | LinkLoginO365Requried |                                          |
+| /login      | Login                 |                                          |
+| /register   | Register              |                                          |
+| /schools    | School                |                                          |
+|             | Classes               |                                          |
+|             | MyClasses             |                                          |
+|             | ClassDetails          |                                          |
+|             |                       |                                          |
+|             |                       |                                          |
+
+
+
+**Services**
+
+|      |      |
+| ---- | ---- |
+|      |      |
+|      |      |
+|      |      |
+|      |      |
+
+
+
+
+
+**Office 365 Education API**
 
 [Office 365 Education APIs](https://msdn.microsoft.com/office/office365/api/school-rest-operations) help extract data from your Office 365 tenant which has been synced to the cloud by Microsoft School Data Sync. These results provide information about schools, sections, teachers, students and rosters. The Schools REST API provides access to school entities in Office 365 for Education tenants.
 
@@ -454,6 +434,55 @@ In **EducationServiceClient**, three private methods prefixed with HttpGet were 
 
 
 ![](Images/web-app-login-o365-required.png)
+
+
+
+### Authentication Flows
+
+There are 4 authentication flows in this project.
+
+The first 2 flows (Local Login/O365 Login) enable users to login in with either a local account or an Office 365 account, then link to the other type account. This procedure is implemented in the LinkController.
+
+**Local Login Authentication Flow**
+
+![](Images/auth-flow-local-login.png)
+
+**O365 Login Authentication Flow**
+
+![](Images/auth-flow-o365-login.png)
+
+**Admin Login Authentication Flow**
+
+This flow shows how an administrator logs into the system and performs administrative operations.
+
+After logging into the app with an office 365 account,the administrator will be asked to link to local account. This step is not required and can be skipped. 
+
+As we mentioned ealier, the web app is a mutli-tenant app which uses some application permissions, so an administrator of the tenant should consent the tenant first.  
+
+This flow is implemented in AdminController. 
+
+![](Images/auth-flow-admin-login.png)
+
+### Two Kinds of Graph API
+
+There are two distinct Graph APIs used in this sample:
+
+|              | [Azure AD Graph API](https://msdn.microsoft.com/en-us/library/azure/ad/graphInstall-Package) | [Microsoft Graph API](https://graph.microsoft.io/) |
+| ------------ | ---------------------------------------- | ---------------------------------------- |
+| Description  | The Azure Active Directory Graph API provides programmatic access to Azure Active Directory through REST API endpoints. Apps can use the Azure AD Graph API to perform create, read, update, and delete (CRUD) operations on directory data and directory objects, such as users, groups, and organizational contacts | A unified API that also includes APIs from other Microsoft services like Outlook, OneDrive, OneNote, Planner, and Office Graph, all accessed through a single endpoint with a single access token. |
+| Client       | Install-Package [Microsoft.Azure.ActiveDirectory.GraphClient](https://www.nuget.org/packages/Microsoft.Azure.ActiveDirectory.GraphClient/) | Install-Package [Microsoft.Graph](https://www.nuget.org/packages/Microsoft.Graph/) |
+| End Point    | https://graph.windows.net                | https://graph.microsoft.com              |
+| API Explorer | https://graphexplorer.cloudapp.net/      | https://graph.microsoft.io/graph-explorer |
+
+In this sample we use the classes below, which are based on a common interface, to demonstrate how the APIs are related:  
+
+
+
+Note that in AAD Application settings, permissions for each Graph API are configured separately:
+
+![](Images/aad-app-permissions.png) 
+
+### 
 
 
 

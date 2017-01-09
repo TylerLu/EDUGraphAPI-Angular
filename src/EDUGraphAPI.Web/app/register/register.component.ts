@@ -1,4 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Response } from '@angular/http';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import {RegisterModel} from './register'
 
@@ -12,6 +13,7 @@ import {RegisterModel} from './register'
 
 export class Register implements OnInit {
     model: RegisterModel = new RegisterModel();
+    duplicatedEmails: string[] = new Array<string>();
 
     constructor( @Inject('user') private userService
         , private router: Router, private activatedRoute: ActivatedRoute) {
@@ -27,9 +29,20 @@ export class Register implements OnInit {
     createLocalUser() {
         this.userService.createLocalAccount(this.model.UserInfo)
             .subscribe((result) => {
-                if (result.ok) {
-                    this.router.navigate(["link"]);
+                this.router.navigate(["link"]);
+            },
+            (response: Response) => {
+                const data: any = response.json();
+                const email: string = this.model.UserInfo.email;
+                if (data.error && data.error === `Email ${email} is used by others`) {
+                    if (this.duplicatedEmails.indexOf(email) === -1) {
+                        this.duplicatedEmails.push(email);
+                    }
                 }
             });
+    }
+
+    isEmailAvailable() {
+        return this.duplicatedEmails.indexOf(this.model.UserInfo.email) === -1;
     }
 }

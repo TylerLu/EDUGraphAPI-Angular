@@ -31,25 +31,21 @@ export class DataService {
     }
 
     public get(actionUrl: string) {
-         let activeProject: ReplaySubject<any> = new ReplaySubject(1);
-        if (actionUrl.indexOf("graph.windows.net") >= 0) {
-            this.authService.getAccessToken()
-                .subscribe((result) => {
-                    this._http.get(actionUrl, { headers: this.getHeader(result.accesstoken) })
-                        .subscribe((data) => {
-                            activeProject.next(data);
-                        });
-                });
-        }
-        else {
-            this.authService.getMSAccessToken()
-                .subscribe((result) => {
-                    this._http.get(actionUrl, { headers: this.getHeader(result.accesstoken) })
-                        .subscribe((data) => {
-                            activeProject.next(data);
-                        });
-                });
-        }
+        let activeProject: ReplaySubject<any> = new ReplaySubject(1);
+        let accessTokenGetter: () => any = actionUrl.indexOf("graph.windows.net") >= 0 ? this.authService.getAccessToken : this.authService.getMSAccessToken;
+        accessTokenGetter.bind(this.authService)()
+            .subscribe((result) => {
+                this._http.get(actionUrl, { headers: this.getHeader(result.accesstoken) })
+                    .subscribe((data) => {
+                        activeProject.next(data);
+                    },
+                    (error) => {
+                        activeProject.error(error);
+                    });
+            },
+            (error) => {
+                activeProject.error(error);
+            });
 
          return activeProject;
     }
