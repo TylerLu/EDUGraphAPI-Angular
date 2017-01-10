@@ -19,6 +19,8 @@ export class LinkCreateLocal implements OnInit {
     checkPwdRequired: boolean = true;
     checkConfirmPwdRequried: boolean = true;
     checkPwdEqualConfirmPwd: boolean = true;
+    serverCheckValid: boolean = true;
+    errorMsgs: string[];
 
     constructor( @Inject('linkService') private linkService: LinkService, private router: Router, @Inject('me') private meService, @Inject('user') private userService) { }
 
@@ -56,11 +58,14 @@ export class LinkCreateLocal implements OnInit {
         if (!this.checkValid())
             return;
         this.linkService.createLocalUser(this.userInfo.email, this.localModel.password, this.localModel.favoriteColor)
-            .subscribe((result) => {
-                if (result.success) {
-                    this.router.navigate(["schools"]);
-                } 
-            });
+            .subscribe(
+                (result) => {
+                    if (result==200) {
+                        this.router.navigate(["schools"]);
+                    } 
+                },
+                (err) => { this.errorMsgs = [err.json().error]; this.serverCheckValid = false; }
+        );
     }
 
 }

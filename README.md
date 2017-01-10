@@ -87,7 +87,7 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
    >**Note:** The key is used in a subsequent step.
 
-**Create an Application in you AAD**
+**Create an Application in your Azure Active Directory (AAD)**
 
 1. Sign into the traditional azure portal: [https://manage.windowsazure.com](https://manage.windowsazure.com).
 
@@ -112,7 +112,7 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
    * **SIGN-ON URL:** https://localhost:44380/
 
-   * **APP ID URI:** https://<<YOUR TENANT>>/EDUGraphAPI
+   * **APP ID URI:** https://**\<\<YOUR TENANT>>**/EDUGraphAPI
 
    >**Note**: A domain from your tenant must be used here, since this is a multi-tenant application.
 
@@ -162,29 +162,29 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
    ![](Images/azure-auto-deploy.png)
 
-   * **Resource group**: we suggest you to Create a new group.
+   * **Resource group**: we suggest you create a new group.
 
-   * **Site Name**: please input a name. Like EDUGraphAPICanviz or EDUGraphAPI993.
+   * **Site Name**: please input a name, like EDUGraphAPICanviz or EDUGraphAPI993.
 
-     > Note: If the name you input is taken, you will get some validation errors:
+     > Note: If the name you try is already taken, you will get some validation errors:
      >
      > ![](Images/azure-auto-deploy-validation-errors-01.png)
      >
-     > Click it you will get more details, like storage account is already in other resource group/subscription.
+     > Click the error message to see more details.  For example:  The storage account is already in another resource group/subscription.
      >
      > In this case, please use another name.
 
    * **Sql Administrator Login Password**: please DO use a strong password.
 
-   * **Source Code Repository URL**: replace <YOUR REPOSITORY> with the repository name of your fork.
+   * **Source Code Repository URL**: replace \<YOUR REPOSITORY> with the repository name of your fork.
 
    * **Source Code Manual Integration**: choose **false**, since you are deploying from your own fork.
 
-   * **Client Id**: use the Client Id of the AAD Application your created earlier.
+   * **Client Id**: use the Client Id of the AAD Application your created.
 
-   * **Client Secret**: use the Key value of the AAD Application your created earlier.
+   * **Client Secret**: use the Key value of the AAD Application your created.
 
-   * **Bing Map Key**: use the key of Bing Map you got earlier.
+   * **Bing Map Key**: use the Bing Map key created.
 
    * Check **I agree to the terms and conditions stated above**.
 
@@ -192,7 +192,7 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
 **Add REPLY URL to the AAD Application**
 
-1. After the deployment, open the resource group:
+1. After the deployment is finished, open the resource group:
 
    ![](Images/azure-resource-group.png)
 
@@ -200,9 +200,9 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
    ![](Images/azure-web-app.png)
 
-   Copy the URL aside and change the schema to **https**. This is the replay URL and will be used in next step.
+   Copy the URL aside and change the schema to **https**. This is the reply URL and will be used in next step.
 
-3. Navigate to the AAD application in the traditional azure portal, then click the **Configure** tab.
+3. Navigate to the AAD application in the traditional Azure portal, then click the **Configure** tab.
 
    Add the reply URL:
 
@@ -212,23 +212,23 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
 **Debug the sample locally**
 
-First you should configure the environment variables. 
+First, configure the environment variables. 
 
-For some OS (like Windows 10), you can configure them by right click the EDUGraphAPI.Web project and click **Properties**.
+For some OSs (like Windows 10), you can configure them by right clicking the EDUGraphAPI.Web project and selecting **Properties**.
 
-![](images/web-app-properties.png)
+![](Images/web-app-properties.png)
 
 Below are all the environments variables used:
 
 * **WEBSITE_HOSTNAME**: the host name of the app, used for the ADAL authentication. For local machine, please use the value: localhost:44380; On a azure website, it will be the default domain name.
-* **Client Id**: use the Client Id of the AAD Application your created earlier.
-* **Client Secret**: use the Key value of the AAD Application your created earlier.
-* **Bing Map Key**: use the key of Bing Map you got earlier.
-* **SQLServerHost**: the host name of the SQL Server.
+* **Client Id**: use the Client Id of the AAD Application you created.
+* **Client Secret**: use the Key value of the AAD Application you created.
+* **Bing Map Key**: use the key of Bing Map you created.
+* **SQLServerHost**: the host name of the SQL server.
 * **SQLServerDatabase**: the database name of the SQL database.
-* **SQLServerUsername**: the username of the SQL Server.
-* **SQLServerPassword**: the password of the SQL user.
-* **sourceCodeRepositoryUrl**: the repository URL,  used by the demo helper control. If you fork this repository, you can update it to point to you repository.
+* **SQLServerUsername**: the username for the SQL server.
+* **SQLServerPassword**: the password for the SQL user.
+* **sourceCodeRepositoryUrl**: the repository URL, used by the demo helper control. If you fork this repository, you can update it to point to your repository.
 
 ## Documentation
 
@@ -243,7 +243,7 @@ The top layer of the solution contains the two parts of the EDUGraphAPI.Web proj
 * The server side Node.js app.
 * The client side Angular 2 app.
 
-The bottom layers contains the three data sources.
+The bottom layers contain the three data sources.
 
 * The EDUGraphAPI database.
 * Education data exposed by REST APIs.
@@ -253,18 +253,18 @@ The bottom layers contains the three data sources.
 
 The server side app is based on Node.js and implemented with Typescript.
 
-**Authentications**
+**Authentication Mechanisms**
 
 Passport and its 2 plugins are used to enable local and O365 authentications:
 
 * **[passport-azure-ad](https://github.com/AzureAD/passport-azure-ad)**: a collection of [Passport](http://passportjs.org/) Strategies to help you integrate with Azure Active Directory. It includes OpenID Connect, WS-Federation, and SAML-P authentication and authorization. These providers let you integrate your Node app with Microsoft Azure AD so you can use its many features, including web single sign-on (WebSSO), Endpoint Protection with OAuth, and JWT token issuance and validation.
 * **[passport-local](https://github.com/jaredhanson/passport-local)**: this module lets you authenticate using a username and password in your Node.js applications. By plugging into Passport, local authentication can be easily and unobtrusively integrated into any application or framework that supports [Connect](http://www.senchalabs.org/connect/)-style middleware, including [Express](http://expressjs.com/).
 
-The 2 kinds of authentications are implemented in the **/auth/appAuth.ts** file.
+The 2 kinds of authentication are implemented in the **/auth/appAuth.ts** file.
 
 **Web APIs**
 
-The server app expose several Web APIs:
+The server app exposes several Web APIs:
 
 | Path                                  | Method   | Description                              |
 | ------------------------------------- | -------- | ---------------------------------------- |
@@ -274,7 +274,7 @@ The server app expose several Web APIs:
 | /tenant                               | POST     | Update information (isAdminConsented) of current user's tenant |
 | /tenant/unlinkAllUsers                | POST     | Unlink all users in current user's tenant |
 | /users/linked                         | GET      | Get all linked users                     |
-| /users/:userId/unlink                 | POST     | Unlink the specified u                   |
+| /users/:userId/unlink                 | POST     | Unlink the specified user                   |
 | /schools/seatingArrangements/:classId | GET/POST | Get or set the seating arrangement of the specified class |
 
 These APIs are defined in the **/routes** folder.
@@ -283,9 +283,9 @@ These APIs are defined in the **/routes** folder.
 
 [Sequelize](http://docs.sequelizejs.com/en/v3/) is used in this sample to access data from a SQL Database. 
 
-The **DbContext** is exposed the models and methods that used to access data.
+The **DbContext** exposes the models and methods that are used to access data.
 
-Below are the tables used in this demo:
+The tables used in this demo:
 
 | Table                        | Description                              |
 | ---------------------------- | ---------------------------------------- |
@@ -299,7 +299,7 @@ You will find the **DbContext** class and related model interfaces in the **/dat
 
 **Services**
 
-Below are the services used by the server side app:
+The services used by the server side app:
 
 | Service           | Description                              |
 | ----------------- | ---------------------------------------- |
@@ -317,7 +317,7 @@ This web application is a **multi-tenant app**. In the AAD, we enabled the optio
 
 ![](Images/app-is-multi-tenant.png)
 
-Users from any Azure Active Directory tenant can access this app. As this app uses some application permissions, an administrator of the tenant should sign up (consent) first. Otherwise, users would be an error:
+Users from any Azure Active Directory tenant can access this app. Because this app uses some application permissions, an administrator of the tenant must sign up (consent) first before users can use it. Otherwise, users will see this error:
 
 ![](Images/app-requires-admin-to-consent.png)
 
@@ -325,9 +325,9 @@ For more information, see [Build a multi-tenant SaaS web application using Azure
 
 ### **EDUGraphAPI.Web - Client**
 
-The client side app which resides in the /app folder is based on Angular 2 and also implemented with Typescript 2.
+The client side app which resides in the /app folder is based on Angular 2 and is also implemented with Typescript 2.
 
-> Note:  getting and using declaration files in TypeScript 2.0 becomes much easier. To get declarations for a library like lodash, all you need is npm:
+> Note:  Getting and using declaration files in TypeScript 2.0 is much easier than in TypeScript 1. To get declarations for a library like lodash for example, all you need is npm:
 >
 > ```
 > npm install --save @types/lodash
@@ -335,7 +335,7 @@ The client side app which resides in the /app folder is based on Angular 2 and a
 
 **Components**
 
-Below are the components used in the client app.
+These components are used in the client app.
 
 | Folder      | Component             |
 | ----------- | --------------------- |
@@ -370,11 +370,11 @@ Below are the components used in the client app.
 
 ### Office 365 Education API
 
-[Office 365 Education APIs](https://msdn.microsoft.com/office/office365/api/school-rest-operations) help extract data from your Office 365 tenant which has been synced to the cloud by Microsoft School Data Sync. These results provide information about schools, sections, teachers, students and rosters. The Schools REST API provides access to school entities in Office 365 for Education tenants.
+The [Office 365 Education APIs](https://msdn.microsoft.com/office/office365/api/school-rest-operations) return data from any Office 365 tenant which has been synced to the cloud by Microsoft School Data Sync. The APIs provide information about schools, sections, teachers, students and rosters. The Schools REST API provides access to school entities in Office 365 for Education tenants.
 
-In the sample, the **Microsoft.Education** Class Library project was created to encapsulate Office 365 Education API. 
+In this sample, the **Microsoft.Education** Class Library project encapsulates the Office 365 Education API. 
 
-**EducationServiceClient** is the core class of the library. With it we can get education data easily.
+The **EducationServiceClient** is the core class of the library. It is used to easily get education data.
 
 **Get schools**
 
@@ -408,12 +408,11 @@ Below are some screenshots of the sample app that show the education data.
 
 ![](Images/edu-class.png)
 
-In **EducationServiceClient**, three private methods prefixed with HttpGet were created to simplify the invoking of REST APIs.
+In the **EducationServiceClient**, three private methods prefixed with HttpGet simplify the invoking of REST APIs.
 
 * **HttpGetAsync**: sends a http GET request to the target endpoint,  and returns the JSON response string.  An access token is included in the bearer authentication header.
-* **HttpGetObjectAsync<T>**:  deserializes the JSON string returned by HttpGetAsync to the target type T, and return the result object.
-* **HttpGetArrayAsync<T>**: deserializes the JSON string returned by HttpGetAsync to the target array type T[], and return the array. 
-
+* **HttpGetObjectAsync<T>**:  deserializes the JSON string returned by HttpGetAsync to the target type T, and returns the result object.
+* **HttpGetArrayAsync<T>**: deserializes the JSON string returned by HttpGetAsync to the target array type T[], and returns the array. 
 
 ### Authentication Flows
 
@@ -433,15 +432,15 @@ The first 2 flows (Local Login/O365 Login) enable users to login in with either 
 
 This flow shows how an administrator logs into the system and performs administrative operations.
 
-After logging into the app with an office 365 account,the administrator will be asked to link to local account. This step is not required and can be skipped. 
+After logging into the app with an office 365 account,the administrator will be asked to link to a local account. This step is not required and can be skipped. 
 
-As we mentioned ealier, the web app is a mutli-tenant app which uses some application permissions, so an administrator of the tenant should consent the tenant first.  
+As mentioned earlier, the web app is a mutli-tenant app which uses some application permissions, so tenant administrator must consent the app first.  
 
-This flow is implemented in AdminController. 
+This flow is implemented in the AdminController. 
 
 ![](Images/auth-flow-admin-login.png)
 
-### Two Kinds of Graph API
+### Two Kinds of Graph APIs
 
 There are two distinct Graph APIs used in this sample:
 
@@ -452,11 +451,11 @@ There are two distinct Graph APIs used in this sample:
 | End Point    | https://graph.windows.net                | https://graph.microsoft.com              |
 | API Explorer | https://graphexplorer.cloudapp.net/      | https://graph.microsoft.io/graph-explorer |
 
-Microsoft are investing heavily in the new MS Graph API, and are not investing in the Azure AD Graph API any more (except fixing security issues).
+> **IMPORTANT NOTE:** Microsoft is investing heavily in the new Microsoft Graph API, and they are not investing in the Azure AD Graph API any more (except fixing security issues).
 
-So, please use he new MS Graph API as much as possible.
+> Therefore, please use the new Microsoft Graph API as much as possible and minimize how much you use the Azure AD Graph API.
 
-Below is a piece of code shows how to get "me" from the MS Graph API.
+Below is a piece of code shows how to get "me" from the Microsoft Graph API.
 
 ```typescript
 public getMe(): Promise<any> {
@@ -474,7 +473,7 @@ public getMe(): Promise<any> {
 
 
 
-Note that in AAD Application settings, permissions for each Graph API are configured separately:
+Note that in the AAD Application settings, permissions for each Graph API are configured separately:
 
 ![](Images/aad-app-permissions.png) 
 

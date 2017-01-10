@@ -21,6 +21,7 @@ import * as moment from 'moment';
 
 export class ClassDetailComponent implements OnInit, AfterContentInit  {
     schoolGuId: string;
+    schoolId :string;
     private sub: any;
     school: SchoolModel;
     classObjectId: string;
@@ -55,6 +56,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
     iniData(params) {
         this.schoolGuId = params['id'];
         this.classObjectId = params['id2'];
+        this.schoolId = params['id3'];
 
         this.schoolService
             .getSchoolById(this.schoolGuId)

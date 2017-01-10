@@ -19,7 +19,7 @@ export class MeService {
     }
 
     public getCurrentUser() {
-        return this._http.get(this.meAPIUrl, {})
+        return this._http.get(this.meAPIUrl + '?t=' + new Date().getTime(), {} )
             .map((response: Response) => response.json());
     }
 

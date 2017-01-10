@@ -10,6 +10,7 @@ export class UserInfo {
     favoriteColor: string;
     organization: Organization;
     roles: string[];
+    remember: boolean;
 
     public areAccountsLinked(): boolean{
         return this.o365UserId != undefined && this.o365UserId != null && this.o365UserId != '';

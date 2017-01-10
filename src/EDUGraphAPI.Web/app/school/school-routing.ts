@@ -23,7 +23,7 @@ const routes: Routes = [
         component: UsersComponent
     },
     {
-        path: 'classdetail/:id/:id2',
+        path: 'classdetail/:id/:id2/:id3',
         component: ClassDetailComponent
     }
 ];

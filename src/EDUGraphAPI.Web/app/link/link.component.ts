@@ -45,7 +45,7 @@ export class Link implements OnInit {
 
     initLocalAccountExisted(user: any) {
         this.localAccountExisted = user.hasSameNameLocalAccount;
-        this.localAccountExistedMessage = 'There is a local account: ' + user.email + ' matching your O365 account.';
+        this.localAccountExistedMessage = 'There is a local account: ' + user.o365Email + ' matching your O365 account.';
     }
 
     initIsLocalAccount() {

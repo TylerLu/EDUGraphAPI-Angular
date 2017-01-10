@@ -57,7 +57,7 @@ export class Login implements OnInit {
     ) {
         this.model.email = "";
         this.model.password = "";
-
+        this.model.remember = false;
     }
 
 

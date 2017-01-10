@@ -61,7 +61,7 @@ export class ClassesComponent implements OnInit {
     gotoDetail(objectId: string) {
         setTimeout(() =>
         {
-            this.router.navigate(['/classdetail', this.schoolGuId, objectId]);
+            this.router.navigate(['/classdetail', this.schoolGuId, objectId, this.schoolId]);
         }, 100);
     }
 

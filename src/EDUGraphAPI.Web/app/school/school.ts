@@ -65,9 +65,9 @@ export class SchoolModel {
         }
         let city: string = "";
         if (this.City) {
-            city = `${this.City},`
+            city = `${this.City}, `
         }
-        return `${city}${this.State} ${this.Zip}`;
+        return `${city} ${" "} ${this.State} ${this.Zip}`;
     };
 
     @JsonProperty("extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType")

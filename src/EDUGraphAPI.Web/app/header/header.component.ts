@@ -47,15 +47,19 @@ export class Header implements OnInit {
 
     getSchoolId() {
         let urlParts = this.urlParts();
-        if (urlParts.length == 3 && (urlParts[0].toLowerCase() == "classes" || urlParts[0].toLowerCase() == "users"))
+        if (urlParts.length == 3 && (urlParts[0].toLowerCase() == "classes" || urlParts[0].toLowerCase() == "users" || urlParts[0].toLowerCase() == "myclasses"))
+            return urlParts[1];
+        if (urlParts.length == 4 && (urlParts[0].toLowerCase() == "classdetail"))
             return urlParts[1];
         return '';
     }
 
     getSchoolIdAlias() {
         let urlParts = this.urlParts();
-        if (urlParts.length == 3 && (urlParts[0].toLowerCase() == "classes" || urlParts[0].toLowerCase() == "users"))
+        if (urlParts.length == 3 && (urlParts[0].toLowerCase() == "classes" || urlParts[0].toLowerCase() == "users" || urlParts[0].toLowerCase() == "myclasses"))
             return urlParts[2];
+        if (urlParts.length == 4 && (urlParts[0].toLowerCase() == "classdetail"))
+            return urlParts[3];
         return '';
     }
 
@@ -76,6 +80,10 @@ export class Header implements OnInit {
             return true;
         return false;
     }
+    isMyClassesPage() {
+        let urlParts = this.urlParts();
+        return urlParts.length > 0 && (urlParts[0].toLowerCase() == "myclasses");
+    }
 
 
     //ifShowHome() {
@@ -83,7 +91,7 @@ export class Header implements OnInit {
     //}
 
     ifShowClassesTeacherStudents() {
-        return this.isClassesPage() || this.isTeacherStudentsPage();
+        return this.isClassesPage() || this.isTeacherStudentsPage() || this.isMyClassesPage();
     }
 
 
