@@ -178,6 +178,7 @@ textarea {
     cursor:pointer;
 }
 .table-green .td-green a.btnlink{background-color:white !important; background-image:none;color:black;text-transform:uppercase;}
+.table-student .tr-content td {font-family:'Helvetica Neue LT Std Roman'}
 .table-student .tr-content td img{max-width:40px;height:auto;margin-right:6px;}
 .table-student .tr-content td:nth-child(1){width:25%;}
 .schools .table-schools tr td:nth-child(1){width:20%;}

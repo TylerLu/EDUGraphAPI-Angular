@@ -1,4 +1,5 @@
 ﻿import { Injectable, Inject } from '@angular/core';
+import { PagedCollection } from '../models/common/pagedCollection';
 import { Http, Response, Headers } from '@angular/http';
 import 'rxjs/add/operator/map'
 import { Observable, ReplaySubject } from 'rxjs/Rx';
@@ -32,7 +33,7 @@ export class DataService {
 
     public get(actionUrl: string) {
         let activeProject: ReplaySubject<any> = new ReplaySubject(1);
-        let accessTokenGetter: () => any = actionUrl.indexOf("graph.windows.net") >= 0 ? this.authService.getAccessToken : this.authService.getMSAccessToken;
+        let accessTokenGetter: () => any = actionUrl.indexOf("graph.windows.net") >= 0 ? this.authService.getAADGraphToken : this.authService.getMSGraphToken;
         accessTokenGetter.bind(this.authService)()
             .subscribe((result) => {
                 this._http.get(actionUrl, { headers: this.getHeader(result.accesstoken) })
@@ -47,7 +48,31 @@ export class DataService {
                 activeProject.error(error);
             });
 
-         return activeProject;
+        return activeProject;
+    }
+
+    public getObject<T>(actionUrl: string): Observable<T> {
+        let activeProject: ReplaySubject<any> = new ReplaySubject(1);
+        this.authService.getGraphToken(actionUrl)
+            .subscribe(result => {
+                this._http.get(actionUrl, { headers: this.getHeader(result.accesstoken) })
+                    .subscribe(
+                    data => activeProject.next(<T>data.json()),
+                    error => activeProject.error(error));
+            },
+            error => activeProject.error(error));
+        return activeProject;
+    }
+
+    public getPagedCollection<T>(actionUrl: string): Observable<PagedCollection<T>> {
+        return this.getObject<PagedCollection<T>>(actionUrl);
+    }
+
+    public getArray<T>(actionUrl: string): Observable<T[]> {
+        return this.getObject<any>(actionUrl)
+            .map(data => {
+                return <T[]>data['value'];
+            });
     }
 
     public post(actionUrl: string, data: any) {

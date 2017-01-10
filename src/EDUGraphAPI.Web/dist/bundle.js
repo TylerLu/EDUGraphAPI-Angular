@@ -19112,7 +19112,7 @@ $__System.registerDynamic("dist/school/school.service.js", ["npm:@angular/core/b
                 return response.json();
             });
         };
-        SchoolService.prototype.getConversation = function (classId) {
+        SchoolService.prototype.getConversations = function (classId) {
             var url = SvcConsts_1.SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/" + SvcConsts_1.SvcConsts.TENANT_ID + "/groups/" + classId + "/conversations";
             return this.dataService.get(url).map(function (response) {
                 return response.json().value;
@@ -19191,13 +19191,13 @@ $__System.registerDynamic("dist/services/dataService.js", ["npm:@angular/core/bu
             var _this = this;
             var activeProject = new Rx_1.ReplaySubject(1);
             if (actionUrl.indexOf("graph.windows.net") >= 0) {
-                this.authService.getAccessToken().subscribe(function (result) {
+                this.authService.getAADGraphToken().subscribe(function (result) {
                     _this._http.get(actionUrl, { headers: _this.getHeader(result.accesstoken) }).subscribe(function (data) {
                         activeProject.next(data);
                     });
                 });
             } else {
-                this.authService.getMSAccessToken().subscribe(function (result) {
+                this.authService.getMSGraphToken().subscribe(function (result) {
                     _this._http.get(actionUrl, { headers: _this.getHeader(result.accesstoken) }).subscribe(function (data) {
                         activeProject.next(data);
                     });
@@ -19208,7 +19208,7 @@ $__System.registerDynamic("dist/services/dataService.js", ["npm:@angular/core/bu
         DataService.prototype.getWithMsToken = function (actionUrl, options) {
             var _this = this;
             var activeProject = new Rx_1.ReplaySubject(1);
-            this.authService.getMSAccessToken().subscribe(function (result) {
+            this.authService.getMSGraphToken().subscribe(function (result) {
                 options = options || {};
                 options.headers = _this.getHeader(result.accesstoken);
                 _this._http.get(actionUrl, { headers: _this.getHeader(result.accesstoken) }).subscribe(function (data) {
@@ -19326,7 +19326,7 @@ $__System.registerDynamic("dist/services/userPhotoService.js", ["npm:@angular/co
                 if (cachedData) {
                     resolve(cachedData);
                 } else {
-                    _this.authService.getMSAccessToken().subscribe(function (result) {
+                    _this.authService.getMSGraphToken().subscribe(function (result) {
                         var url = SvcConsts_1.SvcConsts.MS_GRAPH_RESOURCE + "/v1.0/" + SvcConsts_1.SvcConsts.TENANT_ID + "/users/" + userId + "/photo/$value";
                         return $.ajax({
                             url: url,
@@ -23529,7 +23529,7 @@ $__System.registerDynamic("dist/school/classdetail.component.js", ["npm:@angular
             this.schoolService.getOneDriveWebURl(this.classObjectId).subscribe(function (result) {
                 _this.oneDriveURL = jsonhelper_1.MapUtils.deserialize(document_1.OneDrive, result).webUrl;
             });
-            this.schoolService.getConversation(this.classObjectId).subscribe(function (result) {
+            this.schoolService.getConversations(this.classObjectId).subscribe(function (result) {
                 result.forEach(function (obj) {
                     _this.conversations.push(jsonhelper_1.MapUtils.deserialize(conversation_1.Conversation, obj));
                 });
@@ -27986,13 +27986,13 @@ $__System.registerDynamic("dist/authHelper/authHelper.js", ["npm:@angular/core/b
                 return false;
             }
         };
-        AuthHelper.prototype.getAccessToken = function () {
-            return this.get("/api/getaccesstoken?resource=https%3A%2F%2Fgraph.windows.net").map(function (response) {
+        AuthHelper.prototype.getAADGraphToken = function () {
+            return this.get("/api/getAADGraphToken?resource=https%3A%2F%2Fgraph.windows.net").map(function (response) {
                 return response.json();
             });
         };
-        AuthHelper.prototype.getMSAccessToken = function () {
-            return this.get("/api/getaccesstoken?resource=https%3A%2F%2Fgraph.microsoft.com").map(function (response) {
+        AuthHelper.prototype.getMSGraphToken = function () {
+            return this.get("/api/getAADGraphToken?resource=https%3A%2F%2Fgraph.microsoft.com").map(function (response) {
                 return response.json();
             });
         };
@@ -43004,13 +43004,13 @@ $__System.registerDynamic("dist/services/DataService.js", ["npm:@angular/core/bu
             var _this = this;
             var activeProject = new Rx_1.ReplaySubject(1);
             if (actionUrl.indexOf("graph.windows.net") >= 0) {
-                this.authService.getAccessToken().subscribe(function (result) {
+                this.authService.getAADGraphToken().subscribe(function (result) {
                     _this._http.get(actionUrl, { headers: _this.getHeader(result.accesstoken) }).subscribe(function (data) {
                         activeProject.next(data);
                     });
                 });
             } else {
-                this.authService.getMSAccessToken().subscribe(function (result) {
+                this.authService.getMSGraphToken().subscribe(function (result) {
                     _this._http.get(actionUrl, { headers: _this.getHeader(result.accesstoken) }).subscribe(function (data) {
                         activeProject.next(data);
                     });
@@ -43021,7 +43021,7 @@ $__System.registerDynamic("dist/services/DataService.js", ["npm:@angular/core/bu
         DataService.prototype.getWithMsToken = function (actionUrl, options) {
             var _this = this;
             var activeProject = new Rx_1.ReplaySubject(1);
-            this.authService.getMSAccessToken().subscribe(function (result) {
+            this.authService.getMSGraphToken().subscribe(function (result) {
                 options = options || {};
                 options.headers = _this.getHeader(result.accesstoken);
                 _this._http.get(actionUrl, { headers: _this.getHeader(result.accesstoken) }).subscribe(function (data) {

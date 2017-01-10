@@ -216,7 +216,7 @@ export class appAuth {
     }
 }
 
-export function getAccessTokenViaRefreshToken(refreshToken: string): Promise<string> {
+export function getAADGraphTokenViaRefreshToken(refreshToken: string): Promise<string> {
     return new Promise<any>((resolve, reject) => {
         var postData = querystring.stringify({
             refresh_token: refreshToken,

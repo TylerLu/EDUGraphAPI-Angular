@@ -3,20 +3,22 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { GraphHelper } from '../utils/graphHelper'
+import { PagedCollection } from '../models/common/pagedCollection';
 import { SchoolModel } from '../school/school';
 import { Constants } from '../constants';
 import { UserModel, StudentModel, TeacherModel } from '../school/user';
-import { ClassesModel, ClassesModelWithPagination } from '../school/classes';
+import { ClassesModel } from '../school/classes';
 import { Document, OneDrive } from './document';
 import { Conversation } from './conversation';
-import { SeatingArrangement } from './seatingarrangements'
+import { SeatingArrangement } from './seatingarrangements';
+import { DataService } from '../services/dataService';
 
 @Injectable()
 export class SchoolService {
     private files = [];
     private urlBase: string = Constants.AADGraphResource + '/' + Constants.TenantId;
 
-    constructor(private http: Http, @Inject('auth') private authService, @Inject('data') private dataService) {
+    constructor(private http: Http, @Inject('auth') private authService, @Inject('data') private dataService: DataService) {
     }
 
 
@@ -24,30 +26,8 @@ export class SchoolService {
      * Retrieves all schools.
      * Reference URL: https://msdn.microsoft.com/office/office365/api/school-rest-operations#get-all-schools
      */
-    getSchools(): any {
-        return this.dataService.get(this.urlBase + "/administrativeUnits?api-version=beta")
-            .map((response: Response) => <SchoolModel[]>response.json().value);
-    }
-
-    /**
-     * Retrieves longitude and latitude by address.
-     * Reference URL: 
-     */
-    getLatitudeAndLongitude(state: string, city: string, address: string): Observable<any> {
-        return this.dataService.jsonpGetWithoutToken(`//dev.virtualearth.net/REST/v1/Locations/US/${state}/${city}/${address}?output=json&key=${Constants.BING_MAP_KEY}`).map((response: Response) => {
-            var data = response.json();
-            if (data && (data["resourceSets"] instanceof Array) && data["resourceSets"].length > 0) {
-                var resourceSet = data["resourceSets"][0];
-                if (resourceSet && (resourceSet["resources"] instanceof Array) && resourceSet["resources"].length > 0) {
-                    var resource = resourceSet["resources"][0];
-                    if (resource["point"] && resource["point"]["coordinates"]) {
-                        var coordinates = resource["point"]["coordinates"];
-                        return{ Latitude: coordinates[0], Longitude: coordinates[1] };
-                    }
-                }
-                return null;
-            }
-        });
+    getSchools(): Observable<SchoolModel[]> {
+        return this.dataService.getArray<SchoolModel>(this.urlBase + "/administrativeUnits?api-version=beta");
     }
 
     /**
@@ -55,9 +35,8 @@ export class SchoolService {
      * @param  {string} id Identification of the school
      * Reference URL: https://msdn.microsoft.com/office/office365/api/school-rest-operations#get-a-school.
 	 */
-    getSchoolById(id: string): any {
-        return this.dataService.get(this.urlBase + '/administrativeUnits/' + id + '?api-version=beta')
-            .map((response: Response) => <SchoolModel>response.json());
+    getSchoolById(id: string): Observable<SchoolModel> {
+        return this.dataService.getObject(this.urlBase + '/administrativeUnits/' + id + '?api-version=beta');
     }
     /**
     * Retrieves all classes of a school.
@@ -65,26 +44,18 @@ export class SchoolService {
     * @param  {string} nextLink next link in the previous response for next page
     * Reference URL: https://msdn.microsoft.com/office/office365/api/school-rest-operations#get-sections-within-a-school.
     */
-    getClasses(schoolId: string, nextLink: string): any {
+    getClasses(schoolId: string, nextLink: string): Observable<PagedCollection<ClassesModel>> {
         //https://graph.windows.net/64446b5c-6d85-4d16-9ff2-94eddc0c2439/groups?api-version=beta&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Section'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'10001'
-        let url: string = this.urlBase +
-            "/groups?api-version=beta&$top=12&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Section'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId + "'";
-        if (nextLink) {
-            url += "&" + GraphHelper.getSkipToken(nextLink);
-        }
-        return this.dataService.get(url)
-            .map((response: Response) =>
-                <ClassesModelWithPagination>response.json()
-            );
-
+        let url: string = this.urlBase + "/groups?api-version=beta&$top=12&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Section'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId + "'" +
+            (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
+        return this.dataService.getPagedCollection<ClassesModel>(url);
     }
     /**
      * Get current user's information from AD
      * Reference URL: https://msdn.microsoft.com/en-us/office/office365/api/teacher-rest-operations
      */
-    getMe(): any {
-        return this.dataService.get(this.urlBase + "/me?api-version=1.5")
-            .map((response: Response) => <UserModel>response.json());
+    getMe(): Observable<UserModel> {
+        return this.dataService.getObject<UserModel>(this.urlBase + "/me?api-version=1.5");
     }
 
     /**
@@ -92,9 +63,8 @@ export class SchoolService {
      * @param schoolId
      * Reference URL: https://msdn.microsoft.com/en-us/office/office365/api/section-rest-operations
      */
-    getMyClasses(schoolId: string): any {
-        return this.dataService.get(this.urlBase + "/me/memberOf?api-version=1.5")
-            .map((response: Response) => <ClassesModel[]>response.json().value);
+    getMyClasses(schoolId: string): Observable<ClassesModel[]> {
+        return this.dataService.getArray<ClassesModel>(this.urlBase + "/me/memberOf?api-version=1.5");
     }
 
     /**
@@ -103,9 +73,8 @@ export class SchoolService {
     * @param classId The Object ID of the section group in Azure Active Directory.
     * <returns></returns>
      */
-    getClassById(classId: string) {
-        return this.dataService.get(this.urlBase + "/groups/" + classId + "?api-version=beta&$expand=members")
-            .map((response: Response) => <ClassesModel>response.json());
+    getClassById(classId: string): Observable<ClassesModel> {
+        return this.dataService.getObject<ClassesModel>(this.urlBase + "/groups/" + classId + "?api-version=beta&$expand=members");
     }
     /**
      * Get all users of a school.
@@ -113,13 +82,10 @@ export class SchoolService {
      * @param  {string} nextLink next link in the previous response for next page
      * Reference URL: https://msdn.microsoft.com/en-us/office/office365/api/school-rest-operations#get-school-members
      */
-    getUsers(schoolId: string, nextLink: string): any {
-        var url = this.urlBase + "/administrativeUnits/" + schoolId + "/members?api-version=beta&$top=12";
-        if (nextLink) {
-            url += "&" + GraphHelper.getSkipToken(nextLink);
-        }
-        return this.dataService.get(url)
-            .map((response: Response) => <UserModel[]>response.json());
+    getUsers(schoolId: string, nextLink: string): Observable<PagedCollection<UserModel>> {
+        var url = this.urlBase + "/administrativeUnits/" + schoolId + "/members?api-version=beta&$top=12" +
+            (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
+        return this.dataService.getPagedCollection<UserModel>(url);
     }
 
     /**
@@ -128,13 +94,12 @@ export class SchoolService {
      * @param  {string} nextLink next link in the previous response for next page
      * Reference URL: https://msdn.microsoft.com/en-us/office/office365/api/school-rest-operations#get-school-members
      */
-    getStudents(schoolId: string, nextLink: string): any {
-        var url = this.urlBase + "/users?api-version=1.5&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId + "'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Student'&$top=12";
-        if (nextLink) {
-            url += "&" + GraphHelper.getSkipToken(nextLink);
-        }
-        return this.dataService.get(url)
-            .map((response: Response) => <StudentModel[]>response.json());
+    getStudents(schoolId: string, nextLink: string): Observable<PagedCollection<StudentModel>> {
+        var url = this.urlBase +
+            "/users?api-version=1.5&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId +
+            "'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Student'&$top=12" +
+            (nextLink ? '&' + GraphHelper.getSkipToken(nextLink) : '');
+        return this.dataService.getPagedCollection<StudentModel>(url);
     }
 
     /**
@@ -143,13 +108,11 @@ export class SchoolService {
     * @param  {string} nextLink next link in the previous response for next page
     * Reference URL: https://msdn.microsoft.com/en-us/office/office365/api/school-rest-operations#get-school-members
      */
-    getTeachers(schoolId: string, nextLink: string): any {
-        var url = this.urlBase + "/users?api-version=1.5&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId + "'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Teacher'&$top=12";
-        if (nextLink) {
-            url += "&" + GraphHelper.getSkipToken(nextLink);
-        }
-        return this.dataService.get(url)
-            .map((response: Response) => <TeacherModel[]>response.json());
+    getTeachers(schoolId: string, nextLink: string): Observable<PagedCollection<TeacherModel>> {
+        var url = this.urlBase + "/users?api-version=1.5&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId +
+            "'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Teacher'&$top=12" +
+            (nextLink ? '&' + GraphHelper.getSkipToken(nextLink) : '');
+        return this.dataService.getPagedCollection<TeacherModel>(url);
     }
 
     /**
@@ -157,16 +120,14 @@ export class SchoolService {
      * @param classId
      * Reference URL: https://dev.onedrive.com/items/list.htm.
      */
-    getDocuments(classId: string) {
+    getDocuments(classId: string): Observable<Document[]> {
         var url = Constants.MSGraphResource + "/v1.0/groups/" + classId + "/drive/root/children";
-        return this.dataService.get(url)
-            .map((response: Response) => <Document[]>response.json().value);
+        return this.dataService.getArray<Document>(url);
     }
 
-    getOneDriveWebURl(classId: string) {
+    getOneDriveWebURl(classId: string): Observable<string> {
         var url = Constants.MSGraphResource + "/v1.0/groups/" + classId + "/drive/root";
-        return this.dataService.get(url)
-            .map((response: Response) => <OneDrive>response.json());
+        return this.dataService.getObject<string>(url);
     }
 
     /**
@@ -174,26 +135,18 @@ export class SchoolService {
      * @param classId
      * Reference URL: https://graph.microsoft.io/en-us/docs/api-reference/v1.0/api/group_list_threads.
      */
-    getConversation(classId: string) {
+    getConversations(classId: string): Observable<Conversation[]> {
         var url = Constants.MSGraphResource + "/v1.0/" + Constants.TenantId + "/groups/" + classId + "/conversations";
-        return this.dataService.get(url)
-            .map((response: Response) => <Conversation[]>response.json().value);
+        return this.dataService.getArray<Conversation>(url);
     }
 
-    getSeatingArrangements(classId: string) {
+    getSeatingArrangements(classId: string): Observable<SeatingArrangement[]> {
         var url = "/api/schools/seatingArrangements/" + classId;
-        return this.dataService.get(url)
-            .map((response: Response) => <SeatingArrangement[]>response.json());
+        return this.dataService.getObject<SeatingArrangement[]>(url);
     }
 
-    saveSeatingArrangement(classId: string, seatingArrangements: SeatingArrangement[]) {
+    saveSeatingArrangement(classId: string, seatingArrangements: SeatingArrangement[]): any {
         var url = "/api/schools/seatingArrangements/" + classId;
-        return this.dataService.post(url, seatingArrangements)
-            .map(this.extractData);
-    }
-
-    private extractData(res: Response) {
-        let body = res.json();
-        return body.data || {};
+        return this.dataService.post(url, seatingArrangements);
     }
 }

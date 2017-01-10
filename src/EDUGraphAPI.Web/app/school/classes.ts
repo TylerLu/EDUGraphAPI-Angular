@@ -111,10 +111,3 @@ export class ClassesModel {
         this.EducationStatus = undefined;
     }
 }
-
-export class ClassesModelWithPagination {
-    public classesArray: ClassesModel[];
-
-    @JsonProperty("odata.nextLink")
-    public NextPageLink: string;
-}

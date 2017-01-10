@@ -11,7 +11,7 @@ export class UserPhotoService {
 
     public getUserPhotoUrl(userId: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            this.authService.getMSAccessToken()
+            this.authService.getMSGraphToken()
                 .subscribe((result) => {
                     var url = `${Constants.MSGraphResource}/v1.0/${Constants.TenantId}/users/${userId}/photo/$value`;
                     return $.ajax({

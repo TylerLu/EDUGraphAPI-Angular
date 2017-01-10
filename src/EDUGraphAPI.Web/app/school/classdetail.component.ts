@@ -152,7 +152,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                 this.oneDriveURL = MapUtils.deserialize(OneDrive, result).webUrl;
             });
         this.schoolService
-            .getConversation(this.classObjectId)
+            .getConversations(this.classObjectId)
             .subscribe((result) => {
                 result.forEach((obj) => {
                     this.conversations.push(MapUtils.deserialize(Conversation, obj));
@@ -251,24 +251,29 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         //new added to seat chart
         $(".desktile .deskcontainer.unsaved").each(function () {
             var prevId = $(this).attr("ng-reflect-prev-position");
-            if (!prevId) { //to be removed
-
+            if (!prevId || prevId == "0") { //to be removed
+                $(this).attr("ng-reflect-position", 0)
+                var id = $(this).attr("ng-reflect-userid");
+                $("#" + id).find(".seated").addClass("hideitem");
+                $("#hidtiles").append($(this));
+            } else {
+                var tile = $(".desktile[ng-reflect-position='" + prevId + "']");
+                tile.append($(this));
+                tile.find(".deskcontainer").removeAttr("ng-reflect-prev-position").removeClass("unsaved");
             }
-            $(this).attr("ng-reflect-position", 0)
-            var id = $(this).attr("ng-reflect-userid");
-            $("#" + id).find(".seated").addClass("hideitem");
-            $("#hidtiles").append($(this));
+           
         });
 
         //deleted
-        $("#hidtiles .deskcontainer:not(.unsaved)").each(function (i, e) {
+        $("#hidtiles .deskcontainer").each(function (i, e) {
             //$e = $(e);
             var position = $(this).attr("ng-reflect-prev-position");
-            $(this).attr("ng-reflect-position", position).removeAttr("ng-reflect-prev-position");
-            var id = $(this).attr("ng-reflect-userid");
-            $(".desktile[ng-reflect-position=" + position + "]").append($(this));
-            if (position && position !="0")
-                $("#" +id ).find(".seated").removeClass("hideitem");
+            if (position && position != "0"){
+                $(this).attr("ng-reflect-position", position).removeAttr("ng-reflect-prev-position");
+                var id = $(this).attr("ng-reflect-userid");
+                $(".desktile[ng-reflect-position=" + position + "]").append($(this));
+                $("#" + id).find(".seated").removeClass("hideitem");
+            }
         });
 
         //move
@@ -327,8 +332,13 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             $(".greenTileTooltip").remove();
             detail.enableDragOnLeft($("#" + id), false).removeClass("greenlist").find(".seated").removeClass("hideitem");
             $(".deskcontainer[ng-reflect-userid='" + id + "']").addClass("white").addClass("unsaved").appendTo($(this));
+            var pos = $(this).find(".deskcontainer").attr("ng-reflect-prev-position");
+            if (!pos) {
+                $(this).find(".deskcontainer").attr({ "ng-reflect-prev-position": $(this).find(".deskcontainer").attr("ng-reflect-position") });
+            }
             var position = $(this).attr("ng-reflect-position");
             $(this).find(".deskcontainer").attr("ng-reflect-position", position);
+
         });
 
         $(".desktile").on('dragenter', function (evt) {
@@ -360,7 +370,12 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             user.find(".seated").addClass("hideitem");
             detail.enableDragOnLeft(user, true);
             var position = parent.attr("ng-reflect-position");
-            parent.attr({ "ng-reflect-prev-position": position, "ng-reflect-position": 0 });
+            var pos = parent.attr("ng-reflect-prev-position");
+            if (pos) {
+                parent.attr({ "ng-reflect-position": 0 });
+            } else {
+                parent.attr({ "ng-reflect-prev-position": position, "ng-reflect-position": 0 });
+            }
             $("#hidtiles").append(parent);
         });
     }

@@ -260,7 +260,7 @@ export class UserService {
             });
     }
     //get accesstoken by o365UserId
-    public getAccessTokenByUserId(o365UserId: string): Promise<string> {
+    public getAADGraphTokenByUserId(o365UserId: string): Promise<string> {
         let tokenService = new TokenCacheService();
         return tokenService.getTokenCacheByOID(o365UserId)
             .then((cach) => {
@@ -274,7 +274,7 @@ export class UserService {
     }
     //graph get o365 user
     public getO365User(o365UserId: string, tenantId: string): Promise<any> {
-        return this.getAccessTokenByUserId(o365UserId)
+        return this.getAADGraphTokenByUserId(o365UserId)
             .then((accessToken) => {
                 let msgraphClient: MSGraphClient = new MSGraphClient(accessToken);
                 return msgraphClient.getO365User(tenantId)

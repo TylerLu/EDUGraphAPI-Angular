@@ -52,7 +52,7 @@ export class LinkService {
             redirectUrl,
             AuthorizationHelper.generateNonce(),
             Constants.MSGraphResource,
-            '',
+            'login',
             AuthorizationHelper.generateNonce(),
             'form_post'
         );

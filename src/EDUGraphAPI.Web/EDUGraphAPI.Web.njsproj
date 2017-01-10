@@ -115,7 +115,6 @@ SQLServerHost=edugraphapi2dev.database.windows.net</Environment>
     <TypeScriptCompile Include="app\services\userService.ts" />
     <TypeScriptCompile Include="app\tabs\tab.ts" />
     <TypeScriptCompile Include="app\tabs\tabs.ts" />
-    <TypeScriptCompile Include="app\utils\authenticationHelper.ts" />
     <TypeScriptCompile Include="app\utils\authorizationHelper.ts" />
     <TypeScriptCompile Include="app\utils\compareHelper.ts" />
     <TypeScriptCompile Include="app\utils\graphHelper.ts" />
@@ -268,6 +267,7 @@ SQLServerHost=edugraphapi2dev.database.windows.net</Environment>
     <Folder Include="ssl\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="app\models\common\pagedCollection.ts" />
     <Compile Include="app\utils\urlHelper.ts" />
     <Compile Include="dist\bundle.js" />
     <Compile Include="gulpfile.js" />

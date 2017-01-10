@@ -68,7 +68,7 @@ router.get('/accesstoken', function (req, res) {
         var tokenCache = new TokenCacheService();
         switch (req.query["resource"]) {
             case Constants.MSGraphResource:
-                tokenCache.getMSAccessToken(oid)
+                tokenCache.getMSGraphToken(oid)
                     .then((result) => {
                         res.json(result);
                     })

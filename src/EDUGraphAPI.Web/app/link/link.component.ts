@@ -62,7 +62,7 @@ export class Link implements OnInit {
     }
 
     initMessage() {
-        var msg = UrlHelper.getUrlQueryValue('error')
+        var msg = UrlHelper.getUrlQueryValue(window.location.href,'error')
         if (msg != null && msg.length > 0) {
             this.error = msg;
         }

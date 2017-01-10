@@ -1,6 +1,6 @@
 ﻿import { DbContext, TokenCacheInstance } from '../data/dbContext';
 import * as Promise from "bluebird";
-import { getAccessTokenViaRefreshToken } from '../auth/appAuth';
+import { getAADGraphTokenViaRefreshToken } from '../auth/appAuth';
 
 export class TokenCacheService {
     private dbContext = new DbContext();
@@ -75,7 +75,7 @@ export class TokenCacheService {
             });
     }
 
-    public getMSAccessToken(oid: string): Promise<any> {
+    public getMSGraphToken(oid: string): Promise<any> {
         return new Promise((resolve, reject) => {
             this.getTokenCacheByOID(oid)
                 .then((tokenObject) => {
@@ -89,7 +89,7 @@ export class TokenCacheService {
                         });
                     }
                     else {
-                        getAccessTokenViaRefreshToken(tokenObject.msgRefreshgToken)
+                        getAADGraphTokenViaRefreshToken(tokenObject.msgRefreshgToken)
                             .then((result: any) => {
                                 tokenObject.msgAccessToken = result.access_token;
                                 tokenObject.msgExpires = result.expires_on * 1000;
@@ -122,7 +122,7 @@ export class TokenCacheService {
                         });
                     }
                     else {
-                        getAccessTokenViaRefreshToken(tokenObject.aadgRefreshgToken)
+                        getAADGraphTokenViaRefreshToken(tokenObject.aadgRefreshgToken)
                             .then((result: any) => {
                                 tokenObject.aadgAccessToken = result.access_token;
                                 tokenObject.aadgExpires = result.expires_on * 1000;

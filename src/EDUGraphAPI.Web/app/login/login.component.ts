@@ -4,7 +4,6 @@ import { Inject } from '@angular/core';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
-import { AuthenticationHelper } from '../utils/authenticationHelper';
 import { UserInfo } from '../models/common/userInfo'
 
 

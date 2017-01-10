@@ -6,8 +6,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute  } from '@angular/router';
 import { Inject } from '@angular/core';
 import { MapUtils } from './utils/jsonhelper';
-import { AuthenticationHelper } from './utils/authenticationHelper';
-
+import { UrlHelper } from './utils/urlHelper';
 
 @Component({
     moduleId: module.id,
@@ -43,10 +42,14 @@ export class AppComponent implements OnInit{
                     this.meService.getCurrentUser()
                         .subscribe((user) => {
                             let url = this.router.url;
-                            if (user.areAccountsLinked || url.indexOf("admin")>=0) {
+
+                            if (user.areAccountsLinked || url.indexOf("admin") >= 0) {
                                 if (url == '/')
                                     url = 'schools';
-                            } else if (url.indexOf('link') < 0) {
+                            } else if (url.indexOf('link') >= 0 && UrlHelper.getUrlQueryValue(url, 'error') != null) {
+                                return;
+                            }
+                            else if (url.indexOf('link') < 0) {
                                 url = 'link';
                             }
                             if (this.router.url != '/' + url && this.router.url != "/login")

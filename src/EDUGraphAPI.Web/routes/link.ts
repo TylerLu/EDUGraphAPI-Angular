@@ -49,7 +49,7 @@ router.post('/O365User', function (req, res) {
     var idToken = jwt.decode(req.body.id_token);
     var tentantId = idToken.tid;
     var code = req.body.code;
-    getAccessToken(code, tentantId, Constants.MSGraphResource)
+    getAADGraphToken(code, tentantId, Constants.MSGraphResource)
         .then(accessToken => {
             return userService.linkO365User(accessToken, localUser.id, tentantId)
         })
@@ -72,7 +72,7 @@ router.post('/O365User', function (req, res) {
 })
 
 
-function getAccessToken(code: string, tenantId: string, resource: string): Promise<string> {
+function getAADGraphToken(code: string, tenantId: string, resource: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         var url = 'https://login.microsoftonline.com/' + tenantId + '/oauth2/token';
         var redirectUri = `https://${Constants.Host}/api/link/O365User`

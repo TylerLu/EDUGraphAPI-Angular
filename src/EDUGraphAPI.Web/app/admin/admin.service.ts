@@ -67,7 +67,7 @@ export class AdminService {
         return new Promise((resolve, reject) => {
             const errorMessage: string = "Admin unconsent failed.";
             const successMessage: string = "Admin unconsent succeeded!"
-            this.getAccessToken()
+            this.getAADGraphToken()
                 .then((accessToken) => {
                     let headers = new Headers();
                     headers.append('Authorization', 'Bearer ' + accessToken);
@@ -99,7 +99,7 @@ export class AdminService {
     addAppRoleAssignments(): Promise<any> {
         const errorMessage = "Enabling user access failed.";
         return new Promise((resolve, reject) => {
-            this.getAccessToken()
+            this.getAADGraphToken()
                 .then((accessToken) => {
                     let headers = new Headers();
                     headers.append('Authorization', 'Bearer ' + accessToken);
@@ -121,9 +121,9 @@ export class AdminService {
         });
     }
 
-    private getAccessToken(): Promise<string> {
+    private getAADGraphToken(): Promise<string> {
         return new Promise((resolve, reject) => {
-            this.authService.getAccessToken()
+            this.authService.getAADGraphToken()
                 .subscribe((result) => {
                     resolve(result.accesstoken);
                 },

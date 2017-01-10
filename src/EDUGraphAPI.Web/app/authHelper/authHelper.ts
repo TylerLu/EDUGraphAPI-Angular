@@ -28,19 +28,26 @@ export class AuthHelper {
         this.router.navigate(['login']);
     }
 
-    public getAccessToken() {
+    public getGraphToken(actionUrl: string) {
+        return actionUrl.indexOf("graph.windows.net") >= 0
+            ? this.getAADGraphToken()
+            : this.getMSGraphToken();
+    }
+
+    public getAADGraphToken() {
         return this.get("/api/me/accesstoken?resource=" + Constants.AADGraphResource.replace("://", "%3A%2F%2F"))
             .map((response: Response) => <TokenEntity>response.json());
     }
-    public getMSAccessToken() {
+    public getMSGraphToken() {
         return this.get("/api/me/accesstoken?resource=" + Constants.MSGraphResource.replace("://", "%3A%2F%2F"))
             .map((response: Response) => <TokenEntity>response.json());
     }
-
+    
     getHeader() {
         let header = new Headers();
         return header;
     }
+
     get(actionUrl: string) {
         return this._http.get(actionUrl, { headers: this.getHeader() });
     }

@@ -65,7 +65,7 @@
                             <div id="documents" class="tab-pane">
                                 <table id="studoc" class="table  table-green table-student tablesorter">
                                     <thead>
-                                        <tr class="table-green-header">
+                                        <tr class="table-green-header" [hidden]="!documents || documents.length == 0" >
                                             <th class="border-holder header" ></th>
                                             <th class="space-holder left header"></th>
                                             <th class="tdleft header headerSortDown" (click)="sortDoc('name')">document name</th>
