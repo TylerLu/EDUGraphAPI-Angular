@@ -136,10 +136,10 @@ export class UsersComponent implements OnInit {
                 usersGetter = this.schoolService.getUsers.bind(this.schoolService);
                 break;
             case "teachers":
-                usersGetter = this.schoolService.getStudents.bind(this.schoolService);
+                usersGetter = this.schoolService.getTeachers.bind(this.schoolService);
                 break;
             case "students":
-                usersGetter = this.schoolService.getTeachers.bind(this.schoolService);
+                usersGetter = this.schoolService.getStudents.bind(this.schoolService);
                 break;
             default:
                 return;

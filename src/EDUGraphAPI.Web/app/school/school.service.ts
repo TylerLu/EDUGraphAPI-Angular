@@ -141,7 +141,7 @@ export class SchoolService {
     }
 
     getSeatingArrangements(classId: string): Observable<SeatingArrangement[]> {
-        var url = "/api/schools/seatingArrangements/" + classId;
+        var url = "/api/schools/seatingArrangements/" + classId +"?t=" + new Date().getTime();
         return this.dataService.getObject<SeatingArrangement[]>(url);
     }
 
