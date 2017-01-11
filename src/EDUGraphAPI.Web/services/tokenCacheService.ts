@@ -1,6 +1,7 @@
 ﻿import { DbContext, TokenCacheInstance } from '../data/dbContext';
 import * as Promise from "bluebird";
-import { getAADGraphTokenViaRefreshToken } from '../auth/appAuth';
+import { TokenUtils } from '../utils/tokenUtils'
+import { Constants } from '../constants';
 
 export class TokenCacheService {
     private dbContext = new DbContext();
@@ -18,7 +19,6 @@ export class TokenCacheService {
                     if (msgExpires) {
                         tokenObject.msgExpires = msgExpires;
                     }
-
                     return tokenObject.save();
                 })
                 .then((tokenObject) => {
@@ -79,8 +79,8 @@ export class TokenCacheService {
         return new Promise((resolve, reject) => {
             this.getTokenCacheByOID(oid)
                 .then((tokenObject) => {
-                    if (tokenObject == null){
-                        reject({ error: 'failed to acquire token'});
+                    if (tokenObject == null) {
+                        reject({ error: 'failed to acquire token' });
                     }
                     if ((new Date()).getTime() < tokenObject.msgExpires - 5 * 60 * 1000) {
                         resolve({
@@ -89,7 +89,7 @@ export class TokenCacheService {
                         });
                     }
                     else {
-                        getAADGraphTokenViaRefreshToken(tokenObject.msgRefreshgToken)
+                        TokenUtils.getTokenByRefreshToken(tokenObject.msgRefreshgToken, Constants.MSGraphResource)
                             .then((result: any) => {
                                 tokenObject.msgAccessToken = result.access_token;
                                 tokenObject.msgExpires = result.expires_on * 1000;
@@ -105,7 +105,7 @@ export class TokenCacheService {
                     }
                 })
                 .catch(reject);
-            });
+        });
     }
 
     public getAADAccessToken(oid: string): Promise<any> {
@@ -122,7 +122,7 @@ export class TokenCacheService {
                         });
                     }
                     else {
-                        getAADGraphTokenViaRefreshToken(tokenObject.aadgRefreshgToken)
+                        TokenUtils.getTokenByRefreshToken(tokenObject.aadgRefreshgToken, Constants.AADGraphResource)
                             .then((result: any) => {
                                 tokenObject.aadgAccessToken = result.access_token;
                                 tokenObject.aadgExpires = result.expires_on * 1000;

@@ -338,7 +338,7 @@
     ]
   },
   {
-    "component": "link.loginLocal",
+    "component": "link-loginLocal",
     "links": [
       {
         "title": "Component",
@@ -379,7 +379,7 @@
     ]
   },
   {
-    "component": "link.createLocal",
+    "component": "link-local",
     "links": [
       {
         "title": "Component",
@@ -424,7 +424,7 @@
     ]
   },
   {
-    "component": "link.loginO365Required",
+    "component": "link-loginO365Requried",
     "links": [
       {
         "title": "Component",
