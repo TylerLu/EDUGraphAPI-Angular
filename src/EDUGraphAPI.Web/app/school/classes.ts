@@ -71,6 +71,9 @@ export class ClassesModel {
     @JsonProperty("extension_fe2174665583431c953114ff7268b7b3_Education_Status")
     public EducationStatus: string;
 
+    @JsonProperty("members@odata.navigationLinkUrl")
+    public MemberLink: string;
+
     public Users: UserModel[] = [];
     public Students: UserModel[] = [];
     public Teachers: UserModel[] = [];
@@ -109,5 +112,6 @@ export class ClassesModel {
         this.SyncSource = undefined;
         this.AnchorId = undefined;
         this.EducationStatus = undefined;
+        this.MemberLink = undefined;
     }
 }

@@ -76,6 +76,11 @@ export class SchoolService {
     getClassById(classId: string): Observable<ClassesModel> {
         return this.dataService.getObject<ClassesModel>(this.urlBase + "/groups/" + classId + "?api-version=beta&$expand=members");
     }
+
+    getClassMembers(classId: string): Observable<UserModel> {
+        return this.dataService.getObject<UserModel>(this.urlBase + "/groups/" + classId + "/members?api-version=1.5");
+    }
+
     /**
      * Get all users of a school.
      * @param  {string} schoolId Identification of the school

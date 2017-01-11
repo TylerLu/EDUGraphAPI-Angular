@@ -89,45 +89,24 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                                         this.classEntity.TermEndDate = moment.utc(this.classEntity.TermEndDate).local().format('MMM YYYY');
                                         this.classEntity.IsMyClasses = true;
                                         this.classEntity.Users = [];
-                                        result.members.forEach((obj) => {
-                                            var user = MapUtils.deserialize(UserModel, obj);
-                                            this.userPhotoService.getUserPhotoUrl(user.O365UserId)
-                                                .then(url => user.Photo = url);
-                                            this.classEntity.Users.push(user);
-                                            if (user.ObjectType == "Teacher") {
-                                                this.classEntity.Teachers.push(user);
-                                            }
-                                            if (user.ObjectType == "Student") {
-                                                this.classEntity.Students.push(user);
-                                            }
-                                        });
-                                        this.classEntity.Students.forEach((stu) => {
-                                            this.seatingArrangements.forEach((arrangment) => {
-                                                if (stu.O365UserId == arrangment.o365UserId) {
-                                                    stu.SeatingArrangment = arrangment.position + "";
-                                                    stu.SeatingClass = "seated hideitem";
-                                                    if (stu.SeatingArrangment != "0") {
-                                                        stu.IsSeated = true;
-                                                        stu.ContainerClass = "deskcontainer white";
-                                                        stu.SeatingClass = "seated";
+                                        this.schoolService
+                                            .getClassMembers(this.classObjectId)
+                                            .subscribe((members) => {
+                                                members.value.forEach((obj) => {
+                                                    var user = MapUtils.deserialize(UserModel, obj);
+                                                    this.userPhotoService.getUserPhotoUrl(user.O365UserId)
+                                                        .then(url => user.Photo = url);
+                                                    this.classEntity.Users.push(user);
+                                                    if (user.ObjectType == "Teacher") {
+                                                        this.classEntity.Teachers.push(user);
                                                     }
-
-                                                    if (this.me.O365UserId == stu.O365UserId) {
-                                                        stu.ContainerClass = "deskcontainer green";
-                                                        stu.BackgroundColor = this.favoriteColor;
+                                                    if (user.ObjectType == "Student") {
+                                                        this.classEntity.Students.push(user);
                                                     }
-                                                }
-                                            });
-                                        });
-                                        this.classEntity.Students.sort((n1, n2) => {
-                                            if (n1.DisplayName > n2.DisplayName) {
-                                                return 1;
-                                            }
-                                            if (n1.DisplayName < n2.DisplayName) {
-                                                return -1;
-                                            }
-                                            return 0;
-                                        })
+                                                });
+                                                 this.setSeatings();
+                                                 this.sortMembers();
+                                      });
 
                                     });
                             });
@@ -166,6 +145,39 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         this.sub.unsubscribe();
     }
 
+    sortMembers() {
+        this.classEntity.Students.sort((n1, n2) => {
+            if (n1.DisplayName > n2.DisplayName) {
+                return 1;
+            }
+            if (n1.DisplayName < n2.DisplayName) {
+                return -1;
+            }
+            return 0;
+        })
+    }
+
+    setSeatings() {
+        this.classEntity.Students.forEach((stu) => {
+            this.seatingArrangements.forEach((arrangment) => {
+                if (stu.O365UserId == arrangment.o365UserId) {
+                    stu.SeatingArrangment = arrangment.position + "";
+                    stu.SeatingClass = "seated hideitem";
+                    if (stu.SeatingArrangment != "0") {
+                        stu.IsSeated = true;
+                        stu.ContainerClass = "deskcontainer white";
+                        stu.SeatingClass = "seated";
+                    }
+
+                    if (this.me.O365UserId == stu.O365UserId) {
+                        stu.ContainerClass = "deskcontainer green";
+                        stu.BackgroundColor = this.favoriteColor;
+                    }
+                }
+            });
+        });
+    }
+
     gotoClasses(school: SchoolModel) {
         this.router.navigate(['classes', school.ObjectId, school.SchoolId]);
     }
@@ -176,7 +188,20 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                 this.iniTiles();
                 clearInterval(interval);
             }
-        },1000);
+        }, 1000);
+
+        var interval2 = setInterval(() => {
+                var leftHeight = $("#dvleft").height();
+                var rightHeight = $("#dvright").height();
+                if (leftHeight > 0 && rightHeight > 0) {
+                    if (leftHeight > rightHeight) {
+                        $("#dvright").height(leftHeight);
+                    } else {
+                        $("#dvleft").height(rightHeight);
+                    }
+                    clearInterval(interval2);
+                }
+        }, 1000);
     }
 
     iniTiles() {
@@ -185,6 +210,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             var tile = $(".desktile[ng-reflect-position='" + position + "']")
             $(this).appendTo(tile);
         });
+
     }
 
     editseats() {
