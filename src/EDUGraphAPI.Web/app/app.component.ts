@@ -24,48 +24,7 @@ export class AppComponent implements OnInit{
     }
 
     ngOnInit() {
-        this.router.events
-            .filter(event => event instanceof NavigationEnd)
-            .map(() => this.activatedRoute)
-            .map(route => {
-                while (route.firstChild)route = route.firstChild;
-                return route;
-            })
-            .filter(route => route.outlet === 'primary')
-            .mergeMap(route => route.data)
-            .subscribe((event) => {
 
-                //if (AuthenticationHelper.isUserLoggedIn()) {
-                //    this.router.navigate([this.router.url]);
-                //}
-                if (this.auth.IsLogin()) {
-                    this.meService.getCurrentUser()
-                        .subscribe((user) => {
-                            let url = this.router.url;
-
-                            if (user.areAccountsLinked || url.indexOf("admin") >= 0) {
-                                if (url == '/')
-                                    url = 'schools';
-                            } else if (url.indexOf('link') >= 0 && UrlHelper.getUrlQueryValue(url, 'error') != null) {
-                                return;
-                            }
-                            else if (url.indexOf('link') < 0) {
-                                url = 'link';
-                            }
-                            if (this.router.url != '/' + url && this.router.url != "/login")
-                                this.router.navigate([url])
-                    });
-                    
-                }
-                else {
-                    if (this.router.url != "/register") {
-                        this.router.navigate(['login']);
-                    } else {
-                        this.router.navigate(['register']);
-                    }
-                }
-
-            });
     
     }
 

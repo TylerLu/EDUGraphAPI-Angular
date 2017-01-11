@@ -22,12 +22,13 @@ import { LinkModule } from './link/link.module';
 import { Register } from './register/register.component';
 import { AboutMe } from './aboutme/aboutme.component';
 import { AboutMeService } from './aboutme/aboutme.service';
+import { HomeComponent } from './home.component';
 
 
 
 @NgModule({
     imports: [BrowserModule, FormsModule, ReactiveFormsModule, CustomFormsModule, routing, HttpModule, SchoolModule,AdminModule,LinkModule],
-    declarations: [AppComponent, Login, Register, Header,DemoHelper, AboutMe],
+    declarations: [AppComponent, Login, Register, Header, DemoHelper, AboutMe, HomeComponent],
     bootstrap: [AppComponent],
     providers: [
         { provide: 'auth', useClass: AuthHelper },

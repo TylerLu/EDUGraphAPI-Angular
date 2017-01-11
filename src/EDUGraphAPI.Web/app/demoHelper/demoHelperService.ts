@@ -12,11 +12,17 @@ export class DemoHelperService {
     GetMappedDemoPage(pages: DemoHelperPage[]) {
         let result = new DemoHelperPage();
         let component = window.location.pathname.split('/')[1];
+
+        let sourceCodeRepositoryUrl = this.GetSourceCodeRepositoryUrl();
+        if (sourceCodeRepositoryUrl.slice(-1) == '/') {
+            sourceCodeRepositoryUrl = sourceCodeRepositoryUrl.slice(0, -1)
+        }
+
         for (var i = 0; i < pages.length; i++) {
             let page = pages[i];
             if (page.component == component) {
                 for (var i = 0; i < page.links.length; i++) {
-                    page.links[i].url = this.GetGitHubDomain() + page.links[i].url;
+                    page.links[i].url = sourceCodeRepositoryUrl + page.links[i].url;
                 }
                 result = page;
                 break;
@@ -32,7 +38,7 @@ export class DemoHelperService {
             });
     }
 
-    GetGitHubDomain() {
+    private GetSourceCodeRepositoryUrl() {
         var domain = Cookie.get(Constants.SourceCodeRepositoryUrl);
         if (domain && domain != "undefined")
             return domain;

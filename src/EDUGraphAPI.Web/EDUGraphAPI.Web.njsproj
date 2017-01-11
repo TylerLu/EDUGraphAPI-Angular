@@ -89,6 +89,7 @@ SQLServerHost=edugraphapi2dev.database.windows.net</Environment>
     <TypeScriptCompile Include="app\models\common\colorEntity.ts" />
     <TypeScriptCompile Include="app\models\common\organization.ts" />
     <TypeScriptCompile Include="app\models\common\userInfo.ts" />
+    <TypeScriptCompile Include="app\home.component.ts" />
     <TypeScriptCompile Include="app\register\register.component.ts" />
     <TypeScriptCompile Include="app\register\register.ts" />
     <TypeScriptCompile Include="app\school\classdetail.component.ts" />

@@ -7,6 +7,7 @@ import { DemoHelper } from './demoHelper/demoHelper.component';
 import { Register } from './register/register.component';
 import { AboutMe } from './aboutme/aboutme.component';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home.component';
 
 export const appRoutes: Routes = [
     { path: 'login', component: Login },
@@ -17,8 +18,7 @@ export const appRoutes: Routes = [
     { path: 'link', redirectTo:"link"},
     { path: 'demoHelper', component: DemoHelper },
     { path: 'aboutme', component: AboutMe },
-    { path: '**', component: AppComponent }
-    
+    { path: '**', component: HomeComponent }    
 ];
 
 
