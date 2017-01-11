@@ -43,6 +43,7 @@ router.route('/')
         else {
             userService.getUserModel({ id: u.id })
                 .then(user => {
+                    user.authType = u.authType;
                     user.areAccountsLinked =
                         user.o365UserId != null && user.o365UserId != ''
                         && user.o365Email != null && user.o365Email != '';

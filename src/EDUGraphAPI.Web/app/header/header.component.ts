@@ -110,7 +110,9 @@ export class Header implements OnInit {
     initFullName() {
         this.meService.getCurrentUser()
             .subscribe((user) => {
-                this.fullName = user.firstName + " " + user.lastName;
+                this.fullName = (user.areAccountsLinked || user.authType == 'O365')
+                    ? (user.firstName + " " + user.lastName)
+                    : user.email
                 this.isAdmin = this.isUserAdmin(user);
             });
     }

@@ -32,7 +32,7 @@ export class Register implements OnInit {
                 this.userService.localLogin(this.model.UserInfo)
                     .then((result) => {
                         if (result.status == "200") {
-                            window.location.href = "/schools";
+                            window.location.href = "/";
                         } 
                     });
                 //this.router.navigate(["link"]);
