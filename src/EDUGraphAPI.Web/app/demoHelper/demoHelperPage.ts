@@ -1,6 +1,6 @@
 ﻿export class DemoHelperPage {
     component: string;
-    links: string[];
+    links: Link[];
     constructor() {
         this.component = undefined;
         this.links = [];
@@ -8,6 +8,6 @@
 }
 
 export class Link {
-    Title: string;
-    Url: string;
+    title: string;
+    url: string;
 }

@@ -1,6 +1,8 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { DemoHelperPage } from './demoHelperPage';
-import { Http,Response} from '@angular/http';
+import { Http, Response } from '@angular/http';
+import { Cookie } from '../services/cookieService';
+import { Constants } from '../constants';
 
 @Injectable()
 export class DemoHelperService {
@@ -13,6 +15,9 @@ export class DemoHelperService {
         for (var i = 0; i < pages.length; i++) {
             let page = pages[i];
             if (page.component == component) {
+                for (var i = 0; i < page.links.length; i++) {
+                    page.links[i].url = this.GetGitHubDomain() + page.links[i].url;
+                }
                 result = page;
                 break;
             }
@@ -25,6 +30,14 @@ export class DemoHelperService {
             .map((response: Response) => {
                 return this.GetMappedDemoPage(response.json());
             });
+    }
+
+    GetGitHubDomain() {
+        var domain = Cookie.get(Constants.SourceCodeRepositoryUrl);
+        if (domain && domain != "undefined")
+            return domain;
+        else 
+            return '';
     }
 
 }
