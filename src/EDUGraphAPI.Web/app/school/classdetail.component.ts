@@ -258,8 +258,8 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                 $("#hidtiles").append($(this));
             } else {
                 var tile = $(".desktile[ng-reflect-position='" + prevId + "']");
+                $(this).removeAttr("ng-reflect-prev-position").removeClass("unsaved").attr("ng-reflect-position", prevId);
                 tile.append($(this));
-                tile.find(".deskcontainer").removeAttr("ng-reflect-prev-position").removeClass("unsaved");
             }
            
         });
@@ -269,7 +269,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             //$e = $(e);
             var position = $(this).attr("ng-reflect-prev-position");
             if (position && position != "0"){
-                $(this).attr("ng-reflect-position", position).removeAttr("ng-reflect-prev-position");
+                $(this).attr("ng-reflect-position", position).removeClass("unsaved").removeAttr("ng-reflect-prev-position");
                 var id = $(this).attr("ng-reflect-userid");
                 $(".desktile[ng-reflect-position=" + position + "]").append($(this));
                 $("#" + id).find(".seated").removeClass("hideitem");

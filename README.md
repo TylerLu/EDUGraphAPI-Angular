@@ -274,7 +274,7 @@ The server app exposes several Web APIs:
 | /tenant                               | POST     | Update information (isAdminConsented) of current user's tenant |
 | /tenant/unlinkAllUsers                | POST     | Unlink all users in current user's tenant |
 | /users/linked                         | GET      | Get all linked users                     |
-| /users/:userId/unlink                 | POST     | Unlink the specified user                   |
+| /users/:userId/unlink                 | POST     | Unlink the specified user                |
 | /schools/seatingArrangements/:classId | GET/POST | Get or set the seating arrangement of the specified class |
 
 These APIs are defined in the **/routes** folder.
@@ -379,24 +379,40 @@ The **EducationServiceClient** is the core class of the library. It is used to e
 **Get schools**
 
 ~~~typescript
-
+getSchools(): Observable<SchoolModel[]> {
+    return this.dataService.getArray<SchoolModel>(this.urlBase + "/administrativeUnits?api-version=beta");
+    }
 ~~~
 
 ~~~typescript
-
+getSchoolById(id: string): Observable<SchoolModel> {
+    return this.dataService.getObject(this.urlBase + '/administrativeUnits/' + id + '?api-version=beta');
+}
 ~~~
 
-**Get sections**
+**Get classes**
 
 ~~~typescript
-
+getClasses(schoolId: string, nextLink: string): Observable<PagedCollection<ClassesModel>> {
+    let url: string = this.urlBase + "/groups?api-version=beta&$top=12&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Section'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId + "'" +
+        (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
+    return this.dataService.getPagedCollection<ClassesModel>(url);
+}
 ~~~
 
 ```typescript
-
+getClassById(classId: string): Observable<ClassesModel> {
+    return this.dataService.getObject<ClassesModel>(this.urlBase + "/groups/" + classId + "?api-version=beta&$expand=members");
+}
 ```
-```typescript
+**Get users**
 
+```typescript
+getUsers(schoolId: string, nextLink: string): Observable<PagedCollection<UserModel>> {
+    var url = this.urlBase + "/administrativeUnits/" + schoolId + "/members?api-version=beta&$top=12" +
+        (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
+    return this.dataService.getPagedCollection<UserModel>(url);
+}
 ```
 Below are some screenshots of the sample app that show the education data.
 

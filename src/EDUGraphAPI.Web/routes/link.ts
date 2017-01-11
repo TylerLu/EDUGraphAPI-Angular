@@ -51,6 +51,8 @@ router.post('/O365User', function (req, res) {
     var code = req.body.code;
     getAADGraphToken(code, tentantId, Constants.MSGraphResource)
         .then(accessToken => {
+            localUser.oid = idToken.oid;
+            localUser.tid = tentantId;
             return userService.linkO365User(accessToken, localUser.id, tentantId)
         })
         .then(() => {

@@ -79,6 +79,7 @@ export class appAuth {
             if (!profile.oid) {
                 return done(new Error("No oid found"), null);
             }
+            profile.tid = profile._json.tid;
             profile.authType = 'O365';
             req.res.cookie('authType', 'O365');
 
@@ -109,9 +110,11 @@ export class appAuth {
                 userSrv.validUser(username, password)
                     .then((user) => {
                         if (user) {
+                            let organization = user['organization'];
                             done(null, {
                                 'id': user['id'],
                                 'oid': user['o365UserId'],
+                                'tid': organization ? organization.tenantId: '',
                                 'authType': "Local"
                             });
                         } else {

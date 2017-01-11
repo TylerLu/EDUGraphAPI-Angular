@@ -106,12 +106,30 @@ export class UserService {
     }
     //valid user in table
     public validUser(email: string, password: string): Promise<any> {
+        let retUser;
         return this.dbContext.User
             .findOne({ where: { email: email } })
             .then((user) => {
                 let isValid = user != null && bcrypt.hashSync(password, user.salt) == user.passwordHash;
-                if (isValid) return user;
-                else throw 'Invalid Username or password';
+                if (isValid) {
+                    retUser = user;
+                    return user;
+                }
+                else
+                    throw 'Invalid Username or password';
+            })
+            .then((user: UserInstance) => {
+                return user.getOrganization();
+            })
+            .then((organization) => {
+                if (organization != null)
+                    retUser.organization = {
+                        tenantId: organization.tenantId,
+                        name: organization.name,
+                        isAdminConsented: organization.isAdminConsented
+                    };
+
+                return retUser;
             })
     }
     //valid user is admin or not

@@ -81,8 +81,11 @@ app.get('/*', function (req, res) {
     if (req.cookies['AppBingMapKey'] == null || req.cookies['AppBingMapKey'] != process.env.BingMapKey) {
         res.cookie('AppBingMapKey', process.env.BingMapKey);
     }
-    if (req.user && req.user._json && req.user._json.tid != req.cookies['UserTenantId']) {
-        res.cookie('UserTenantId', req.user._json.tid);
+    if (req.cookies['SourceCodeRepositoryUrl'] == null || req.cookies['SourceCodeRepositoryUrl'] != process.env.SourceCodeRepositoryUrl) {
+        res.cookie('SourceCodeRepositoryUrl', process.env.SourceCodeRepositoryUrl);
+    }
+    if (req.user && req.user.tid != req.cookies['UserTenantId']) {
+        res.cookie('UserTenantId', req.user.tid);
     }
     res.sendfile(path.join(__dirname, indexPage));
 });
