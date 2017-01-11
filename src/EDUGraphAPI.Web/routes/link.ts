@@ -46,13 +46,16 @@ router.post('/CreateLocalUser', function (req, res) {
 
 router.post('/O365User', function (req, res) {
     var redirectUrl = req.query.redirectUrl || '/schools';
-    var localUser = req.user;
     var idToken = jwt.decode(req.body.id_token);
     var tentantId = idToken.tid;
     var code = req.body.code;
 
     let accessToken: string;
     let tokenService = new TokenCacheService();
+    
+    var localUser = req.user;
+    localUser.oid = idToken.oid;  // O365 User Id
+    localUser.tid = tentantId;    // Tenant Id
 
     getTokenByCode(code, tentantId, Constants.MSGraphResource)
         .then(msToken => {

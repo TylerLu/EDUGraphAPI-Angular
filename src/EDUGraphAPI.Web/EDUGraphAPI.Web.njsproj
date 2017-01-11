@@ -136,7 +136,6 @@ SQLServerHost=edugraphapi2dev.database.windows.net</Environment>
     <Content Include="app\app.component.css" />
     <Content Include="app\app.component.template.html" />
     <Content Include="app\css\bootstrap.min.css" />
-    <Content Include="app\css\login.css" />
     <Content Include="app\css\Site.css" />
     <Content Include="app\demoHelper\demoHelper-pages.json" />
     <Content Include="app\demoHelper\demoHelper.component.template.html" />
