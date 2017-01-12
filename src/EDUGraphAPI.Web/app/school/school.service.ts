@@ -152,7 +152,7 @@ export class SchoolService {
     }
 
     saveSeatingArrangement(classId: string, seatingArrangements: SeatingArrangement[]): any {
-        var url = "/api/schools/seatingArrangements/" + classId +"&t=" + new Date().getTime();
+        var url = "/api/schools/seatingArrangements/" + classId +"?t=" + new Date().getTime();
         return this.dataService.post(url, seatingArrangements);
     }
 }

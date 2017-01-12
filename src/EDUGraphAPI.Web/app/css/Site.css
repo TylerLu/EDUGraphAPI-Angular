@@ -523,3 +523,4 @@ top: -10px;cursor:pointer;}
 .register .form-group{width:100%;float:left;}
 .register .form-group .control-label { padding-top: 7px; margin-bottom: 0; text-align: right;}
 .linkcontrol select{margin-right:6px;}
+.table > tbody + tbody{border-top:none;}
