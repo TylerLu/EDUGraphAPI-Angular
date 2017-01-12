@@ -7,6 +7,7 @@ import 'rxjs/add/operator/toPromise';
 import { UserInfo } from '../models/common/userinfo';
 import { Cookie } from './cookieService';
 import { Constants } from '../constants';
+import { AuthHelper } from "../authHelper/authHelper";
 
 
 
@@ -15,7 +16,7 @@ export class MeService {
 
     private meAPIUrl = 'api/me';
 
-    constructor(private _http: Http, @Inject('auth') private authService) {
+    constructor(private _http: Http, @Inject('auth') private authService: AuthHelper) {
     }
 
     public getCurrentUser() {

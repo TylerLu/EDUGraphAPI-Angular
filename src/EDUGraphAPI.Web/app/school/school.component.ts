@@ -9,7 +9,7 @@ import { BingMapHelper } from '../utils/bingMapHelper'
 import { MapUtils } from '../utils/jsonHelper'
 import { UserModel } from './user'
 import { Constants } from '../constants';
-
+import { MeService } from "../services/meService";
 @Component({
     moduleId: module.id,
     selector: 'schools-list',
@@ -27,7 +27,8 @@ export class SchoolComponent implements OnInit {
     areAccountsLinked: boolean;
     isLocalAccount: boolean;
     showNoData: boolean = false;
-    constructor( @Inject('schoolService') private schoolService: SchoolService, private router: Router, @Inject('me') private meService) {
+    constructor( @Inject('schoolService') private schoolService: SchoolService, private router: Router,
+        @Inject('me') private meService: MeService) {
     }
 
     ngOnInit() {

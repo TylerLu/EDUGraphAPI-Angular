@@ -1,7 +1,8 @@
 ﻿import { Component, Input, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserInfo } from '../models/common/userinfo';
-
+import { AuthHelper } from "../authHelper/authHelper";
+import { MeService } from "../services/meService";
 
 @Component({
     moduleId: module.id,
@@ -12,28 +13,17 @@ import { UserInfo } from '../models/common/userinfo';
 export class Header implements OnInit {
     @Input() isAuthenticated: boolean;
 
-    //urlParts: string[];
     ifShowContextMenu: boolean;
     fullName: string;
     isAdmin: boolean;
 
-    constructor(private router: Router, @Inject('me') private meService, @Inject('auth') private authService) { }
+    constructor(private router: Router, @Inject('me') private meService: MeService, @Inject('auth') private authService: AuthHelper) { }
 
     ngOnInit() {
-        //this.initUrlParts();
         this.ifShowContextMenu = false;
         this.initFullName();
     }
 
-    //initUrlParts() {
-    //    var parts = window.location.pathname.split('/');
-    //    var result = [];
-    //    for (var i = 0; i < parts.length; i++) {
-    //        if (parts[i] != '')
-    //            result.push(parts[i]);
-    //    }
-    //    this.urlParts = result; 
-    //}
 
     urlParts() {
         var parts = window.location.pathname.split('/');
@@ -63,13 +53,9 @@ export class Header implements OnInit {
         return '';
     }
 
-    //isSchoolsPage() {
-    //    return this.urlParts.length == 1 && this.urlParts[0] == "Schools";
-    //}
 
     isClassesPage() {
         let urlParts = this.urlParts();
-        //return this.urlParts.length == 3 && this.urlParts[0] == "Schools" && this.urlParts[2] == "Classes"; 
         return urlParts.length > 0 && (urlParts[0].toLowerCase() == "classes" || urlParts[0].toLowerCase() == "classdetail");
     }
     isTeacherStudentsPage() {
@@ -84,11 +70,6 @@ export class Header implements OnInit {
         let urlParts = this.urlParts();
         return urlParts.length > 0 && (urlParts[0].toLowerCase() == "myclasses");
     }
-
-
-    //ifShowHome() {
-    //    return this.isAuthenticated;
-    //}
 
     ifShowClassesTeacherStudents() {
         return this.isClassesPage() || this.isTeacherStudentsPage() || this.isMyClassesPage();

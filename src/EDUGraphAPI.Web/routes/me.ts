@@ -1,9 +1,11 @@
 ﻿import express = require('express');
 import * as Storage from '../data/dbContext';
 import * as Sequelize from 'sequelize';
+import jwt = require('jsonwebtoken');
 import { Constants } from '../constants';
 import { UserService } from '../services/userService';
 import { TokenCacheService } from '../services/tokenCacheService';
+import { TokenUtils } from '../utils/tokenUtils'
 
 var router = express.Router();
 var userService = new UserService();
@@ -63,7 +65,7 @@ router.post('/favoriteColor', function (req, res) {
 });
 
 
-router.get('/accesstoken', function (req, res) {
+router.get('/accessToken', function (req, res) {
     if (req.isAuthenticated()) {
         let oid = req.user.oid;
         var tokenCache = new TokenCacheService();
@@ -83,7 +85,7 @@ router.get('/accesstoken', function (req, res) {
                     .catch(error => res.json(500, { error: error }));
                 break;
             default:
-                res.json({ error: "resource is invalid" });
+                res.json(null);
                 break;
         }
     }
@@ -91,5 +93,47 @@ router.get('/accesstoken', function (req, res) {
         res.json({ error: "401 unauthorized" });
     }
 });
+
+router.post('/O365UserLogin', function (req, res) {
+    var redirectUrl = req.query.redirectUrl || '/schools';
+    var idToken = jwt.decode(req.body.id_token);
+    var tentantId = idToken.tid;
+    var code = req.body.code;
+
+    let accessToken: string;
+    let tokenService = new TokenCacheService();
+
+    var localUser = req.user;
+    localUser.oid = idToken.oid;  // O365 User Id
+    localUser.tid = tentantId;    // Tenant Id
+
+    TokenUtils.getTokenByCode(code, tentantId, Constants.MSGraphResource, 'api/me/O365UserLogin')
+        .then(msToken => {
+            return tokenService.updateMSGToken(idToken.oid, msToken.access_token, msToken.refresh_token, msToken.expires_on * 1000);
+        })
+        .then(tokenObject => {
+            accessToken = tokenObject.msgAccessToken;
+            return TokenUtils.getTokenByRefreshToken(tokenObject.msgRefreshgToken, Constants.AADGraphResource)
+        })
+        .then(aadToken => {
+            return tokenService.updateAADGToken(idToken.oid, aadToken.access_token, aadToken.refresh_token, aadToken.expires_on * 1000);
+        })
+        .then(tokenObject => {
+            res.redirect(redirectUrl);
+        })
+        .catch(error => {
+            let errorMsg: String = '';
+            if (typeof error == 'string' || error instanceof String) {
+                errorMsg = error;
+            }
+            else if (error != null && error.hasOwnProperty('message')) {
+                errorMsg = error.message
+            }
+            else {
+                errorMsg = 'unknown error'
+            }
+            res.redirect('/link-loginO365Requried?error=' + encodeURI(errorMsg as string));
+        });
+})
 
 export = router;

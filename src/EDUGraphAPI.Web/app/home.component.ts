@@ -1,7 +1,8 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Inject } from '@angular/core';
-
+import { AuthHelper } from "./authHelper/authHelper";
+import { MeService } from "./services/meService";
 @Component({
     moduleId: module.id,
     template: ''
@@ -9,7 +10,8 @@ import { Inject } from '@angular/core';
 
 export class HomeComponent implements OnInit {
 
-    constructor(private router: Router, @Inject('auth') private auth, @Inject('me') private meService) {
+    constructor(private router: Router, @Inject('auth') private auth: AuthHelper,
+        @Inject('me') private meService: MeService) {
     }
 
     ngOnInit() {

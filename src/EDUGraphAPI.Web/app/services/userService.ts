@@ -2,6 +2,7 @@
 import { Http, Response, Headers } from '@angular/http';
 import { UserInfo } from '../models/common/userInfo';
 import 'rxjs/add/operator/toPromise';
+import { AuthHelper } from "../authHelper/authHelper";
 
 @Injectable()
 export class UserService {
@@ -11,7 +12,7 @@ export class UserService {
     private registerAPIUrl = 'api/register';
     private authToken: string;
 
-    constructor(private _http: Http, @Inject('auth') private authService) {
+    constructor(private _http: Http, @Inject('auth') private authService: AuthHelper) {
         this.authToken = authService.access_token;
     }
 

@@ -5,14 +5,14 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import { UserInfo } from '../models/common/userInfo'
-
+import { AuthHelper } from "../authHelper/authHelper";
+import { UserService } from "../services/userService";
 
 @Component({
     encapsulation: ViewEncapsulation.None,
     moduleId: module.id,
     selector: 'loginform',
     templateUrl: 'login.component.template.html',
-    //styleUrls: ['../../app/css/login.css']
     styles: [`
         .containerbg{height:100%;}
         .container{width:100% !important;}
@@ -51,8 +51,8 @@ export class Login implements OnInit {
 
     model: UserInfo = new UserInfo();
     showLoginFailed: boolean = false;
-    constructor( @Inject('auth') private auth, private router: Router, private activatedRoute: ActivatedRoute,
-        @Inject('user') private userService
+    constructor( @Inject('auth') private auth: AuthHelper, private router: Router, private activatedRoute: ActivatedRoute,
+        @Inject('user') private userService: UserService
     ) {
         this.model.email = "";
         this.model.password = "";

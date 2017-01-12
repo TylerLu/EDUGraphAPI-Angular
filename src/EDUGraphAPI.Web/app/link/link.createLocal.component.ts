@@ -5,7 +5,8 @@ import { UserInfo } from '../models/common/userinfo';
 import { CreateLocalModel } from './link';
 import { ColorEntity } from '../models/common/colorEntity';
 import { Constants } from '../constants';
-
+import { MeService } from "../services/meService";
+import { UserService } from "../services/userService";
 @Component({
     moduleId: module.id,
     selector: 'link-local',
@@ -22,7 +23,8 @@ export class LinkCreateLocal implements OnInit {
     serverCheckValid: boolean = true;
     errorMsgs: string[];
 
-    constructor( @Inject('linkService') private linkService: LinkService, private router: Router, @Inject('me') private meService, @Inject('user') private userService) { }
+    constructor( @Inject('linkService') private linkService: LinkService, private router: Router,
+        @Inject('me') private meService: MeService, @Inject('user') private userService: UserService) { }
 
     ngOnInit() {
         this.localModel = new CreateLocalModel();

@@ -5,6 +5,8 @@ import { UserInfo } from '../models/common/userinfo';
 import { LoginLocalModel } from './link';
 import { ColorEntity } from '../models/common/colorEntity';
 import { Constants } from '../constants';
+import { MeService } from "../services/meService";
+import { UserService } from "../services/userService";
 
 @Component({
     moduleId: module.id,
@@ -20,7 +22,8 @@ export class LinkLoginLocal implements OnInit {
     errorMsgs: string[];
     serverCheckValid: boolean=true;
 
-    constructor( @Inject('linkService') private linkService: LinkService, private router: Router, @Inject('me') private meService, @Inject('user') private userService) { }
+    constructor( @Inject('linkService') private linkService: LinkService, private router: Router,
+        @Inject('me') private meService: MeService, @Inject('user') private userService: UserService) { }
 
     ngOnInit() {
         this.initCurrentUser();

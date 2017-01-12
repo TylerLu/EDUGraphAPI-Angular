@@ -4,6 +4,7 @@ import { Cookie } from '../services/cookieService';
 import { Http, Headers, Response } from '@angular/http';
 import { MapUtils, JsonProperty } from '../utils/jsonhelper'
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Observable, ReplaySubject } from 'rxjs/Rx';
 
 @Injectable()
 export class AuthHelper {
@@ -34,22 +35,30 @@ export class AuthHelper {
             : this.getMSGraphToken();
     }
 
-    public getAADGraphToken() {
-        return this.get("/api/me/accesstoken?resource=" + Constants.AADGraphResource.replace("://", "%3A%2F%2F"))
-            .map((response: Response) => <TokenEntity>response.json());
+    public getAADGraphToken(): Observable<TokenEntity> {
+        return this.get("/api/me/accesstoken?resource=" + encodeURIComponent(Constants.AADGraphResource));
     }
-    public getMSGraphToken() {
-        return this.get("/api/me/accesstoken?resource=" + Constants.MSGraphResource.replace("://", "%3A%2F%2F"))
-            .map((response: Response) => <TokenEntity>response.json());
+    public getMSGraphToken(): Observable<TokenEntity> {
+        return this.get("/api/me/accesstoken?resource=" + encodeURIComponent(Constants.MSGraphResource));
     }
-    
+
     getHeader() {
         let header = new Headers();
         return header;
     }
+    get(actionUrl: string): Observable<TokenEntity> {
+        let activeProject: ReplaySubject<any> = new ReplaySubject(1);
+        this._http.get(actionUrl, { headers: this.getHeader() })
+            .map((response: Response) => <TokenEntity>response.json())
+            .subscribe((resp) => {
+                activeProject.next(resp);
+            },
+            (error) => {
+                window.location.href = "/link-loginO365Requried";
+                activeProject.complete();
 
-    get(actionUrl: string) {
-        return this._http.get(actionUrl, { headers: this.getHeader() });
+            });
+        return activeProject;
     }
 
     login() {
@@ -59,11 +68,8 @@ export class AuthHelper {
 }
 
 export class TokenEntity {
-    @JsonProperty("accesstoken")
     public accessToken: string;
-    @JsonProperty("error")
-    public error: string;
-    @JsonProperty("expires")
+    public error: any;
     public expires: number;
     constructor() {
         this.accessToken = undefined;

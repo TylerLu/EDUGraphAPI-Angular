@@ -4,6 +4,7 @@ import { SchoolModel } from './school'
 import { MapUtils } from '../utils/jsonhelper'
 import { UserModel } from './user'
 import { ClassesModel } from './classes';
+import { SchoolService } from './school.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class MyClassesComponent implements OnInit {
     school: SchoolModel;
     showNoData: boolean = false;
 
-    constructor( @Inject('schoolService') private schoolService
+    constructor( @Inject('schoolService') private schoolService: SchoolService
         , private route: ActivatedRoute, private router: Router) {
 
     }
@@ -58,7 +59,7 @@ export class MyClassesComponent implements OnInit {
                             .subscribe((result) => {
                                 var classObj = MapUtils.deserialize(ClassesModel, result);
                                 classObj.IsMyClasses = true;
-                                classObj.Users = []; //MapUtils.deserialize(UserModel[], result);
+                                classObj.Users = []; 
                                 result.members.forEach((obj) => {
                                     classObj.Users.push(MapUtils.deserialize(UserModel, obj));
                                 });

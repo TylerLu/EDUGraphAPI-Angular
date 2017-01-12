@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { SchoolModel } from './school'
 import { UserModel, StudentModel, TeacherModel } from './user'
 import { MapUtils } from '../utils/jsonhelper'
+import { SchoolService } from './school.service';
+import { UserPhotoService } from '../services/userPhotoService';
 
 class UsersViewModel {
     private static cache = {};
@@ -92,8 +94,8 @@ export class UsersComponent implements OnInit {
     studentsModel: UsersViewModel;
     teachersModel: UsersViewModel;
 
-    constructor( @Inject('schoolService') private schoolService
-        , @Inject('userPhotoService') private userPhotoService
+    constructor( @Inject('schoolService') private schoolService: SchoolService
+        , @Inject('userPhotoService') private userPhotoService: UserPhotoService
         , private route: ActivatedRoute, private router: Router) {
     }
 

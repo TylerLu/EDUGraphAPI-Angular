@@ -5,12 +5,14 @@ import { Constants } from '../constants';
 import { AboutMeModel } from './aboutme';
 import { ClassesModel } from '../school/classes';
 import { ColorEntity } from '../models/common/colorEntity';
+import { MeService } from "../services/meService";
+import { DataService } from "../services/dataService";
 
 @Injectable()
 export class AboutMeService {
     private graphUrlBase: string = Constants.AADGraphResource + '/' + Constants.TenantId;
 
-    constructor(private http: Http, @Inject('me') private meService, @Inject('data') private dataService) {
+    constructor(private http: Http, @Inject('me') private meService: MeService, @Inject('data') private dataService: DataService) {
     }
 
     /**

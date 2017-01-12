@@ -4,12 +4,16 @@ import { Observable } from 'rxjs/Observable';
 import { Constants } from '../constants';
 import { UserModel } from '../school/user';
 import { AuthorizationHelper, Prompt } from '../utils/AuthorizationHelper';
+import { AuthHelper } from "../authHelper/authHelper";
+import { MeService } from "../services/meService";
+import { UserService } from "../services/userService";
 
 @Injectable()
 export class LinkService {
 
     private linkUrl = 'api/link';
-    constructor(private http: Http, @Inject('auth') private authService, @Inject('me') private meService, @Inject('user') private userService) { }
+    constructor(private http: Http, @Inject('auth') private authService: AuthHelper,
+        @Inject('me') private meService: MeService, @Inject('user') private userService: UserService) { }
 
 
     isLocalAccount() {

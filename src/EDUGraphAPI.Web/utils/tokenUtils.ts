@@ -3,10 +3,10 @@ import { Constants } from '../constants';
 
 export class TokenUtils {
 
-    static getTokenByCode(code: string, tenantId: string, resource: string): Promise<any> {
+    static getTokenByCode(code: string, tenantId: string, resource: string, redirectUrl: string): Promise<any> {
         return new Promise<string>((resolve, reject) => {
             var url = 'https://login.microsoftonline.com/' + tenantId + '/oauth2/token';
-            var redirectUri = `https://${Constants.Host}/api/link/O365User`
+            var redirectUri = `https://${Constants.Host}/${redirectUrl}`
             request.post(url)
                 .accept('application/json')
                 .send('resource=' + encodeURI(resource))

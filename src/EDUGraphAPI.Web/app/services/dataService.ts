@@ -6,6 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/catch';
 import { SchoolModel } from '../school/school'
 import 'rxjs/add/operator/toPromise';
+import { AuthHelper } from "../authHelper/authHelper";
 
 export class Item {
     public objectType: string;
@@ -17,7 +18,7 @@ export class Item {
 @Injectable()
 export class DataService {
 
-    constructor(private _http: Http, @Inject('auth') private authService
+    constructor(private _http: Http, @Inject('auth') private authService: AuthHelper
     ) {
     }
 
@@ -36,7 +37,7 @@ export class DataService {
         let accessTokenGetter: () => any = actionUrl.indexOf("graph.windows.net") >= 0 ? this.authService.getAADGraphToken : this.authService.getMSGraphToken;
         accessTokenGetter.bind(this.authService)()
             .subscribe((result) => {
-                this._http.get(actionUrl, { headers: this.getHeader(result.accesstoken) })
+                this._http.get(actionUrl, { headers: this.getHeader(result.accessToken) })
                     .subscribe((data) => {
                         activeProject.next(data);
                     },
@@ -55,7 +56,7 @@ export class DataService {
         let activeProject: ReplaySubject<any> = new ReplaySubject(1);
         this.authService.getGraphToken(actionUrl)
             .subscribe(result => {
-                this._http.get(actionUrl, { headers: this.getHeader(result.accesstoken) })
+                this._http.get(actionUrl, { headers: this.getHeader(result.accessToken) })
                     .subscribe(
                     data => activeProject.next(<T>data.json()),
                     error => activeProject.error(error));

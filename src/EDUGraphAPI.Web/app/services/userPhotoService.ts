@@ -3,10 +3,11 @@
 import { Injectable, Inject } from '@angular/core';
 import { Constants } from '../constants';
 import { ConvertHelper } from '../utils/convertHelper';
+import { AuthHelper } from "../authHelper/authHelper";
 
 @Injectable()
 export class UserPhotoService {
-    constructor( @Inject('auth') private authService) {
+    constructor( @Inject('auth') private authService: AuthHelper) {
     }
 
     public getUserPhotoUrl(userId: string): Promise<string> {
@@ -18,7 +19,7 @@ export class UserPhotoService {
                         url: url,
                         type: 'GET',
                         headers: {
-                            'Authorization': 'Bearer ' + result.accesstoken,
+                            'Authorization': 'Bearer ' + result.accessToken,
                             "If-None-Match": ""
                         },
                         mimeType: "text/plain; charset=x-user-defined",

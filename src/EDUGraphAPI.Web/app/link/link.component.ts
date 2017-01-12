@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { LinkService } from './link.service';
 import { UrlHelper } from '../utils/urlHelper';
 import { UserInfo } from '../models/common/userinfo';
-
-
+import { MeService } from "../services/meService";
+import { UserService } from "../services/userService";
 @Component({
     moduleId: module.id,
     selector: 'linkPage',
@@ -20,7 +20,8 @@ export class Link implements OnInit {
     error: string;
 
 
-    constructor( @Inject('linkService') private linkService: LinkService, private router: Router, @Inject('me') private meService, @Inject('user') private userService) { }
+    constructor( @Inject('linkService') private linkService: LinkService, private router: Router,
+        @Inject('me') private meService: MeService, @Inject('user') private userService: UserService) { }
 
     ngOnInit() {
         this.initCurrentUser();

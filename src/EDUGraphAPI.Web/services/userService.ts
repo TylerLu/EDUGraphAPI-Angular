@@ -167,18 +167,18 @@ export class UserService {
                 return user != null;
             });
     }
-    public validHasO365User(oid: string): Promise<boolean> {
+    private validHasO365User(oid: string): Promise<boolean> {
         return this.dbContext.User
             .find({ where: { o365UserId: oid } })
             .then(user => {
                 return user != null;
             });
     }
-    public getUserById(userId: string): Promise<UserInstance> {
+    private getUserById(userId: string): Promise<UserInstance> {
         return this.dbContext.User.findById(userId);
     }
     //get User Roles from Table
-    public getUserRoles(userId: string): Promise<any> {
+    private getUserRoles(userId: string): Promise<any> {
         return this.getUserById(userId)
             .then((user) => {
                 return user.getUserRoles();
@@ -283,8 +283,9 @@ export class UserService {
                     throw (`User ${userId} does not existed`);
             });
     }
-    //get accesstoken by o365UserId
-    public getAADGraphTokenByUserId(o365UserId: string): Promise<string> {
+
+    //graph get o365 user
+    public getO365User(o365UserId: string, tenantId: string): Promise<any> {
         let tokenService = new TokenCacheService();
         return tokenService.getTokenCacheByOID(o365UserId)
             .then((cach) => {
@@ -295,10 +296,6 @@ export class UserService {
                     throw ("Access Token Is Null")
                 }
             })
-    }
-    //graph get o365 user
-    public getO365User(o365UserId: string, tenantId: string): Promise<any> {
-        return this.getAADGraphTokenByUserId(o365UserId)
             .then((accessToken) => {
                 let msgraphClient: MSGraphClient = new MSGraphClient(accessToken);
                 return msgraphClient.getO365User(tenantId)

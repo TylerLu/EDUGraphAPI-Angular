@@ -85,7 +85,6 @@ export class Cookie {
             cookieStr += 'secure;';
         }
 
-        // console.log(cookieStr);
         document.cookie = cookieStr;
     }
 

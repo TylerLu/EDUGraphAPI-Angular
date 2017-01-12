@@ -56,7 +56,7 @@ router.post('/O365User', function (req, res) {
     localUser.oid = idToken.oid;  // O365 User Id
     localUser.tid = tentantId;    // Tenant Id
 
-    TokenUtils.getTokenByCode(code, tentantId, Constants.MSGraphResource)
+    TokenUtils.getTokenByCode(code, tentantId, Constants.MSGraphResource,'api/link/O365User')
         .then(msToken => {
             return tokenService.updateMSGToken(idToken.oid, msToken.access_token, msToken.refresh_token, msToken.expires_on * 1000);
         })

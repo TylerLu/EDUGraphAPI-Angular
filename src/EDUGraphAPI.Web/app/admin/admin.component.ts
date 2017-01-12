@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MapUtils } from '../utils/jsonhelper';
 import { AdminService } from './admin.service';
 import { UrlHelper } from '../utils/urlHelper';
+import { AuthHelper } from "../authHelper/authHelper";
 
 
 @Component({
@@ -18,7 +19,7 @@ export class AdminComponent implements OnInit {
     message: string;
 
     constructor( @Inject('adminService') private adminService: AdminService, private router: Router,
-        @Inject('auth') private auth) {
+        @Inject('auth') private auth: AuthHelper) {
 
     }
 

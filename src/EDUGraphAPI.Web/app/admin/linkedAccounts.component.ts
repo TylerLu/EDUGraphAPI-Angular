@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MapUtils } from '../utils/jsonhelper';
 import { UserInfo } from '../models/common/userInfo'
 import { AdminService } from './admin.service';
+import { AuthHelper } from "../authHelper/authHelper";
 
 
 @Component({
@@ -16,7 +17,7 @@ export class LinkedAccountsComponent implements OnInit {
     accounts: UserInfo[] = new Array<UserInfo>();
 
     constructor(private router: Router,
-        @Inject('auth') private auth, @Inject('adminService') private adminService: AdminService) {
+        @Inject('auth') private auth: AuthHelper, @Inject('adminService') private adminService: AdminService) {
     }
 
     ngOnInit() {

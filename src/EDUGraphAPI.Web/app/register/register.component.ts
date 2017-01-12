@@ -2,7 +2,7 @@
 import { Response } from '@angular/http';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import {RegisterModel} from './register'
-
+import { UserService } from "../services/userService";
 
 @Component({
     moduleId: module.id,
@@ -15,7 +15,7 @@ export class Register implements OnInit {
     model: RegisterModel = new RegisterModel();
     duplicatedEmails: string[] = new Array<string>();
 
-    constructor( @Inject('user') private userService
+    constructor( @Inject('user') private userService: UserService
         , private router: Router, private activatedRoute: ActivatedRoute) {
         this.model.UserInfo.email = "";
         this.model.UserInfo.password = "";
@@ -35,7 +35,6 @@ export class Register implements OnInit {
                             window.location.href = "/";
                         } 
                     });
-                //this.router.navigate(["link"]);
 
             },
             (response: Response) => {

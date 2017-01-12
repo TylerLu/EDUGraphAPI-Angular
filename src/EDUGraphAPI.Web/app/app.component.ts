@@ -7,7 +7,8 @@ import { Router, NavigationEnd, ActivatedRoute  } from '@angular/router';
 import { Inject } from '@angular/core';
 import { MapUtils } from './utils/jsonhelper';
 import { UrlHelper } from './utils/urlHelper';
-
+import { AuthHelper } from "./authHelper/authHelper";
+import { MeService } from "./services/meService";
 @Component({
     moduleId: module.id,
     selector: 'app',
@@ -19,7 +20,8 @@ import { UrlHelper } from './utils/urlHelper';
 export class AppComponent implements OnInit{
 
 
-    constructor(private router: Router, @Inject('auth') private auth, private activatedRoute: ActivatedRoute, @Inject('me') private meService) {
+    constructor(private router: Router, @Inject('auth') private auth: AuthHelper, private activatedRoute: ActivatedRoute,
+        @Inject('me') private meService: MeService) {
       
     }
 

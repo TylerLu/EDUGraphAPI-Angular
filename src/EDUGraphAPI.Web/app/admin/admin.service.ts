@@ -8,14 +8,17 @@ import { AuthorizationHelper, Prompt } from '../utils/AuthorizationHelper';
 import { Constants } from '../constants';
 import { GraphHelper } from '../utils/graphHelper'
 import { Roles } from '../constants';
-
+import { AuthHelper } from "../authHelper/authHelper";
+import { UserService } from "../services/userService";
+import { DataService } from "../services/dataService";
 @Injectable()
 export class AdminService {
     private getMeUrl = Constants.AADGraphResource + '/' + Constants.TenantId + "/me?api-version=1.5";
     private getAdminUrl = '/api/me';
     private aadBaseUrl = Constants.AADGraphResource + '/' + Constants.TenantId;
     
-    constructor(private _http: Http, @Inject('auth') private authService, @Inject('user') private userService, @Inject('data') private dataService) { }
+    constructor(private _http: Http, @Inject('auth') private authService: AuthHelper,
+        @Inject('user') private userService: UserService, @Inject('data') private dataService: DataService) { }
 
 
     getAdmin(): any {
@@ -125,7 +128,7 @@ export class AdminService {
         return new Promise((resolve, reject) => {
             this.authService.getAADGraphToken()
                 .subscribe((result) => {
-                    resolve(result.accesstoken);
+                    resolve(result.accessToken);
                 },
                 (error) => reject(error))
         });

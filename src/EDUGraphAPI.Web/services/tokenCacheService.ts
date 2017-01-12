@@ -76,68 +76,64 @@ export class TokenCacheService {
     }
 
     public getMSGraphToken(oid: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this.getTokenCacheByOID(oid)
-                .then((tokenObject) => {
-                    if (tokenObject == null) {
-                        reject({ error: 'failed to acquire token' });
-                    }
-                    if ((new Date()).getTime() < tokenObject.msgExpires - 5 * 60 * 1000) {
-                        resolve({
-                            accesstoken: tokenObject.msgAccessToken,
-                            expires: tokenObject.msgExpires
-                        });
-                    }
-                    else {
-                        TokenUtils.getTokenByRefreshToken(tokenObject.msgRefreshgToken, Constants.MSGraphResource)
-                            .then((result: any) => {
-                                tokenObject.msgAccessToken = result.access_token;
-                                tokenObject.msgExpires = result.expires_on * 1000;
-                                tokenObject.save();
-                                resolve({
-                                    accesstoken: tokenObject.msgAccessToken,
-                                    expires: tokenObject.msgExpires
-                                });
-                            })
-                            .catch(() => {
-                                reject({ error: 'failed to acquire token' });
-                            });
-                    }
-                })
-                .catch(reject);
-        });
+        return this.getTokenCacheByOID(oid)
+            .then((tokenObject) => {
+                if (tokenObject == null) {
+                    throw 'failed to acquire token';
+                }
+
+                if ((new Date()).getTime() < tokenObject.msgExpires - 5 * 60 * 1000) {
+                    return {
+                        accessToken: tokenObject.msgAccessToken,
+                        expires: tokenObject.msgExpires
+                    };
+                }
+                else {
+                    return TokenUtils.getTokenByRefreshToken(tokenObject.msgRefreshgToken, Constants.MSGraphResource)
+                        .then((result: any) => {
+                            tokenObject.msgAccessToken = result.access_token;
+                            tokenObject.msgExpires = result.expires_on * 1000;
+                            return tokenObject.save()
+                                .then((ret) => {
+                                    return {
+                                        accessToken: tokenObject.msgAccessToken,
+                                        expires: tokenObject.msgExpires
+                                    }
+                                })
+                        })
+                }
+            })
     }
 
     public getAADAccessToken(oid: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this.getTokenCacheByOID(oid)
-                .then((tokenObject) => {
-                    if (tokenObject == null) {
-                        reject({ error: 'failed to acquire token' });
-                    }
+        return this.getTokenCacheByOID(oid)
+            .then((tokenObject) => {
+                if (tokenObject == null) {
+                    throw 'failed to acquire token';
+                }
+                else {
+                    let btetst = false;
                     if ((new Date()).getTime() < tokenObject.aadgExpires - 5 * 60 * 1000) {
-                        resolve({
-                            accesstoken: tokenObject.aadgAccessToken,
+                        return {
+                            accessToken: tokenObject.aadgAccessToken,
                             expires: tokenObject.aadgExpires
-                        });
+                        }
                     }
                     else {
-                        TokenUtils.getTokenByRefreshToken(tokenObject.aadgRefreshgToken, Constants.AADGraphResource)
+                        return TokenUtils.getTokenByRefreshToken(tokenObject.aadgRefreshgToken, Constants.AADGraphResource)
                             .then((result: any) => {
                                 tokenObject.aadgAccessToken = result.access_token;
                                 tokenObject.aadgExpires = result.expires_on * 1000;
-                                tokenObject.save();
-                                resolve({
-                                    accesstoken: tokenObject.aadgAccessToken,
-                                    expires: tokenObject.aadgExpires
-                                });
+                                return tokenObject.save()
+                                    .then((ret) => {
+                                        return {
+                                            accessToken: tokenObject.aadgAccessToken,
+                                            expires: tokenObject.aadgExpires
+                                        };
+                                    })
                             })
-                            .catch(() => {
-                                reject({ error: 'failed to acquire token' });
-                            });
                     }
-                })
-                .catch(reject);
-        });
+                }
+            })
     }
 }

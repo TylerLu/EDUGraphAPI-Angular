@@ -11,6 +11,9 @@ import { Conversation } from './conversation';
 import { SeatingArrangement } from './seatingarrangements';
 import { CompareHelper } from '../utils/compareHelper';
 import * as moment from 'moment';
+import { MeService } from "../services/meService";
+import { SchoolService } from './school.service';
+import { UserPhotoService } from '../services/userPhotoService';
 
 @Component({
     moduleId: module.id,
@@ -37,8 +40,10 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
     isEditing: boolean = false;
     dragId: string = "";
 
-    constructor( @Inject('schoolService') private schoolService, @Inject('userPhotoService') private userPhotoService, private route: ActivatedRoute, private router: Router,
-        @Inject('me') private meService
+    constructor( @Inject('schoolService') private schoolService: SchoolService,
+        @Inject('userPhotoService') private userPhotoService: UserPhotoService,
+        private route: ActivatedRoute, private router: Router,
+        @Inject('me') private meService: MeService
     ) {
 
     }
@@ -253,7 +258,6 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             .subscribe();
         $(".deskcontainer.unsaved").removeClass("unsaved");
         $(".desktile .deskcontainer[ng-reflect-prev-position]").removeAttr("ng-reflect-prev-position");
-        //$("#hidtiles .deskcontainer:not(.unsaved)").remove();
         $('<div id="saveResult"><div>Seating map changes saved.</div></div>')
             .insertBefore($('#dvleft'))
             .fadeIn("slow", function () { $(this).delay(3000).fadeOut("slow"); });
@@ -271,13 +275,10 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
     }
 
     cancelEditDesk() {
-    //var id = $(".desktile .deskcontainer.unsaved").appendTo($("#hidtiles")).attr("position", 0).attr("userid");
-        //$("#" + id).find(".seated").addClass("hideitem");
-
         //new added to seat chart
         $(".desktile .deskcontainer.unsaved").each(function () {
             var prevId = $(this).attr("ng-reflect-prev-position");
-            if (!prevId || prevId == "0") { //to be removed
+            if (!prevId || prevId == "0") { 
                 $(this).attr("ng-reflect-position", 0)
                 var id = $(this).attr("ng-reflect-userid");
                 $("#" + id).find(".seated").addClass("hideitem");
@@ -292,7 +293,6 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
 
         //deleted
         $("#hidtiles .deskcontainer").each(function (i, e) {
-            //$e = $(e);
             var position = $(this).attr("ng-reflect-prev-position");
             if (position && position != "0"){
                 $(this).attr("ng-reflect-position", position).removeClass("unsaved").removeAttr("ng-reflect-prev-position");
@@ -321,7 +321,6 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         var detail = this;
         $.each(lstProducts, function (idx, val) {
             var id = $(this).attr("id");
-            //detail.dragId = id;
             var position = $(".deskcontainer[ng-reflect-userid='" + id + "']").attr("ng-reflect-position");
             if (position == '0') {
                 detail.enableDragOnLeft(this, true);
