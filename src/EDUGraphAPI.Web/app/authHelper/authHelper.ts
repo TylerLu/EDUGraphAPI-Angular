@@ -36,10 +36,10 @@ export class AuthHelper {
     }
 
     public getAADGraphToken(): Observable<TokenEntity> {
-        return this.get("/api/me/accesstoken?resource=" + encodeURIComponent(Constants.AADGraphResource));
+        return this.get("/api/me/accessToken?resource=" + encodeURIComponent(Constants.AADGraphResource) + "&t=" + new Date().getTime());
     }
     public getMSGraphToken(): Observable<TokenEntity> {
-        return this.get("/api/me/accesstoken?resource=" + encodeURIComponent(Constants.MSGraphResource));
+        return this.get("/api/me/accessToken?resource=" + encodeURIComponent(Constants.MSGraphResource) + "&t=" + new Date().getTime());
     }
 
     getHeader() {

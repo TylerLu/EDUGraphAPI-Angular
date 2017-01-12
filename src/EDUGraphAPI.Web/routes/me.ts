@@ -68,29 +68,35 @@ router.post('/favoriteColor', function (req, res) {
 router.get('/accessToken', function (req, res) {
     if (req.isAuthenticated()) {
         let oid = req.user.oid;
-        var tokenCache = new TokenCacheService();
-        switch (req.query["resource"]) {
-            case Constants.MSGraphResource:
-                tokenCache.getMSGraphToken(oid)
-                    .then((result) => {
-                        res.json(result);
-                    })
-                    .catch(error => res.json(500, { error: error }));
-                break;
-            case Constants.AADGraphResource:
-                tokenCache.getAADAccessToken(oid)
-                    .then((result) => {
-                        res.json(result);
-                    })
-                    .catch(error => res.json(500, { error: error }));
-                break;
-            default:
-                res.json(null);
-                break;
+        if (oid != null) {
+            var tokenCache = new TokenCacheService();
+            switch (req.query["resource"]) {
+                case Constants.MSGraphResource:
+                    tokenCache.getMSGraphToken(oid)
+                        .then((result) => {
+                            res.json(result);
+                        })
+                        .catch(error => res.json(500, { error: error }));
+                    break;
+                case Constants.AADGraphResource:
+                    tokenCache.getAADAccessToken(oid)
+                        .then((result) => {
+                            res.json(result);
+                        })
+                        .catch(error => res.json(500, { error: error }));
+                    break;
+                default:
+                    res.json(null);
+                    break;
+            }
         }
+        else {
+            res.json(null);
+        }
+
     }
     else {
-        res.json({ error: "401 unauthorized" });
+        res.json(401, { error: "401 unauthorized" });
     }
 });
 
