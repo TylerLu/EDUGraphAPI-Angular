@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Response } from '@angular/http';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import {RegisterModel} from './register'
+import { RegisterModel } from './register'
 import { UserService } from "../services/userService";
 
 @Component({
@@ -12,11 +12,14 @@ import { UserService } from "../services/userService";
 })
 
 export class Register implements OnInit {
+
     model: RegisterModel = new RegisterModel();
     duplicatedEmails: string[] = new Array<string>();
 
-    constructor( @Inject('user') private userService: UserService
-        , private router: Router, private activatedRoute: ActivatedRoute) {
+    constructor(
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        @Inject('user') private userService: UserService) {
         this.model.UserInfo.email = "";
         this.model.UserInfo.password = "";
         this.model.UserInfo.favoriteColor = this.model.FavoriteColors[0].Value;
@@ -33,7 +36,7 @@ export class Register implements OnInit {
                     .then((result) => {
                         if (result.status == "200") {
                             window.location.href = "/";
-                        } 
+                        }
                     });
 
             },

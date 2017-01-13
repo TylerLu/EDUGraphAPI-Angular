@@ -9,18 +9,18 @@ import { Cookie } from './cookieService';
 import { Constants } from '../constants';
 import { AuthHelper } from "../authHelper/authHelper";
 
-
-
 @Injectable()
 export class MeService {
 
     private meAPIUrl = 'api/me';
 
-    constructor(private _http: Http, @Inject('auth') private authService: AuthHelper) {
+    constructor(
+        private _http: Http,
+        @Inject('auth') private authService: AuthHelper) {
     }
 
     public getCurrentUser() {
-        return this._http.get(this.meAPIUrl + '?t=' + new Date().getTime(), {} )
+        return this._http.get(this.meAPIUrl + '?t=' + new Date().getTime(), {})
             .map((response: Response) => response.json());
     }
 

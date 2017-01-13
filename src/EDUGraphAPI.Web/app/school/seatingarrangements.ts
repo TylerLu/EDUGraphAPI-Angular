@@ -1,5 +1,6 @@
 ﻿import { JsonProperty } from '../utils/jsonhelper'
 export class SeatingArrangement {
+
     @JsonProperty("position")
     position: string;
 
@@ -8,6 +9,7 @@ export class SeatingArrangement {
 
     @JsonProperty("classId")
     classId: string;
+
     constructor() {
         this.position = undefined;
         this.o365UserId = undefined;

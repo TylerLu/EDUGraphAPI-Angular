@@ -1,12 +1,11 @@
 ﻿import express = require('express');
 import jwt = require('jsonwebtoken');
-var router = express.Router();
-
 import { UserService } from '../services/userService';
 import { Constants } from '../constants';
 import { TokenCacheService } from '../services/TokenCacheService';
 import { TokenUtils } from '../utils/tokenUtils'
 
+var router = express.Router();
 var userService = new UserService();
 
 router.post('/ExistingLocalUser', function (req, res) {
@@ -14,12 +13,8 @@ router.post('/ExistingLocalUser', function (req, res) {
     if (u.authType == 'O365') {
         var localUser = req.body;
         userService.linkExistingLocalUser(u, localUser.email, localUser.password)
-            .then(() => {
-                res.json(200);
-            })
-            .catch(error => {
-                res.json(500, { error: error })
-            })
+            .then(() => res.json(200))
+            .catch(error => res.json(500, { error: error }))
 
     }
     else {
@@ -32,11 +27,8 @@ router.post('/CreateLocalUser', function (req, res) {
     if (u.authType == 'O365') {
         var localUser = req.body;
         userService.linkCreateLocalUser(u, localUser.email, localUser.password, localUser.favoriteColor)
-            .then(() => {
-                res.json(200);
-            })
+            .then(() => res.json(200))
             .catch(error => res.json(500, { error: error }))
-
     }
     else {
         res.json(500, { error: "Invalid login attempt." });
@@ -51,10 +43,9 @@ router.post('/O365User', function (req, res) {
 
     let accessToken: string;
     let tokenService = new TokenCacheService();
-    
     var localUser = req.user;
-    localUser.oid = idToken.oid;  // O365 User Id
-    localUser.tid = tentantId;    // Tenant Id
+    localUser.oid = idToken.oid;
+    localUser.tid = tentantId;
 
     TokenUtils.getTokenByCode(code, tentantId, Constants.MSGraphResource,'api/link/O365User')
         .then(msToken => {

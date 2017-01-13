@@ -1,10 +1,11 @@
-﻿import { Component,  OnInit, Inject  } from '@angular/core';
+﻿import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LinkService } from './link.service';
 import { UrlHelper } from '../utils/urlHelper';
 import { UserInfo } from '../models/common/userinfo';
 import { MeService } from "../services/meService";
 import { UserService } from "../services/userService";
+
 @Component({
     moduleId: module.id,
     selector: 'linkPage',
@@ -12,16 +13,19 @@ import { UserService } from "../services/userService";
 })
 
 export class Link implements OnInit {
+
     areAccountsLinked: boolean;
     isLocalAccount: boolean;
     localAccountExisted: boolean;
     localAccountExistedMessage: string;
-    userInfo: UserInfo; 
+    userInfo: UserInfo;
     error: string;
 
-
-    constructor( @Inject('linkService') private linkService: LinkService, private router: Router,
-        @Inject('me') private meService: MeService, @Inject('user') private userService: UserService) { }
+    constructor(
+        private router: Router,
+        @Inject('linkService') private linkService: LinkService,
+        @Inject('me') private meService: MeService,
+        @Inject('user') private userService: UserService) { }
 
     ngOnInit() {
         this.initCurrentUser();
@@ -63,7 +67,7 @@ export class Link implements OnInit {
     }
 
     initMessage() {
-        var msg = UrlHelper.getUrlQueryValue(window.location.href,'error')
+        var msg = UrlHelper.getUrlQueryValue(window.location.href, 'error')
         if (msg != null && msg.length > 0) {
             this.error = msg;
         }

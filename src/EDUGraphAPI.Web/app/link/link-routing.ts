@@ -1,8 +1,9 @@
 ﻿import { Routes, RouterModule } from '@angular/router';
-import { Link} from './link.component';
-import { LinkCreateLocal} from './link.createLocal.component';
+import { Link } from './link.component';
+import { LinkCreateLocal } from './link.createLocal.component';
 import { LinkLoginLocal } from './link.loginLocal.component';
 import { LinkLoginO365Requried } from './link.loginO365Required.component';
+
 const routes: Routes = [
     {
         path: 'link',

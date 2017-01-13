@@ -1,4 +1,5 @@
 ﻿export class GraphHelper {
+
     /**
      * Get the $skiptoken part from next link
      * @param nextLink

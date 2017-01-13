@@ -7,6 +7,7 @@ import { ColorEntity } from '../models/common/colorEntity';
 import { Constants } from '../constants';
 import { MeService } from "../services/meService";
 import { UserService } from "../services/userService";
+
 @Component({
     moduleId: module.id,
     selector: 'link-local',
@@ -14,6 +15,7 @@ import { UserService } from "../services/userService";
 })
 
 export class LinkCreateLocal implements OnInit {
+
     userInfo: UserInfo;
     localModel: CreateLocalModel;
     favoriteColors: ColorEntity[];
@@ -23,8 +25,11 @@ export class LinkCreateLocal implements OnInit {
     serverCheckValid: boolean = true;
     errorMsgs: string[];
 
-    constructor( @Inject('linkService') private linkService: LinkService, private router: Router,
-        @Inject('me') private meService: MeService, @Inject('user') private userService: UserService) { }
+    constructor(
+        private router: Router,
+        @Inject('linkService') private linkService: LinkService,
+        @Inject('me') private meService: MeService,
+        @Inject('user') private userService: UserService) { }
 
     ngOnInit() {
         this.localModel = new CreateLocalModel();
@@ -60,14 +65,13 @@ export class LinkCreateLocal implements OnInit {
         if (!this.checkValid())
             return;
         this.linkService.createLocalUser(this.userInfo.email, this.localModel.password, this.localModel.favoriteColor)
-            .subscribe(
-                (result) => {
-                    if (result==200) {
-                        this.router.navigate(["schools"]);
-                    } 
-                },
-                (err) => { this.errorMsgs = [err.json().error]; this.serverCheckValid = false; }
-        );
+            .subscribe((result) => {
+                if (result == 200) {
+                    this.router.navigate(["schools"]);
+                }
+            },
+            (err) => {
+                this.errorMsgs = [err.json().error]; this.serverCheckValid = false;
+            });
     }
-
 }

@@ -1,5 +1,6 @@
 ﻿import { ColorEntity } from '../models/common/colorEntity'
 export class AboutMeModel {
+
     public UserName: string;
 
     public IsLinked: boolean;

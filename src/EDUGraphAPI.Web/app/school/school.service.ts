@@ -16,13 +16,15 @@ import { AuthHelper } from "../authHelper/authHelper";
 
 @Injectable()
 export class SchoolService {
+
     private files = [];
     private urlBase: string = Constants.AADGraphResource + '/' + Constants.TenantId;
 
-    constructor(private http: Http, @Inject('auth') private authService: AuthHelper,
+    constructor(
+        private http: Http,
+        @Inject('auth') private authService: AuthHelper,
         @Inject('data') private dataService: DataService) {
     }
-
 
     /**
      * Retrieves all schools.
@@ -147,12 +149,12 @@ export class SchoolService {
     }
 
     getSeatingArrangements(classId: string): Observable<SeatingArrangement[]> {
-        var url = "/api/schools/seatingArrangements/" + classId +"?t=" + new Date().getTime();
+        var url = "/api/schools/seatingArrangements/" + classId + "?t=" + new Date().getTime();
         return this.dataService.getObject<SeatingArrangement[]>(url);
     }
 
     saveSeatingArrangement(classId: string, seatingArrangements: SeatingArrangement[]): any {
-        var url = "/api/schools/seatingArrangements/" + classId +"?t=" + new Date().getTime();
+        var url = "/api/schools/seatingArrangements/" + classId + "?t=" + new Date().getTime();
         return this.dataService.post(url, seatingArrangements);
     }
 }

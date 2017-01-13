@@ -1,5 +1,5 @@
 ﻿import { Injectable, Inject } from '@angular/core';
-import { Http, Headers, Response, URLSearchParams} from '@angular/http';
+import { Http, Headers, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Constants } from '../constants';
 import { UserModel } from '../school/user';
@@ -12,9 +12,13 @@ import { UserService } from "../services/userService";
 export class LinkService {
 
     private linkUrl = 'api/link';
-    constructor(private http: Http, @Inject('auth') private authService: AuthHelper,
-        @Inject('me') private meService: MeService, @Inject('user') private userService: UserService) { }
 
+    constructor(
+        private http: Http, @Inject('auth')
+        private authService: AuthHelper,
+        @Inject('me') private meService: MeService,
+        @Inject('user') private userService: UserService) {
+    }
 
     isLocalAccount() {
         return this.meService.isLocalAccount();
@@ -28,9 +32,7 @@ export class LinkService {
         return str == undefined || str == '' || str == null;
     }
 
-
-
-    linkLocalUser(email:string,password:string) {
+    linkLocalUser(email: string, password: string) {
         var body = {
             email: email,
             password: password
@@ -39,14 +41,14 @@ export class LinkService {
             .map((response: Response) => response.json());
     }
 
-    createLocalUser(email: string, password: string, favoriteColor:string) {
+    createLocalUser(email: string, password: string, favoriteColor: string) {
         var body = {
             email: email,
             password: password,
             favoriteColor: favoriteColor
         };
         return this.http.post(this.linkUrl + "/CreateLocalUser", body)
-            .map((response: Response) => response.json()); 
+            .map((response: Response) => response.json());
     }
 
     linkO365User() {
@@ -63,15 +65,14 @@ export class LinkService {
         window.location.href = url;
     }
 
-    getPostBodyWithParams(params:Object) {
+    getPostBodyWithParams(params: Object) {
         var headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
         let urlSearchParams = new URLSearchParams();
         for (var key in params) {
-            urlSearchParams.append(key,params[key]);
+            urlSearchParams.append(key, params[key]);
         }
         let body = urlSearchParams.toString();
         return body;
     }
-
 }

@@ -10,9 +10,12 @@ import { DataService } from "../services/dataService";
 
 @Injectable()
 export class AboutMeService {
+
     private graphUrlBase: string = Constants.AADGraphResource + '/' + Constants.TenantId;
 
-    constructor(private http: Http, @Inject('me') private meService: MeService, @Inject('data') private dataService: DataService) {
+    constructor(private http: Http,
+        @Inject('me') private meService: MeService,
+        @Inject('data') private dataService: DataService) {
     }
 
     /**

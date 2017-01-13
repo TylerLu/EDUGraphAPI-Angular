@@ -2,14 +2,13 @@
 import { SchoolService } from '../services/schoolService';
 
 var router = express.Router();
+
 router.route('/seatingArrangements/:classId')
     .get((req, res) => {
         var classId = req.params.classId as string;
         var schoolService = new SchoolService();
         schoolService.getSeatingArrangementsAsync(classId)
-            .then(arrangement => {
-                return res.json(arrangement);
-            })
+            .then(arrangement => res.json(arrangement))
             .catch(error => res.json(500, { error: error }));
     })
     .post((req, res) => {

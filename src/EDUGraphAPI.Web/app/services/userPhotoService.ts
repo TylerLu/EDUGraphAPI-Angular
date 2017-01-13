@@ -7,19 +7,20 @@ import { AuthHelper } from "../authHelper/authHelper";
 
 @Injectable()
 export class UserPhotoService {
-    constructor( @Inject('auth') private authService: AuthHelper) {
+    constructor(
+        @Inject('auth') private authService: AuthHelper) {
     }
 
     public getUserPhotoUrl(userId: string): Promise<string> {
         return new Promise((resolve, reject) => {
             this.authService.getMSGraphToken()
-                .subscribe((result) => {
+                .subscribe(accessToken => {
                     var url = `${Constants.MSGraphResource}/v1.0/${Constants.TenantId}/users/${userId}/photo/$value`;
                     return $.ajax({
                         url: url,
                         type: 'GET',
                         headers: {
-                            'Authorization': 'Bearer ' + result.accessToken,
+                            'Authorization': 'Bearer ' + accessToken,
                             "If-None-Match": ""
                         },
                         mimeType: "text/plain; charset=x-user-defined",

@@ -8,9 +8,9 @@
             </button>
             <a class="navbar-brand" href="/">EDUGraphAPI</a>
         </div>
-        <div  class="navbar-collapse">
+        <div class="navbar-collapse">
             <ul class="nav navbar-nav">
-                <li ><a href="/">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li [hidden]="!ifShowClassesTeacherStudents()"><a href="/classes/{{getSchoolId()}}/{{getSchoolIdAlias()}}">Classes</a></li>
                 <li [hidden]="!ifShowClassesTeacherStudents()"><a href="/users/{{getSchoolId()}}/{{getSchoolIdAlias()}}">Teachers &amp; Students</a></li>
                 <li [hidden]="!isAdmin"><a href="/admin">Admin</a></li>
@@ -29,11 +29,11 @@
                             <a href="/link">Link</a>
                         </div>
                         <div class="subitem">
-                            <a  href="javascript:void(0);" (click)="doLogOff(this)">Log off</a>
+                            <a href="javascript:void(0);" (click)="doLogOff(this)">Log off</a>
                         </div>
                     </div>
                 </div>
-             </form>
+            </form>
         </div>
     </div>
 </div>

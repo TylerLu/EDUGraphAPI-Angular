@@ -5,7 +5,6 @@ import { DemoHelperPage } from './demoHelperPage';
 import { DemoHelperService } from './demoHelperService';
 import { MapUtils } from '../utils/jsonhelper';
 
-
 @Component({
     moduleId: module.id,
     selector: 'demohelper',
@@ -18,7 +17,12 @@ export class DemoHelper implements OnInit {
     DemoPage: DemoHelperPage;
     Collapsed: boolean;
 
-    constructor(private router: Router, private http: Http, @Inject('demoHelperService') private demoHelperService: DemoHelperService, private activatedRoute: ActivatedRoute) { }
+    constructor(
+        private router: Router,
+        private http: Http, @Inject('demoHelperService')
+        private demoHelperService: DemoHelperService,
+        private activatedRoute: ActivatedRoute) {
+    }
 
     ngOnInit() {
         this.HasDemo = true;
@@ -50,6 +54,4 @@ export class DemoHelper implements OnInit {
                 console.log(this.DemoPage);
             });
     }
-
-
 }

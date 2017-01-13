@@ -2,6 +2,7 @@
 import { UserModel } from './user'
 
 export class ClassesModel {
+
     @JsonProperty("objectId")
     public ObjectId: string;
 

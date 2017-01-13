@@ -7,6 +7,7 @@ import { SchoolService } from './school.service';
 import { UserPhotoService } from '../services/userPhotoService';
 
 class UsersViewModel {
+
     private static cache = {};
     private userPhotoService: any;
     private id: string;
@@ -40,7 +41,7 @@ class UsersViewModel {
                     const userId: string = model.O365UserId;
                     var cachedItem = UsersViewModel.cache[userId];
                     if (!cachedItem) {
-                        cachedItem = UsersViewModel.cache[userId] = { queue: new Array<UserModel>(model)};
+                        cachedItem = UsersViewModel.cache[userId] = { queue: new Array<UserModel>(model) };
                         this.userPhotoService.getUserPhotoUrl(userId)
                             .then(url => {
                                 cachedItem["data"] = url;
@@ -86,6 +87,7 @@ class UsersViewModel {
 })
 
 export class UsersComponent implements OnInit {
+
     private sub: any;
 
     school: SchoolModel;
@@ -94,9 +96,11 @@ export class UsersComponent implements OnInit {
     studentsModel: UsersViewModel;
     teachersModel: UsersViewModel;
 
-    constructor( @Inject('schoolService') private schoolService: SchoolService
-        , @Inject('userPhotoService') private userPhotoService: UserPhotoService
-        , private route: ActivatedRoute, private router: Router) {
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        @Inject('schoolService') private schoolService: SchoolService,
+        @Inject('userPhotoService') private userPhotoService: UserPhotoService) {
     }
 
     ngOnInit() {

@@ -1,7 +1,5 @@
-﻿import express = require('express');
-import * as Sequelize from 'sequelize';
+﻿import * as Sequelize from 'sequelize';
 import * as Promise from "bluebird";
-
 import { DbContext, ClassroomSeatingArrangementAttributes } from '../data/dbContext';
 
 export class SchoolService {
@@ -18,7 +16,6 @@ export class SchoolService {
             .findAll({ where: { classId: classId } })
             .then(oldItems => {
                 let promises = new Array<Promise<any>>();
-
                 newItems.forEach(newItem => {
                     var oldItemIndex = oldItems.findIndex(i => i.o365UserId == newItem.o365UserId);
                     if (oldItemIndex >= 0) {
@@ -39,4 +36,5 @@ export class SchoolService {
                 return Promise.all(promises);
             })
     }
+
 }

@@ -7,7 +7,7 @@ import { Constants } from '../constants';
 @Injectable()
 export class DemoHelperService {
 
-    constructor(private http: Http) {}
+    constructor(private http: Http) { }
 
     getMappedDemoPage(pages: DemoHelperPage[]) {
         let result = new DemoHelperPage();
@@ -31,7 +31,7 @@ export class DemoHelperService {
         return result;
     }
 
-    getDemoData(){
+    getDemoData() {
         return this.http.get('app/demoHelper/demoHelper-pages.json')
             .map((response: Response) => {
                 return this.getMappedDemoPage(response.json());
@@ -42,8 +42,7 @@ export class DemoHelperService {
         var domain = Cookie.get(Constants.SourceCodeRepositoryUrl);
         if (domain && domain != "undefined")
             return domain;
-        else 
+        else
             return '';
     }
-
 }

@@ -43,22 +43,23 @@ import { UserService } from "../services/userService";
         .loginbody .row .col-md-5:nth-child(2){margin-left:85px;}
         .loginbody .row .col-md-5:nth-child(1){margin-left:75px;}
         .container > .navbar-header, .container > .navbar-collapse {width: 1120px!important; margin:auto auto; float:none;}
-
-            `]
+    `]
 })
 
 export class Login implements OnInit {
 
     model: UserInfo = new UserInfo();
     showLoginFailed: boolean = false;
-    constructor( @Inject('auth') private auth: AuthHelper, private router: Router, private activatedRoute: ActivatedRoute,
-        @Inject('user') private userService: UserService
-    ) {
+
+    constructor(
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        @Inject('auth') private auth: AuthHelper,
+        @Inject('user') private userService: UserService) {
         this.model.email = "";
         this.model.password = "";
         this.model.remember = false;
     }
-
 
     ngOnInit() {
         this.router.events
@@ -83,13 +84,10 @@ export class Login implements OnInit {
                     }
                 }
             });
-
-
     }
 
     login() {
         this.auth.login();
-
     }
 
     localLogin() {

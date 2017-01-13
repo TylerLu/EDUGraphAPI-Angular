@@ -9,19 +9,14 @@ import { Observable, ReplaySubject } from 'rxjs/Rx';
 @Injectable()
 export class AuthHelper {
 
-    public access_token: string = null;
-    public ms_access_token: string = null;
-
-    constructor(private router: Router, private _http: Http) {
+    constructor(
+        private router: Router,
+        private _http: Http) {
     }
 
     public IsLogin(): boolean {
         var token = Cookie.get(Constants.LOGIN_TOKEN);
-        if (token && token != "undefined")
-            return true;
-        else {
-            return false;
-        }
+        return token && token != "undefined";
     }
 
     public reLogin() {
@@ -35,61 +30,47 @@ export class AuthHelper {
             : this.getMSGraphToken();
     }
 
-    public getAADGraphToken(): Observable<TokenEntity> {
+    public getAADGraphToken(): Observable<string> {
         return this.getToken(Constants.COOKIE_TOKEN, Constants.AADGraphResource);
     }
-    public getMSGraphToken(): Observable<TokenEntity> {
+
+    public getMSGraphToken(): Observable<string> {
         return this.getToken(Constants.MS_COOKIE_TOKEN, Constants.MSGraphResource);
     }
 
-    private getToken(tokenName: string, siteURL: string): Observable<TokenEntity> {
+    private getToken(tokenName: string, siteURL: string): Observable<string> {
         let cookie = Cookie.get(tokenName);
-         if (cookie) {
-            var entity: TokenEntity = new TokenEntity();
-            entity.accessToken = cookie;
-            return Observable.of(entity);
-       
+        if (cookie) {
+            return Observable.of(cookie);
         } else {
-             var token = this.get("/api/me/accessToken?resource=" + encodeURIComponent(siteURL) + "&t=" + new Date().getTime());
-             token.subscribe((result) => {
-                 Cookie.set(tokenName, result.accessToken, new Date( result.expires - 5 * 60 * 1000));
-             });
-             return token;
+            var token = this.getTokenFromServer("/api/me/accessToken?resource=" + encodeURIComponent(siteURL) + "&t=" + new Date().getTime());
+            token.subscribe((result) => {
+                Cookie.set(tokenName, result.accessToken, new Date(result.expires - 5 * 60 * 1000));
+            });
+            return token.map(result => result.accessToken);
         }
     }
 
-    getHeader() {
-        let header = new Headers();
-        return header;
-    }
-    get(actionUrl: string): Observable<TokenEntity> {
+    private getTokenFromServer(actionUrl: string): Observable<any> {
         let activeProject: ReplaySubject<any> = new ReplaySubject(1);
-        this._http.get(actionUrl, { headers: this.getHeader() })
-            .map((response: Response) => <TokenEntity>response.json())
+        this._http.get(actionUrl, { headers: new Headers() })
+            .map((response: Response) => <string>response.json())
             .subscribe((resp) => {
                 activeProject.next(resp);
             },
             (error) => {
-                window.location.href = "/link-loginO365Requried";
+                if (!this.IsLogin()) {
+                    this.router.navigate(['login']);
+                }
+                else {
+                    window.location.href = "/link-loginO365Requried";
+                }
                 activeProject.complete();
-
             });
         return activeProject;
     }
 
     login() {
         window.location.href = "/o365login";
-    }
-
-}
-
-export class TokenEntity {
-    public accessToken: string;
-    public error: any;
-    public expires: number;
-    constructor() {
-        this.accessToken = undefined;
-        this.error = undefined;
-        this.expires = undefined;
     }
 }

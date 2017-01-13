@@ -18,8 +18,9 @@ export class Item {
 @Injectable()
 export class DataService {
 
-    constructor(private _http: Http, @Inject('auth') private authService: AuthHelper
-    ) {
+    constructor(
+        private _http: Http,
+        @Inject('auth') private authService: AuthHelper) {
     }
 
     getHeader(token: string) {
@@ -27,17 +28,17 @@ export class DataService {
         header.append('Authorization', 'Bearer ' + token);
         return header;
     }
+
     getHeaderWithoutToken() {
         let header = new Headers();
         return header;
     }
 
     public get(actionUrl: string) {
-        let activeProject: ReplaySubject<any> = new ReplaySubject(1);
-        let accessTokenGetter: () => any = actionUrl.indexOf("graph.windows.net") >= 0 ? this.authService.getAADGraphToken : this.authService.getMSGraphToken;
-        accessTokenGetter.bind(this.authService)()
-            .subscribe((result) => {
-                this._http.get(actionUrl, { headers: this.getHeader(result.accessToken) })
+        let activeProject: ReplaySubject<any> = new ReplaySubject(1); 
+        this.authService.getGraphToken(actionUrl)
+            .subscribe(accessToken => {
+                this._http.get(actionUrl, { headers: this.getHeader(accessToken) })
                     .subscribe((data) => {
                         activeProject.next(data);
                     },
@@ -55,8 +56,8 @@ export class DataService {
     public getObject<T>(actionUrl: string): Observable<T> {
         let activeProject: ReplaySubject<any> = new ReplaySubject(1);
         this.authService.getGraphToken(actionUrl)
-            .subscribe(result => {
-                this._http.get(actionUrl, { headers: this.getHeader(result.accessToken) })
+            .subscribe(accessToken => {
+                this._http.get(actionUrl, { headers: this.getHeader(accessToken) })
                     .subscribe(
                     data => activeProject.next(<T>data.json()),
                     error => activeProject.error(error));

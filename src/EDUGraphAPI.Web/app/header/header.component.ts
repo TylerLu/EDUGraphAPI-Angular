@@ -13,19 +13,23 @@ import { Cookie } from "../services/cookieService";
 })
 
 export class Header implements OnInit {
+
     @Input() isAuthenticated: boolean;
 
     ifShowContextMenu: boolean;
     fullName: string;
     isAdmin: boolean;
 
-    constructor(private router: Router, @Inject('me') private meService: MeService, @Inject('auth') private authService: AuthHelper) { }
+    constructor(
+        private router: Router,
+        @Inject('me') private meService: MeService,
+        @Inject('auth') private authService: AuthHelper) {
+    }
 
     ngOnInit() {
         this.ifShowContextMenu = false;
         this.initFullName();
     }
-
 
     urlParts() {
         var parts = window.location.pathname.split('/');
@@ -34,7 +38,7 @@ export class Header implements OnInit {
             if (parts[i] != '')
                 result.push(parts[i]);
         }
-        return result;  
+        return result;
     }
 
     getSchoolId() {
@@ -54,12 +58,12 @@ export class Header implements OnInit {
             return urlParts[3];
         return '';
     }
-
-
+    
     isClassesPage() {
         let urlParts = this.urlParts();
         return urlParts.length > 0 && (urlParts[0].toLowerCase() == "classes" || urlParts[0].toLowerCase() == "classdetail");
     }
+
     isTeacherStudentsPage() {
         let urlParts = this.urlParts();
         if (urlParts.length == 0 || (urlParts[0].toLowerCase() != "users"))
@@ -68,6 +72,7 @@ export class Header implements OnInit {
             return true;
         return false;
     }
+
     isMyClassesPage() {
         let urlParts = this.urlParts();
         return urlParts.length > 0 && (urlParts[0].toLowerCase() == "myclasses");
@@ -76,8 +81,7 @@ export class Header implements OnInit {
     ifShowClassesTeacherStudents() {
         return this.isClassesPage() || this.isTeacherStudentsPage() || this.isMyClassesPage();
     }
-
-
+    
     showContextMenu() {
         let isLogin = false;
         let urlParts = this.urlParts();
@@ -100,7 +104,7 @@ export class Header implements OnInit {
             });
     }
 
-    isUserAdmin(user:UserInfo): boolean {
+    isUserAdmin(user: UserInfo): boolean {
         let result = false;
         let roles = user.roles;
         if (roles == undefined || roles == null || roles.length == 0)
@@ -114,11 +118,10 @@ export class Header implements OnInit {
         return result;
     }
 
-    doLogOff(): void{
+    doLogOff(): void {
         console.log('logOff');
         Cookie.delete(Constants.COOKIE_TOKEN);
         Cookie.delete(Constants.MS_COOKIE_TOKEN);
         window.location.href = '/logout';
     }
-    
 }

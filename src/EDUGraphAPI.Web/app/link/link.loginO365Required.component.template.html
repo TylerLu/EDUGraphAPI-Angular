@@ -1,12 +1,9 @@
 ﻿<div *ngIf="error" class="message-container bg-danger">
     <p>{{error}}</p>
-</div> 
-
+</div>
 <h2>Login to Office 365 is required</h2>
-
 <p>You were redirected to this page for one of the following reasons:</p>
-<p>
-</p>
+<p></p>
 <ul>
     <li>The app could not find your token.</li>
     <li>Your token has expired.</li>
@@ -14,5 +11,5 @@
 <p></p>
 <p>To continue, please click the button below to login with your Office 365 account.</p>
 <p>
-    <a class="btn btn-primary" (click)="reLoginO365()"  >Login with Office 365 account</a>
+    <a class="btn btn-primary" (click)="reLoginO365()">Login with Office 365 account</a>
 </p>

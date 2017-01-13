@@ -4,7 +4,7 @@ export class AuthorizationHelper {
 
     public static getUrl(responseType: string, redirectUrl: string, state: string, resource: string, prompt: string, nonce: string, responseMode: string = null): string {
         var url = Constants.Authority + `oauth2/authorize` +
-            `?response_type=` + responseType + 
+            `?response_type=` + responseType +
             `&client_id=` + encodeURIComponent(Constants.ClientId) +
             `&redirect_uri=` + encodeURIComponent(redirectUrl) +
             `&state=` + encodeURIComponent(state) +

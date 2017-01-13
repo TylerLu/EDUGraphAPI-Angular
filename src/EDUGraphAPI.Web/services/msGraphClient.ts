@@ -3,13 +3,13 @@ import * as Promise from "bluebird";
 import { Constants, O365ProductLicenses, Roles} from '../constants';
 
 export class MSGraphClient {
+
     private accessToken: string;
 
     constructor(accessToken: string) {
         this.accessToken = accessToken;
     }
 
-    //basic, roles, organization
     public getO365User(tenantId: string): Promise<any> {
         let o365UserInfo = {
             user: null,
@@ -34,7 +34,8 @@ export class MSGraphClient {
                 return o365UserInfo;
             })
     }
-    public getMe(): Promise<any> {
+
+    private getMe(): Promise<any> {
         return new Promise((resolve, reject) => {
             request
                 .get(Constants.MSGraphResource + "/v1.0/me/?$select=id,givenName,surname,userPrincipalName,assignedLicenses")
@@ -46,9 +47,9 @@ export class MSGraphClient {
                     resolve(res.body);
                 })
         })
-
     }
-    public getOrganization(tenantID: string): Promise<any> {
+
+    private getOrganization(tenantID: string): Promise<any> {
         return new Promise((resolve, reject) => {
             request
                 .get(Constants.MSGraphResource + "/v1.0/organization/" + tenantID +"?$select=id,displayName")
@@ -61,7 +62,6 @@ export class MSGraphClient {
                 })
         });
     }
-
 
     private getDirectoryAdminRole(): Promise<any> {
         return new Promise((resolve, reject) => {
@@ -77,7 +77,8 @@ export class MSGraphClient {
                 })
         })
     }
-    public getRoles(user: any): Promise<string[]> {
+
+    private getRoles(user: any): Promise<string[]> {
         let roles: string[] = [];
         return this.getDirectoryAdminRole()
             .then((directoryAdminRole) => {
@@ -92,4 +93,3 @@ export class MSGraphClient {
             })
     }
 }
-

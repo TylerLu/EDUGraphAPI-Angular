@@ -15,7 +15,8 @@ import { UsersComponent } from './users.component';
 import { ClassDetailComponent } from './classdetail.component';
 import { Tabs } from '../tabs/tabs';
 import { Tab } from '../tabs/tab';
-import { CustomPosition, CustomUserId, CustomRealHeader, CustomPrevPosition} from './customdirectives';
+import { CustomPosition, CustomUserId, CustomRealHeader, CustomPrevPosition } from './customdirectives';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -23,8 +24,19 @@ import { CustomPosition, CustomUserId, CustomRealHeader, CustomPrevPosition} fro
         HttpModule,
         routing
     ],
-    declarations: [SchoolComponent, ClassesComponent, MyClassesComponent, UsersComponent,
-        ClassDetailComponent, Tabs, Tab, CustomPosition, CustomUserId, CustomRealHeader, CustomPrevPosition],
+    declarations: [
+        SchoolComponent,
+        ClassesComponent,
+        MyClassesComponent,
+        UsersComponent,
+        ClassDetailComponent,
+        Tabs,
+        Tab,
+        CustomPosition,
+        CustomUserId,
+        CustomRealHeader,
+        CustomPrevPosition
+    ],
     providers: [
         { provide: 'schoolService', useClass: SchoolService },
         { provide: 'auth', useClass: AuthHelper },
@@ -33,4 +45,5 @@ import { CustomPosition, CustomUserId, CustomRealHeader, CustomPrevPosition} fro
     ],
     bootstrap: [SchoolComponent]
 })
+
 export class SchoolModule { }

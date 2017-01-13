@@ -10,10 +10,10 @@ export class UserService {
     private usersAPIUrl = 'api/users';
     private loginUrl = '/account/login';
     private registerAPIUrl = 'api/register';
-    private authToken: string;
 
-    constructor(private _http: Http, @Inject('auth') private authService: AuthHelper) {
-        this.authToken = authService.access_token;
+    constructor(
+        private _http: Http,
+        @Inject('auth') private authService: AuthHelper) {
     }
 
     public unlinkAccount(id: string) {
@@ -25,15 +25,15 @@ export class UserService {
 
     public getLinkedAccounts() {
         return this._http.get(this.usersAPIUrl + '/linked', {})
-            .map((response: Response) => response.json()); 
-    } 
+            .map((response: Response) => response.json());
+    }
 
     public createLocalAccount(userInfo: UserInfo) {
         return this._http.post(this.registerAPIUrl, userInfo)
             .map((response: Response) => response.json());
     }
 
-    public localLogin(userInfo: UserInfo): Promise<any>{
+    public localLogin(userInfo: UserInfo): Promise<any> {
         return this._http.post(this.loginUrl, userInfo)
             .toPromise();
     }

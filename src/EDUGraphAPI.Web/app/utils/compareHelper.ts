@@ -1,4 +1,5 @@
 ﻿export class CompareHelper {
+
     private static createComparer2<T, V>(propertySelector: (t: T) => V, desc: boolean = false): (a: T, b: T) => number {
         return (a: T, b: T) => {
             let va = propertySelector(a);

@@ -7,7 +7,6 @@ import { ClassesModel } from '../school/classes';
 import { MapUtils } from '../utils/jsonHelper';
 import { Constants } from '../constants';
 
-
 @Component({
     moduleId: module.id,
     selector: '',
@@ -16,10 +15,13 @@ import { Constants } from '../constants';
 })
 
 export class AboutMe implements OnInit {
+
     model: AboutMeModel = new AboutMeModel();
 
-    constructor(@Inject('aboutMeService') private aboutMeservice
-        , private route: ActivatedRoute, private router: Router) {
+    constructor(
+        @Inject('aboutMeService') private aboutMeservice,
+        private route: ActivatedRoute,
+        private router: Router) {
         this.model.FavoriteColors = Constants.FavoriteColors;
     }
 

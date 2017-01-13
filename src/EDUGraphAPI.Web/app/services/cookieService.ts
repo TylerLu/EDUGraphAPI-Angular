@@ -68,7 +68,7 @@ export class Cookie {
 
         if (expires) {
             if (typeof expires === 'number') {
-                let dtExpires = new Date(new Date().getTime() + expires  );
+                let dtExpires = new Date(new Date().getTime() + expires);
                 cookieStr += 'expires=' + dtExpires.toUTCString() + ';';
             } else {
                 cookieStr += 'expires=' + expires.toUTCString() + ';';
@@ -113,6 +113,4 @@ export class Cookie {
         }
 
     }
-
-
 }

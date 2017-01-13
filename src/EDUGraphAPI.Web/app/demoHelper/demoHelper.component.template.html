@@ -6,7 +6,7 @@
     <div class="body">
         <p class="desc">Code sample links for this page:</p>
         <ul *ngIf="HasDemo">
-            <li *ngFor="let link of DemoPage.links" >
+            <li *ngFor="let link of DemoPage.links">
                 <p class="title">{{link.title }}</p>
                 <p><a href='{{link.url }}' target="_blank">{{link.url }}</a></p>
             </li>

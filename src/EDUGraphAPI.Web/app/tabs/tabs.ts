@@ -7,6 +7,7 @@ import { Tab } from './tab';
     templateUrl: 'tabs.html',
     styleUrls: ['../../app/tabs/tabs.css'],
 })
+
 export class Tabs implements AfterContentInit {
 
     @ContentChildren(Tab) tabs: QueryList<Tab>;
@@ -22,5 +23,4 @@ export class Tabs implements AfterContentInit {
         this.tabs.toArray().forEach(tab => tab.active = false);
         tab.active = true;
     }
-
 }

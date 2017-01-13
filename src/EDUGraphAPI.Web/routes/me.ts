@@ -1,6 +1,4 @@
 ﻿import express = require('express');
-import * as Storage from '../data/dbContext';
-import * as Sequelize from 'sequelize';
 import jwt = require('jsonwebtoken');
 import { Constants } from '../constants';
 import { UserService } from '../services/userService';
@@ -10,9 +8,7 @@ import { TokenUtils } from '../utils/tokenUtils'
 var router = express.Router();
 var userService = new UserService();
 
-
-router.route('/')
-    .get(function (req, res) {
+router.get('/', function (req, res) {
         var u = req.user;
         if (u.authType == 'O365') {
             var retUser;
@@ -38,9 +34,7 @@ router.route('/')
                     }
                 })
                 .then(usermodel => { res.json(usermodel); })
-                .catch(error => {
-                    res.json(500, { error: error })
-                });
+                .catch(error => res.json(500, { error: error }));
         }
         else {
             userService.getUserModel({ id: u.id })
@@ -53,17 +47,14 @@ router.route('/')
                 })
                 .catch(error => res.json(500, { error: error }));
         }
-
     })
+
 router.post('/favoriteColor', function (req, res) {
     var user = req.body;
     userService.updateFavoriteColor(user.id, user.favoriteColor)
-        .then((user) => {
-            res.json(user);
-        })
+        .then(user => res.json(user))
         .catch(error => res.json(500, { error: error }));
 });
-
 
 router.get('/accessToken', function (req, res) {
     if (req.isAuthenticated()) {
@@ -73,16 +64,12 @@ router.get('/accessToken', function (req, res) {
             switch (req.query["resource"]) {
                 case Constants.MSGraphResource:
                     tokenCache.getMSGraphToken(oid)
-                        .then((result) => {
-                            res.json(result);
-                        })
+                        .then((result) => res.json(result))
                         .catch(error => res.json(500, { error: error }));
                     break;
                 case Constants.AADGraphResource:
                     tokenCache.getAADAccessToken(oid)
-                        .then((result) => {
-                            res.json(result);
-                        })
+                        .then((result) => res.json(result))
                         .catch(error => res.json(500, { error: error }));
                     break;
                 default:
@@ -108,10 +95,9 @@ router.post('/O365UserLogin', function (req, res) {
 
     let accessToken: string;
     let tokenService = new TokenCacheService();
-
     var localUser = req.user;
-    localUser.oid = idToken.oid;  // O365 User Id
-    localUser.tid = tentantId;    // Tenant Id
+    localUser.oid = idToken.oid;
+    localUser.tid = tentantId; 
 
     TokenUtils.getTokenByCode(code, tentantId, Constants.MSGraphResource, 'api/me/O365UserLogin')
         .then(msToken => {

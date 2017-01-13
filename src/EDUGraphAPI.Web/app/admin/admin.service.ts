@@ -11,15 +11,20 @@ import { Roles } from '../constants';
 import { AuthHelper } from "../authHelper/authHelper";
 import { UserService } from "../services/userService";
 import { DataService } from "../services/dataService";
+
 @Injectable()
 export class AdminService {
+
     private getMeUrl = Constants.AADGraphResource + '/' + Constants.TenantId + "/me?api-version=1.5";
     private getAdminUrl = '/api/me';
     private aadBaseUrl = Constants.AADGraphResource + '/' + Constants.TenantId;
-    
-    constructor(private _http: Http, @Inject('auth') private authService: AuthHelper,
-        @Inject('user') private userService: UserService, @Inject('data') private dataService: DataService) { }
 
+    constructor(
+        private _http: Http,
+        @Inject('auth') private authService: AuthHelper,
+        @Inject('user') private userService: UserService,
+        @Inject('data') private dataService: DataService) {
+    }
 
     getAdmin(): any {
         return this.dataService.get(this.getAdminUrl)
@@ -85,7 +90,7 @@ export class AdminService {
                             this.cleanUpTanent().then(() => resolve(successMessage)).catch(() => reject(errorMessage));
                         }
                     })
-                    .catch(() => reject(errorMessage));
+                        .catch(() => reject(errorMessage));
                 })
                 .catch(() => reject(errorMessage));
         });
@@ -118,7 +123,7 @@ export class AdminService {
                             }).catch(() => reject(errorMessage));
                         }
                     })
-                    .catch(() => reject(errorMessage));
+                        .catch(() => reject(errorMessage));
                 })
                 .catch(() => reject(errorMessage));
         });
@@ -126,11 +131,9 @@ export class AdminService {
 
     private getAADGraphToken(): Promise<string> {
         return new Promise((resolve, reject) => {
-            this.authService.getAADGraphToken()
-                .subscribe((result) => {
-                    resolve(result.accessToken);
-                },
-                (error) => reject(error))
+            this.authService.getAADGraphToken().subscribe(
+                accessToken => resolve(accessToken),
+                error => reject(error))
         });
     }
 
@@ -256,9 +259,9 @@ export class AdminService {
 
     private cleanUpTanent(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._http.post("api/tenant", {"isAdminConsented": false })
+            this._http.post("api/tenant", { "isAdminConsented": false })
                 .subscribe((response: Response) => {
-                    this._http.post("api/tenant/unlinkAllUsers", { })
+                    this._http.post("api/tenant/unlinkAllUsers", {})
                         .subscribe((response: Response) => {
                             resolve(response.ok);
                         },

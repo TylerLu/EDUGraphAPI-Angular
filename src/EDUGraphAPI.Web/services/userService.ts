@@ -1,9 +1,6 @@
-﻿import express = require('express');
-import * as Sequelize from 'sequelize';
-import * as uuid from "node-uuid";
+﻿import * as uuid from "node-uuid";
 import * as Promise from "bluebird";
 import * as bcrypt from 'bcryptjs';
-
 import { DbContext, UserInstance } from '../data/dbContext';
 import { TokenCacheService } from '../services/TokenCacheService';
 import { MSGraphClient } from "../services/msGraphClient";
@@ -13,74 +10,6 @@ export class UserService {
 
     private dbContext = new DbContext();
 
-    private updateUser(userId: string, user: any): Promise<any> {
-        return this.getUserById(userId).then(u => {
-            let promises = new Array<Promise<any>>();
-            // update basic info
-            if (user.firstName != undefined) u.firstName = user.firstName;
-            if (user.lastName != undefined) u.lastName = user.lastName;
-            if (user.o365UserId != undefined) u.o365UserId = user.o365UserId;
-            if (user.o365Email != undefined) u.o365Email = user.o365Email
-            if (user.favoriteColor != undefined) u.favoriteColor = user.favoriteColor;
-            promises.push(u.save());
-
-            // update or create organization
-            if (user.organization && user.organization.tenantId) {
-                this.dbContext.Organization
-                    .findOne({ where: { tenantId: user.organization.tenantId } })
-                    .then(organization => {
-                        let p: Promise<any>;
-                        if (organization == null) {
-                            user.organization.created = new Date();
-                            p = u.createOrganization(user.organization);
-                        }
-                        else
-                            p = u.setOrganization(organization);
-                        promises.push(p);
-                    })
-            }
-
-            // update roles
-            var newRoleNames = user.roles as string[];
-            if (newRoleNames != null) {
-                u.getUserRoles().then(oldRoles => {
-                    newRoleNames.forEach(newRoleName => {
-                        if (oldRoles.findIndex(i => i.name == newRoleName) < 0) {
-                            let p = u.createUserRole({ name: newRoleName });
-                            promises.push(p);
-                        }
-                    });
-                    oldRoles.forEach(oldRole => {
-                        if (newRoleNames.findIndex(i => i == oldRole.name) < 0) {
-                            let p = u.removeUserRole(oldRole);
-                            promises.push(p);
-                        }
-                    });
-                });
-            }
-
-            // wait all
-            return Promise.all(promises);
-        });
-    }
-
-    private convertO365UserToLocal(o365UserInfo: any): any {
-        let userInfo = {
-            firstName: o365UserInfo.user.givenName,
-            lastName: o365UserInfo.user.surname,
-            o365UserId: o365UserInfo.user.id,
-            o365Email: o365UserInfo.user.mail == null ? o365UserInfo.user.userPrincipalName : o365UserInfo.user.mail,
-            organization: o365UserInfo.organization == null ? null : {
-                tenantId: o365UserInfo.organization.id,
-                name: o365UserInfo.organization.displayName,
-                isAdminConsented: false
-            },
-            roles: o365UserInfo.roles
-        };
-        return userInfo
-    }
-
-    //regist user
     public creatUser(email: string, password: string, firstName: string, lastName: string, favoriteColor: string): Promise<UserInstance> {
         return this.dbContext.User
             .findOne({ where: { email: email } })
@@ -104,7 +33,7 @@ export class UserService {
 
             });
     }
-    //valid user in table
+
     public validUser(email: string, password: string): Promise<any> {
         let retUser;
         return this.dbContext.User
@@ -132,7 +61,7 @@ export class UserService {
                 return retUser;
             })
     }
-    //valid user is admin or not
+
     public validUserIsAdmin(bO365User: boolean, userId: string): Promise<boolean> {
         if (bO365User) {
             return this.dbContext.User.findOne({ where: { o365UserId: userId } })
@@ -160,6 +89,7 @@ export class UserService {
                 })
         }
     }
+
     public validUserHasSameEmail(email: string): Promise<boolean> {
         return this.dbContext.User
             .findOne({ where: { email: email } })
@@ -167,30 +97,7 @@ export class UserService {
                 return user != null;
             });
     }
-    private validHasO365User(oid: string): Promise<boolean> {
-        return this.dbContext.User
-            .find({ where: { o365UserId: oid } })
-            .then(user => {
-                return user != null;
-            });
-    }
-    private getUserById(userId: string): Promise<UserInstance> {
-        return this.dbContext.User.findById(userId);
-    }
-    //get User Roles from Table
-    private getUserRoles(userId: string): Promise<any> {
-        return this.getUserById(userId)
-            .then((user) => {
-                return user.getUserRoles();
-            })
-            .then((roles) => {
-                let retRoles = [];
-                roles.forEach(i => retRoles.push(i.name));
-                return retRoles;
-            })
-    }
 
-    //get user Organization
     public getUserTenantId(userId: string): Promise<string> {
         return this.getUserById(userId)
             .then((user) => {
@@ -208,6 +115,7 @@ export class UserService {
                     return organization.tenantId;
             })
     }
+
     public getUserModel(where: any): Promise<any> {
         return this.dbContext.User.findOne({ where: where })
             .then(user => {
@@ -258,6 +166,7 @@ export class UserService {
             }
         });
     }
+
     public updateFavoriteColor(userId: string, color: string): Promise<UserInstance> {
         return this.getUserById(userId)
             .then((u) => {
@@ -284,7 +193,6 @@ export class UserService {
             });
     }
 
-    //graph get o365 user
     public getO365User(o365UserId: string, tenantId: string): Promise<any> {
         let tokenService = new TokenCacheService();
         return tokenService.getTokenCacheByOID(o365UserId)
@@ -306,7 +214,6 @@ export class UserService {
             })
     }
 
-    //o365user login and link exist local user
     public linkExistingLocalUser(o365User: any, localEmail: string, localPassword: string): Promise<any> {
         let localUserId: string;
         return this.dbContext.User
@@ -329,7 +236,7 @@ export class UserService {
                 return this.updateUser(localUserId, o365UserInfo);
             })
     }
-    //o365user login and link new local user
+
     public linkCreateLocalUser(o365User: any, localEmail: string, localPassword: string, favoriteColor: string): Promise<any> {
         let localUserId: string;
         return this.creatUser(localEmail, localPassword, null, null, favoriteColor).
@@ -341,7 +248,7 @@ export class UserService {
                 return this.updateUser(localUserId, o365UserInfo);
             })
     }
-    //local user login and link O365 user
+
     public linkO365User(accessToken: string, oid: string, o365email: string, localUserId: string, tenantId: string): Promise<any> {
         let updateUserInfo; 
         return this.validHasO365User(oid)
@@ -360,6 +267,94 @@ export class UserService {
             .then((o365UserInfo) => {
                 updateUserInfo = this.convertO365UserToLocal(o365UserInfo);
                 return this.updateUser(localUserId, updateUserInfo);
+            })
+    }
+
+    private updateUser(userId: string, user: any): Promise<any> {
+        return this.getUserById(userId).then(u => {
+            let promises = new Array<Promise<any>>();
+
+            if (user.firstName != undefined) u.firstName = user.firstName;
+            if (user.lastName != undefined) u.lastName = user.lastName;
+            if (user.o365UserId != undefined) u.o365UserId = user.o365UserId;
+            if (user.o365Email != undefined) u.o365Email = user.o365Email
+            if (user.favoriteColor != undefined) u.favoriteColor = user.favoriteColor;
+            promises.push(u.save());
+
+            if (user.organization && user.organization.tenantId) {
+                this.dbContext.Organization
+                    .findOne({ where: { tenantId: user.organization.tenantId } })
+                    .then(organization => {
+                        let p: Promise<any>;
+                        if (organization == null) {
+                            user.organization.created = new Date();
+                            p = u.createOrganization(user.organization);
+                        }
+                        else
+                            p = u.setOrganization(organization);
+                        promises.push(p);
+                    })
+            }
+
+            var newRoleNames = user.roles as string[];
+            if (newRoleNames != null) {
+                u.getUserRoles().then(oldRoles => {
+                    newRoleNames.forEach(newRoleName => {
+                        if (oldRoles.findIndex(i => i.name == newRoleName) < 0) {
+                            let p = u.createUserRole({ name: newRoleName });
+                            promises.push(p);
+                        }
+                    });
+                    oldRoles.forEach(oldRole => {
+                        if (newRoleNames.findIndex(i => i == oldRole.name) < 0) {
+                            let p = u.removeUserRole(oldRole);
+                            promises.push(p);
+                        }
+                    });
+                });
+            }
+
+            return Promise.all(promises);
+        });
+    }
+
+    private convertO365UserToLocal(o365UserInfo: any): any {
+        let userInfo = {
+            firstName: o365UserInfo.user.givenName,
+            lastName: o365UserInfo.user.surname,
+            o365UserId: o365UserInfo.user.id,
+            o365Email: o365UserInfo.user.mail == null ? o365UserInfo.user.userPrincipalName : o365UserInfo.user.mail,
+            organization: o365UserInfo.organization == null ? null : {
+                tenantId: o365UserInfo.organization.id,
+                name: o365UserInfo.organization.displayName,
+                isAdminConsented: false
+            },
+            roles: o365UserInfo.roles
+        };
+        return userInfo
+    }
+
+    private validHasO365User(oid: string): Promise<boolean> {
+        return this.dbContext.User
+            .find({ where: { o365UserId: oid } })
+            .then(user => {
+                return user != null;
+            });
+    }
+
+    private getUserById(userId: string): Promise<UserInstance> {
+        return this.dbContext.User.findById(userId);
+    }
+
+    private getUserRoles(userId: string): Promise<any> {
+        return this.getUserById(userId)
+            .then((user) => {
+                return user.getUserRoles();
+            })
+            .then((roles) => {
+                let retRoles = [];
+                roles.forEach(i => retRoles.push(i.name));
+                return retRoles;
             })
     }
 }

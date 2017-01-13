@@ -6,7 +6,6 @@ import { UserModel } from './user'
 import { ClassesModel } from './classes';
 import { SchoolService } from './school.service';
 
-
 @Component({
     moduleId: module.id,
     selector: '',
@@ -15,36 +14,37 @@ import { SchoolService } from './school.service';
 })
 
 export class ClassesComponent implements OnInit {
+
     private sub: any;
     schoolGuId: string;
     schoolId: string;
     classesArray: ClassesModel[] = [];
     myClassesArray: ClassesModel[] = [];
-    tempClassesArray: ClassesModel[]=[];
+    tempClassesArray: ClassesModel[] = [];
     school: SchoolModel;
     nextLink: string;
     isGettingData: boolean = false;
     showNoData: boolean = false;
 
-    constructor( @Inject('schoolService') private schoolService: SchoolService
-        , private route: ActivatedRoute, private router: Router) {
-
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        @Inject('schoolService') private schoolService: SchoolService) {
     }
 
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
             this.schoolGuId = params['id'];
             this.schoolId = params['id2'];
-
             this.schoolService
                 .getSchoolById(this.schoolGuId)
                 .subscribe((result) => {
                     this.school = MapUtils.deserialize(SchoolModel, result);
                 });
-
             this.getClasses();
         });
     }
+
     ngOnDestroy() {
         this.sub.unsubscribe();
     }
@@ -52,6 +52,7 @@ export class ClassesComponent implements OnInit {
     showDetail(classEntity) {
         classEntity.UIHoverShowDetail = true;
     }
+
     hideDetail(classEntity) {
         classEntity.UIHoverShowDetail = false;
     }
@@ -59,9 +60,9 @@ export class ClassesComponent implements OnInit {
     gotoMyClasses() {
         this.router.navigate(['/myclasses', this.schoolGuId, this.schoolId]);
     }
+
     gotoDetail(objectId: string) {
-        setTimeout(() =>
-        {
+        setTimeout(() => {
             this.router.navigate(['/classdetail', this.schoolGuId, objectId, this.schoolId]);
         }, 100);
     }
@@ -84,7 +85,7 @@ export class ClassesComponent implements OnInit {
                     this.classesArray = [];
                 }
                 result.value.forEach((obj) => { this.classesArray.push(MapUtils.deserialize(ClassesModel, obj)); });
-                if (this.classesArray.length == 0){
+                if (this.classesArray.length == 0) {
                     this.showNoData = true;
                 }
                 this.schoolService.getMyClasses(this.schoolId)
@@ -100,7 +101,7 @@ export class ClassesComponent implements OnInit {
                                 .getClassById(obj.ObjectId)
                                 .subscribe((result) => {
                                     var classObj = MapUtils.deserialize(ClassesModel, result);
-                                    classObj.Users = []; 
+                                    classObj.Users = [];
                                     result.members.forEach((obj) => {
                                         classObj.Users.push(MapUtils.deserialize(UserModel, obj));
                                     });
@@ -110,7 +111,7 @@ export class ClassesComponent implements OnInit {
                                             classObj.ObjectType == "Group" && classObj.EducationObjectType == "Section") {
                                             objofAllClasses.IsMyClasses = true;
                                             objofAllClasses.Users = classObj.Users;
-                                            }
+                                        }
                                     });
                                 });
                         });

@@ -11,6 +11,7 @@ export function JsonProperty(metadata: string): any {
 }
 
 export class MapUtils {
+
     static isPrimitive(obj) {
         switch (typeof obj) {
             case "string":

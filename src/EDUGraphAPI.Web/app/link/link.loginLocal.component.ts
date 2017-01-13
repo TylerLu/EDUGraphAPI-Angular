@@ -20,10 +20,13 @@ export class LinkLoginLocal implements OnInit {
     checkPwdRequired: boolean = true;
     checkEmailRequried: boolean = true;
     errorMsgs: string[];
-    serverCheckValid: boolean=true;
+    serverCheckValid: boolean = true;
 
-    constructor( @Inject('linkService') private linkService: LinkService, private router: Router,
-        @Inject('me') private meService: MeService, @Inject('user') private userService: UserService) { }
+    constructor(
+        private router: Router,
+        @Inject('linkService') private linkService: LinkService,
+        @Inject('me') private meService: MeService,
+        @Inject('user') private userService: UserService) { }
 
     ngOnInit() {
         this.initCurrentUser();
@@ -41,7 +44,7 @@ export class LinkLoginLocal implements OnInit {
     checkValid() {
         this.checkPwdRequired = !this.linkService.isEmpty(this.loginLocalModel.password);
         this.checkEmailRequried = !this.linkService.isEmpty(this.loginLocalModel.email);
-        return this.checkPwdRequired && this.checkEmailRequried ;
+        return this.checkPwdRequired && this.checkEmailRequried;
     }
 
     loginLocal() {
@@ -52,5 +55,4 @@ export class LinkLoginLocal implements OnInit {
             (result) => this.router.navigate(["schools"]),
             (err) => { this.errorMsgs = [err.json().error]; this.serverCheckValid = false; });
     }
-
 }

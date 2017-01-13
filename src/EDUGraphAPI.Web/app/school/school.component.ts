@@ -3,13 +3,14 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { SchoolModel} from './school'
+import { SchoolModel } from './school'
 import { SchoolService } from './school.service';
 import { BingMapHelper } from '../utils/bingMapHelper'
 import { MapUtils } from '../utils/jsonHelper'
 import { UserModel } from './user'
 import { Constants } from '../constants';
 import { MeService } from "../services/meService";
+
 @Component({
     moduleId: module.id,
     selector: 'schools-list',
@@ -27,8 +28,11 @@ export class SchoolComponent implements OnInit {
     areAccountsLinked: boolean;
     isLocalAccount: boolean;
     showNoData: boolean = false;
-    constructor( @Inject('schoolService') private schoolService: SchoolService, private router: Router,
-        @Inject('me') private meService: MeService) {
+
+    constructor(
+        private router: Router,
+        @Inject('me') private meService: MeService,
+        @Inject('schoolService') private schoolService: SchoolService) {
     }
 
     ngOnInit() {

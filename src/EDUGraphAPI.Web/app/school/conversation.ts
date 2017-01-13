@@ -1,5 +1,7 @@
 ﻿import { JsonProperty } from '../utils/jsonhelper'
+
 export class Conversation {
+
     @JsonProperty("topic")
     public topic: string;
 
@@ -15,7 +17,3 @@ export class Conversation {
         this.id = undefined;
     }
 }
-
-
-
-

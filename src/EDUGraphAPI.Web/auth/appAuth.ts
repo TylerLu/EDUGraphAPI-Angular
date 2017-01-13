@@ -1,8 +1,6 @@
 ﻿var express = require("express");
 var passport = require("passport");
-import * as Promise from "bluebird";
 import https = require('https');
-import querystring = require('querystring');
 import { TokenCacheService } from '../services/tokenCacheService';
 import { Constants } from '../constants';
 import { UserService } from '../services/userService';
@@ -114,7 +112,7 @@ export class appAuth {
                             done(null, {
                                 'id': user['id'],
                                 'oid': user['o365UserId'],
-                                'tid': organization ? organization.tenantId: '',
+                                'tid': organization ? organization.tenantId : '',
                                 'authType': "Local"
                             });
                         } else {

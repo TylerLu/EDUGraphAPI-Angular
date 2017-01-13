@@ -1,4 +1,5 @@
 ﻿export class ColorEntity {
+
     public DisplayName: string;
     public Value: string;
 

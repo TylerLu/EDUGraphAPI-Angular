@@ -22,9 +22,10 @@ import { UserPhotoService } from '../services/userPhotoService';
     styleUrls: []
 })
 
-export class ClassDetailComponent implements OnInit, AfterContentInit  {
+export class ClassDetailComponent implements OnInit, AfterContentInit {
+
     schoolGuId: string;
-    schoolId :string;
+    schoolId: string;
     private sub: any;
     school: SchoolModel;
     classObjectId: string;
@@ -39,13 +40,16 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
     seatingsCount = [];
     isEditing: boolean = false;
     dragId: string = "";
+    
+    sortAsc: boolean = false;
+    sortDocAsc: boolean = false;
 
-    constructor( @Inject('schoolService') private schoolService: SchoolService,
-        @Inject('userPhotoService') private userPhotoService: UserPhotoService,
-        private route: ActivatedRoute, private router: Router,
-        @Inject('me') private meService: MeService
-    ) {
-
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        @Inject('me') private meService: MeService,
+        @Inject('schoolService') private schoolService: SchoolService,
+        @Inject('userPhotoService') private userPhotoService: UserPhotoService) {
     }
 
     ngOnInit() {
@@ -55,7 +59,6 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         this.sub = this.route.params.subscribe(params => {
             this.iniData(params);
         });
-       
     }
 
     iniData(params) {
@@ -109,13 +112,11 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                                                         this.classEntity.Students.push(user);
                                                     }
                                                 });
-                                                 this.setSeatings();
-                                                 this.sortMembers();
-                                      });
-
+                                                this.setSeatings();
+                                                this.sortMembers();
+                                            });
                                     });
                             });
-
                     });
             });
         this.schoolService
@@ -125,11 +126,10 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                     var doc = MapUtils.deserialize(Document, obj);
                     doc.lastModifiedDateTime = moment(doc.lastModifiedDateTime).utc(true)
                         .local().format('MM/DD/YYYY hh: mm: ss A');
-                    doc.LastModifiedBy = obj.lastModifiedBy.user.displayName+"";
+                    doc.LastModifiedBy = obj.lastModifiedBy.user.displayName + "";
                     this.documents.push(doc);
                 });
             });
-        
         this.schoolService
             .getOneDriveWebURl(this.classObjectId)
             .subscribe((result) => {
@@ -142,8 +142,6 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                     this.conversations.push(MapUtils.deserialize(Conversation, obj));
                 });
             });
-
-
     }
 
     ngOnDestroy() {
@@ -196,16 +194,16 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         }, 1000);
 
         var interval2 = setInterval(() => {
-                var leftHeight = $("#dvleft").height();
-                var rightHeight = $("#dvright").height();
-                if (leftHeight > 0 && rightHeight > 0) {
-                    if (leftHeight > rightHeight) {
-                        $("#dvright").height(leftHeight);
-                    } else {
-                        $("#dvleft").height(rightHeight);
-                    }
-                    clearInterval(interval2);
+            var leftHeight = $("#dvleft").height();
+            var rightHeight = $("#dvright").height();
+            if (leftHeight > 0 && rightHeight > 0) {
+                if (leftHeight > rightHeight) {
+                    $("#dvright").height(leftHeight);
+                } else {
+                    $("#dvleft").height(rightHeight);
                 }
+                clearInterval(interval2);
+            }
         }, 1000);
     }
 
@@ -247,9 +245,9 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             }
         });
         $("#hidtiles .deskcontainer").each(function (i, e) {
-            $(this).attr("ng-reflect-prev-position","0");
+            $(this).attr("ng-reflect-prev-position", "0");
         });
-        
+
         $(".desktile .deskcontainer").each(function (i, e) {
             $(this).removeClass("unsaved").removeAttr("ng-reflect-prev-position");
         });
@@ -278,7 +276,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         //new added to seat chart
         $(".desktile .deskcontainer.unsaved").each(function () {
             var prevId = $(this).attr("ng-reflect-prev-position");
-            if (!prevId || prevId == "0") { 
+            if (!prevId || prevId == "0") {
                 $(this).attr("ng-reflect-position", 0)
                 var id = $(this).attr("ng-reflect-userid");
                 $("#" + id).find(".seated").addClass("hideitem");
@@ -288,13 +286,13 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                 $(this).removeAttr("ng-reflect-prev-position").removeClass("unsaved").attr("ng-reflect-position", prevId);
                 tile.append($(this));
             }
-           
+
         });
 
         //deleted
         $("#hidtiles .deskcontainer").each(function (i, e) {
             var position = $(this).attr("ng-reflect-prev-position");
-            if (position && position != "0"){
+            if (position && position != "0") {
                 $(this).attr("ng-reflect-position", position).removeClass("unsaved").removeAttr("ng-reflect-prev-position");
                 var id = $(this).attr("ng-reflect-userid");
                 $(".desktile[ng-reflect-position=" + position + "]").append($(this));
@@ -325,7 +323,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
             if (position == '0') {
                 detail.enableDragOnLeft(this, true);
             } else {
-                if (position){
+                if (position) {
                     detail.enableDragOnLeft($(this), false).find(".seated").removeClass("hideitem");
                 }
             }
@@ -352,7 +350,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
                 id = $(this).find(".deskcontainer").attr("ng-reflect-userid");
             }
             var container = $(this).find(".deskcontainer");
-            if (container.length > 0 )
+            if (container.length > 0)
                 return;
             $(".greenTileTooltip").remove();
             detail.enableDragOnLeft($("#" + id), false).removeClass("greenlist").find(".seated").removeClass("hideitem");
@@ -433,7 +431,6 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         return item;
     }
 
-    sortAsc: boolean = false;
     sortStu(sortby: string) {
         $("#students .table-green-header th").removeClass("headerSortDown").removeClass("headerSortUp");
         if (sortby == 'name') {
@@ -461,7 +458,6 @@ export class ClassDetailComponent implements OnInit, AfterContentInit  {
         }
     }
 
-    sortDocAsc: boolean = false;
     sortDoc(sortby: string) {
         $("#studoc .table-green-header th").removeClass("headerSortDown").removeClass("headerSortUp");
         if (sortby == 'name') {

@@ -12,9 +12,9 @@ import { DemoHelper } from './demoHelper/demoHelper.component';
 import { DemoHelperService } from './demoHelper/demoHelperService';
 import { routing } from './app.routing';
 import { AuthHelper } from "./authHelper/authHelper";
-import { DataService} from "./services/dataService";
-import { UserService} from "./services/userService";
-import { MeService} from "./services/meService";
+import { DataService } from "./services/dataService";
+import { UserService } from "./services/userService";
+import { MeService } from "./services/meService";
 import { JsonProperty, MapUtils } from "./utils/jsonHelper";
 import { SchoolModule } from './school/school.module';
 import { AdminModule } from './admin/admin.module';
@@ -24,10 +24,8 @@ import { AboutMe } from './aboutme/aboutme.component';
 import { AboutMeService } from './aboutme/aboutme.service';
 import { HomeComponent } from './home.component';
 
-
-
 @NgModule({
-    imports: [BrowserModule, FormsModule, ReactiveFormsModule, CustomFormsModule, routing, HttpModule, SchoolModule,AdminModule,LinkModule],
+    imports: [BrowserModule, FormsModule, ReactiveFormsModule, CustomFormsModule, routing, HttpModule, SchoolModule, AdminModule, LinkModule],
     declarations: [AppComponent, Login, Register, Header, DemoHelper, AboutMe, HomeComponent],
     bootstrap: [AppComponent],
     providers: [
@@ -41,5 +39,4 @@ import { HomeComponent } from './home.component';
 })
 
 export class AppModule {
-    
 }

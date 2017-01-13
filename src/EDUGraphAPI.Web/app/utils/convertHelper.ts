@@ -1,4 +1,5 @@
 ﻿export class ConvertHelper {
+
     /**
      * Convert binary to base64 string
      * @param binary

@@ -11,10 +11,7 @@ import { appAuth } from './auth/appAuth';
 
 var fs = require("fs");
 var url = require("url");
-var querystring = require("querystring");
 var dbContext_1 = require("./data/dbContext");
-var msGraphClient = require("./services/msGraphClient");
-
 var meRoute = require("./routes/me");
 var usersRoute = require("./routes/users");
 var registerRoute = require("./routes/register");

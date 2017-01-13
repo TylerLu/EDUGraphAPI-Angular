@@ -3,12 +3,13 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute  } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Inject } from '@angular/core';
 import { MapUtils } from './utils/jsonhelper';
 import { UrlHelper } from './utils/urlHelper';
 import { AuthHelper } from "./authHelper/authHelper";
 import { MeService } from "./services/meService";
+
 @Component({
     moduleId: module.id,
     selector: 'app',
@@ -16,23 +17,19 @@ import { MeService } from "./services/meService";
     styleUrls: ['../app/app.component.css']
 })
 
+export class AppComponent implements OnInit {
 
-export class AppComponent implements OnInit{
-
-
-    constructor(private router: Router, @Inject('auth') private auth: AuthHelper, private activatedRoute: ActivatedRoute,
+    constructor(
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        @Inject('auth') private auth: AuthHelper,
         @Inject('me') private meService: MeService) {
-      
     }
 
     ngOnInit() {
-
-    
     }
 
-      
     integrateJson() {
         MapUtils.deserialize(Object, {});
     }
-
 }

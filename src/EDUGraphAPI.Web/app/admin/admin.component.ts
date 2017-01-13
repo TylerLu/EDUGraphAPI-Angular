@@ -5,7 +5,6 @@ import { AdminService } from './admin.service';
 import { UrlHelper } from '../utils/urlHelper';
 import { AuthHelper } from "../authHelper/authHelper";
 
-
 @Component({
     moduleId: module.id,
     selector: 'admin',
@@ -14,13 +13,15 @@ import { AuthHelper } from "../authHelper/authHelper";
 })
 
 export class AdminComponent implements OnInit {
+
     IsAdminConsented: boolean;
     error: string;
     message: string;
 
-    constructor( @Inject('adminService') private adminService: AdminService, private router: Router,
+    constructor(
+        @Inject('adminService') private adminService: AdminService,
+        private router: Router,
         @Inject('auth') private auth: AuthHelper) {
-
     }
 
     ngOnInit() {
@@ -47,13 +48,13 @@ export class AdminComponent implements OnInit {
             this.message = message;
         }).catch((message) => {
             this.error = message;
-            });
+        });
     }
 
     linkedAccounts() {
         this.router.navigate(["linkedAccounts"]);
     }
-    
+
     addAppRoleAssignments() {
         this.adminService.addAppRoleAssignments().then((message) => {
             this.message = message;
@@ -74,7 +75,7 @@ export class AdminComponent implements OnInit {
             this.adminService.setIsAdminConsented().then(() => {
                 this.message = 'Admin consented successfully!';
             }).catch((error) => {
-                this.error = error; 
+                this.error = error;
             });
         }
     }

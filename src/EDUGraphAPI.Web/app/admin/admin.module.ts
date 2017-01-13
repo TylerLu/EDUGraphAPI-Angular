@@ -17,7 +17,9 @@ import { routing } from './admin-routing';
         HttpModule,
         routing
     ],
-    declarations: [AdminComponent, LinkedAccountsComponent],
+    declarations: [
+        AdminComponent,
+        LinkedAccountsComponent],
     providers: [
         { provide: 'adminService', useClass: AdminService },
         { provide: 'auth', useClass: AuthHelper },
@@ -25,4 +27,6 @@ import { routing } from './admin-routing';
     ],
     bootstrap: [AdminComponent]
 })
-export class AdminModule { }
+
+export class AdminModule {
+}

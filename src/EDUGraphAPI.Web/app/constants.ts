@@ -12,7 +12,7 @@ export class Constants {
     public static COOKIE_TOKEN: string = "user_token_ad";
     public static MS_COOKIE_TOKEN: string = "user_token_ms";
     public static LOGIN_TOKEN = "authType";
-    public static BING_MAP_KEY: string = Cookie.get("AppBingMapKey"); 
+    public static BING_MAP_KEY: string = Cookie.get("AppBingMapKey");
     public static FavoriteColors: ColorEntity[] = [new ColorEntity("Blue", "#2F19FF"), new ColorEntity("Green", "#127605"), new ColorEntity("Grey", "#535353")];
     public static SourceCodeRepositoryUrl = "SourceCodeRepositoryUrl";
 }
@@ -21,4 +21,3 @@ export class Roles {
     public static readonly Faculty = "Faculty";
     public static readonly Student = "Student";
 }
-

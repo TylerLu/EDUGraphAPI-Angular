@@ -21,7 +21,12 @@ import { LinkLoginO365Requried } from './link.loginO365Required.component';
         HttpModule,
         routing
     ],
-    declarations: [Link, LinkCreateLocal, LinkLoginLocal, LinkLoginO365Requried],
+    declarations: [
+        Link,
+        LinkCreateLocal,
+        LinkLoginLocal,
+        LinkLoginO365Requried
+    ],
     providers: [
         { provide: 'linkService', useClass: LinkService },
         { provide: 'auth', useClass: AuthHelper },
@@ -31,4 +36,5 @@ import { LinkLoginO365Requried } from './link.loginO365Required.component';
     ],
     bootstrap: [Link]
 })
+
 export class LinkModule { }

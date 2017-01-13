@@ -1,11 +1,7 @@
-﻿import * as fs from 'fs';
-import * as path from 'path';
-import * as Sequelize from 'sequelize';
+﻿import * as Sequelize from 'sequelize';
 import * as Promise from "bluebird";
-
 import { Constants } from '../constants';
 
-// User
 export interface UserAttributes {
     id?: string;
     firstName?: string;
@@ -21,14 +17,13 @@ export interface UserInstance extends Sequelize.Instance<UserAttributes>, UserAt
     getOrganization: Sequelize.BelongsToGetAssociationMixin<OrganizationInstance>;
     setOrganization: Sequelize.BelongsToSetAssociationMixin<OrganizationInstance, number>;
     createOrganization: Sequelize.BelongsToCreateAssociationMixin<OrganizationAttributes>;
-
     getUserRoles: Sequelize.HasManyGetAssociationsMixin<UserRoleInstance>;
     createUserRole: Sequelize.HasManyCreateAssociationMixin<UserRoleAttributes>;
     removeUserRole: Sequelize.HasManyRemoveAssociationMixin<UserRoleAttributes, number>;
 }
 export interface UserModel extends Sequelize.Model<UserInstance, UserAttributes> { }
 
-// Organization
+
 export interface OrganizationAttributes {
     name?: string;
     tenantId?: string;
@@ -42,29 +37,25 @@ export interface OrganizationInstance extends Sequelize.Instance<OrganizationAtt
 export interface OrganizationModel extends Sequelize.Model<OrganizationInstance, OrganizationAttributes> { }
 
 
-// User Roles
 export interface UserRoleAttributes {
     id?: number;
     name?: string;
 }
-
 export interface UserRoleInstance extends Sequelize.Instance<UserRoleAttributes>, UserRoleAttributes {
 }
 export interface UserRoleModel extends Sequelize.Model<UserRoleInstance, UserRoleAttributes > { }
 
 
-//ClassroomSeatingArrangements
 export interface ClassroomSeatingArrangementAttributes {
     position: number;
     o365UserId?: string;
     classId?: string;
 }
-
 export interface ClassroomSeatingArrangementInstance extends Sequelize.Instance<ClassroomSeatingArrangementAttributes>, ClassroomSeatingArrangementAttributes {
 }
 export interface ClassroomSeatingArrangementModel extends Sequelize.Model<ClassroomSeatingArrangementInstance, ClassroomSeatingArrangementAttributes> { }
 
-// Tokencache
+
 export interface TokenCacheAttributes {
     oid: string;
     msgAccessToken?: string;
@@ -78,7 +69,7 @@ export interface TokenCacheInstance extends Sequelize.Instance<TokenCacheAttribu
 }
 export interface TokenCacheModel extends Sequelize.Model<TokenCacheInstance, TokenCacheAttributes> { }
 
-// DbContext
+
 export class DbContext {
     public sequelize: Sequelize.Sequelize;
     public User: UserModel;
@@ -124,6 +115,7 @@ export class DbContext {
                 timestamps: false,
                 tableName: "Users"
             });
+
         this.Organization = this.sequelize.define<OrganizationInstance, OrganizationAttributes>('Organization',
             {
                 name: Sequelize.STRING,
@@ -173,6 +165,5 @@ export class DbContext {
                 timestamps: false,
                 tableName: "TokenCache"
             });
-        
     }
 }

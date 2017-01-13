@@ -29,9 +29,7 @@ router.post('/', function (req, res) {
         .then(tId => {
             return tenantService.updateTenant(tId, org.isAdminConsented);
         })
-        .then((org) => {
-            res.json(org);
-        })
+        .then(org => res.json(org))
         .catch(error => res.json(500, { error: error }))
 });
 
@@ -60,9 +58,7 @@ router.post('/unlinkAllUsers', function (req, res) {
         .then((org) => {
             return tenantService.unlinkTenantAllAccounts(org);
         })
-        .then(() => {
-            res.json(200);
-        })
+        .then(() => res.json(200))
         .catch(error => res.json(500, { error: error }))
 });
 

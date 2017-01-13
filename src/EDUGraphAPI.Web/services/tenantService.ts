@@ -4,13 +4,10 @@ import { DbContext, OrganizationInstance } from '../data/dbContext';
 import { UserService } from '../services/userService';
 
 export class TenantService {
+
     private dbContext = new DbContext();
     private userService = new UserService();
 
-    public getTenant(tenantId: string): Promise<OrganizationInstance> {
-        return this.dbContext.Organization
-            .find({ where: { tenantId: tenantId } });
-    }
     public updateTenant(tenantId: string, adminConsented: boolean): Promise<OrganizationInstance> {
         return this.getTenant(tenantId)
             .then((org: OrganizationInstance) => {
@@ -18,6 +15,7 @@ export class TenantService {
                 return org.save();
             })
     }
+
     public unlinkTenantAllAccounts(tenant: OrganizationInstance): Promise<any> {
         return tenant.getUsers()
             .then((users) => {
@@ -31,4 +29,10 @@ export class TenantService {
                 return tenant.removeUsers();
             })
     }
+
+    private getTenant(tenantId: string): Promise<OrganizationInstance> {
+        return this.dbContext.Organization
+            .find({ where: { tenantId: tenantId } });
+    }
+
 }

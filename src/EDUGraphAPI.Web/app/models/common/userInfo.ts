@@ -12,7 +12,7 @@ export class UserInfo {
     roles: string[];
     remember: boolean;
 
-    public areAccountsLinked(): boolean{
+    public areAccountsLinked(): boolean {
         return this.o365UserId != undefined && this.o365UserId != null && this.o365UserId != '';
     }
 
@@ -26,5 +26,4 @@ export class UserInfo {
         if (user.o365Email != undefined) this.o365Email = user.o365Email
         if (user.favoriteColor != undefined) this.favoriteColor = user.favoriteColor;
     }
-
 }

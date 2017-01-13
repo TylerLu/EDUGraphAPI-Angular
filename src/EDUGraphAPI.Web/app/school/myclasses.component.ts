@@ -6,7 +6,6 @@ import { UserModel } from './user'
 import { ClassesModel } from './classes';
 import { SchoolService } from './school.service';
 
-
 @Component({
     moduleId: module.id,
     selector: '',
@@ -15,17 +14,19 @@ import { SchoolService } from './school.service';
 })
 
 export class MyClassesComponent implements OnInit {
+
     schoolGuId: string;
     schoolId: string;
     private sub: any;
-    classesArray: ClassesModel[]=[];
-    myClassesArray: ClassesModel[]=[];
+    classesArray: ClassesModel[] = [];
+    myClassesArray: ClassesModel[] = [];
     school: SchoolModel;
     showNoData: boolean = false;
 
-    constructor( @Inject('schoolService') private schoolService: SchoolService
-        , private route: ActivatedRoute, private router: Router) {
-
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        @Inject('schoolService') private schoolService: SchoolService) {
     }
 
     ngOnInit() {
@@ -59,18 +60,17 @@ export class MyClassesComponent implements OnInit {
                             .subscribe((result) => {
                                 var classObj = MapUtils.deserialize(ClassesModel, result);
                                 classObj.IsMyClasses = true;
-                                classObj.Users = []; 
+                                classObj.Users = [];
                                 result.members.forEach((obj) => {
                                     classObj.Users.push(MapUtils.deserialize(UserModel, obj));
                                 });
                                 this.classesArray.push(classObj);
                             });
                     });
-
-                 });
-
+                });
         });
     }
+
     ngOnDestroy() {
         this.sub.unsubscribe();
     }
@@ -78,16 +78,18 @@ export class MyClassesComponent implements OnInit {
     showDetail(classEntity) {
         classEntity.UIHoverShowDetail = true;
     }
+
     hideDetail(classEntity) {
         classEntity.UIHoverShowDetail = false;
     }
+
     gotoDetail(objectId: string) {
         setTimeout(() => {
-            this.router.navigate(['/classdetail', this.schoolGuId, objectId,  this.schoolId]);
+            this.router.navigate(['/classdetail', this.schoolGuId, objectId, this.schoolId]);
         }, 100);
     }
+
     gotoAllClasses() {
         this.router.navigate(['classes', this.schoolGuId, this.schoolId]);
     }
-
 }

@@ -4,6 +4,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Constants } from '../Constants';
 
 export class BingMapHelper {
+
     /**
      * Retrieves longitude and latitude by address.
      * Reference URL: 
@@ -33,4 +34,3 @@ export class BingMapHelper {
         });
     }
 }
-

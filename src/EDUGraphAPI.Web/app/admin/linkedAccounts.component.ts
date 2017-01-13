@@ -5,7 +5,6 @@ import { UserInfo } from '../models/common/userInfo'
 import { AdminService } from './admin.service';
 import { AuthHelper } from "../authHelper/authHelper";
 
-
 @Component({
     moduleId: module.id,
     selector: '',
@@ -14,10 +13,13 @@ import { AuthHelper } from "../authHelper/authHelper";
 })
 
 export class LinkedAccountsComponent implements OnInit {
+
     accounts: UserInfo[] = new Array<UserInfo>();
 
-    constructor(private router: Router,
-        @Inject('auth') private auth: AuthHelper, @Inject('adminService') private adminService: AdminService) {
+    constructor(
+        private router: Router,
+        @Inject('auth') private auth: AuthHelper,
+        @Inject('adminService') private adminService: AdminService) {
     }
 
     ngOnInit() {
@@ -39,7 +41,6 @@ export class LinkedAccountsComponent implements OnInit {
                         });
                 }
             });
-
     }
 
     unlink(account: UserInfo, index: number) {
