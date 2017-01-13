@@ -34,7 +34,7 @@ export class DemoHelper implements OnInit {
             .filter(route => route.outlet === 'primary')
             .mergeMap(route => route.data)
             .subscribe((event) => {
-                this.GetDemoPage();
+                this.getDemoPage();
             });
     }
 
@@ -42,8 +42,8 @@ export class DemoHelper implements OnInit {
         this.Collapsed = !(this.Collapsed);
     }
 
-    GetDemoPage() {
-        this.demoHelperService.GetDemoData()
+    getDemoPage() {
+        this.demoHelperService.getDemoData()
             .subscribe(res => {
                 this.DemoPage = res;
                 this.HasDemo = this.DemoPage != {};

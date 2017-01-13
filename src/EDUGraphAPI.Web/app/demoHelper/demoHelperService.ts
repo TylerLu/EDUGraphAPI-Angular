@@ -9,11 +9,11 @@ export class DemoHelperService {
 
     constructor(private http: Http) {}
 
-    GetMappedDemoPage(pages: DemoHelperPage[]) {
+    getMappedDemoPage(pages: DemoHelperPage[]) {
         let result = new DemoHelperPage();
         let component = window.location.pathname.split('/')[1];
 
-        let sourceCodeRepositoryUrl = this.GetSourceCodeRepositoryUrl();
+        let sourceCodeRepositoryUrl = this.getSourceCodeRepositoryUrl();
         if (sourceCodeRepositoryUrl.slice(-1) == '/') {
             sourceCodeRepositoryUrl = sourceCodeRepositoryUrl.slice(0, -1)
         }
@@ -31,14 +31,14 @@ export class DemoHelperService {
         return result;
     }
 
-    GetDemoData(){
+    getDemoData(){
         return this.http.get('app/demoHelper/demoHelper-pages.json')
             .map((response: Response) => {
-                return this.GetMappedDemoPage(response.json());
+                return this.getMappedDemoPage(response.json());
             });
     }
 
-    private GetSourceCodeRepositoryUrl() {
+    private getSourceCodeRepositoryUrl() {
         var domain = Cookie.get(Constants.SourceCodeRepositoryUrl);
         if (domain && domain != "undefined")
             return domain;

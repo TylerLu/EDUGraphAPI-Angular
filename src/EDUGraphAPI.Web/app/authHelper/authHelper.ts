@@ -36,10 +36,26 @@ export class AuthHelper {
     }
 
     public getAADGraphToken(): Observable<TokenEntity> {
-        return this.get("/api/me/accessToken?resource=" + encodeURIComponent(Constants.AADGraphResource) + "&t=" + new Date().getTime());
+        return this.getToken(Constants.COOKIE_TOKEN, Constants.AADGraphResource);
     }
     public getMSGraphToken(): Observable<TokenEntity> {
-        return this.get("/api/me/accessToken?resource=" + encodeURIComponent(Constants.MSGraphResource) + "&t=" + new Date().getTime());
+        return this.getToken(Constants.MS_COOKIE_TOKEN, Constants.MSGraphResource);
+    }
+
+    private getToken(tokenName: string, siteURL: string): Observable<TokenEntity> {
+        let cookie = Cookie.get(tokenName);
+         if (cookie) {
+            var entity: TokenEntity = new TokenEntity();
+            entity.accessToken = cookie;
+            return Observable.of(entity);
+       
+        } else {
+             var token = this.get("/api/me/accessToken?resource=" + encodeURIComponent(siteURL) + "&t=" + new Date().getTime());
+             token.subscribe((result) => {
+                 Cookie.set(tokenName, result.accessToken, new Date( result.expires - 5 * 60 * 1000));
+             });
+             return token;
+        }
     }
 
     getHeader() {

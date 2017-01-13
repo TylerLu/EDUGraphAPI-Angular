@@ -1,8 +1,10 @@
 ﻿import { Component, Input, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { Constants } from '../constants';
 import { UserInfo } from '../models/common/userinfo';
 import { AuthHelper } from "../authHelper/authHelper";
 import { MeService } from "../services/meService";
+import { Cookie } from "../services/cookieService";
 
 @Component({
     moduleId: module.id,
@@ -110,6 +112,13 @@ export class Header implements OnInit {
             }
         }
         return result;
+    }
+
+    doLogOff(): void{
+        console.log('logOff');
+        Cookie.delete(Constants.COOKIE_TOKEN);
+        Cookie.delete(Constants.MS_COOKIE_TOKEN);
+        window.location.href = '/logout';
     }
     
 }
