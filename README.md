@@ -128,7 +128,7 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
    ![](Images/aad-configure-app-02.png)
 
-11. Enable **USER ASSIGNMENT REQUIRED TO ACCESS APP**.
+11. [Optional] Enable **USER ASSIGNMENT REQUIRED TO ACCESS APP**.
 
    ![](Images/aad-configure-app-05.png)
 
