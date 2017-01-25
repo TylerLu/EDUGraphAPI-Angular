@@ -1,4 +1,8 @@
-﻿import { Organization } from './organization';
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+import { Organization } from './organization';
 export class UserInfo {
     id: string;
     email: string;

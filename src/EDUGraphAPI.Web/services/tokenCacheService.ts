@@ -1,4 +1,8 @@
-﻿import { DbContext, TokenCacheInstance } from '../data/dbContext';
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+import { DbContext, TokenCacheInstance } from '../data/dbContext';
 import * as Promise from "bluebird";
 import { TokenUtils } from '../utils/tokenUtils'
 import { Constants } from '../constants';

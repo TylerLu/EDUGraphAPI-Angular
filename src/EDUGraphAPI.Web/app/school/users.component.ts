@@ -1,4 +1,8 @@
-﻿import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SchoolModel } from './school'
 import { UserModel, StudentModel, TeacherModel } from './user'

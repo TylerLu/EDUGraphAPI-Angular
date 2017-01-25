@@ -1,4 +1,8 @@
-﻿/// <reference path="../../node_modules/@types/jquery/index.d.ts" />
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+/// <reference path="../../node_modules/@types/jquery/index.d.ts" />
 
 import { Injectable, Inject } from '@angular/core';
 import { Constants } from '../constants';

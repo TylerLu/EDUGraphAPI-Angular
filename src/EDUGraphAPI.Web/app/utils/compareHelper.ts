@@ -1,4 +1,8 @@
-﻿export class CompareHelper {
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+export class CompareHelper {
 
     private static createComparer2<T, V>(propertySelector: (t: T) => V, desc: boolean = false): (a: T, b: T) => number {
         return (a: T, b: T) => {

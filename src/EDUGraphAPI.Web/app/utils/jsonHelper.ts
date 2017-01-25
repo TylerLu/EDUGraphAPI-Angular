@@ -1,4 +1,8 @@
-﻿import 'reflect-metadata';
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+import 'reflect-metadata';
 
 const jsonMetadataKey = "jsonProperty";
 export interface IJsonMetaData {

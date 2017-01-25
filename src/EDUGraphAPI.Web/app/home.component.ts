@@ -1,4 +1,8 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Inject } from '@angular/core';
 import { AuthHelper } from "./authHelper/authHelper";

@@ -523,3 +523,6 @@ Note that in the AAD Application settings, permissions for each Graph API are co
 
 ## Disclaimer
 **THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
+
+## Copyright
+Copyright (c) 2016 Microsoft Corporation. All rights reserved.

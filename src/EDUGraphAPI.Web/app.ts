@@ -1,4 +1,8 @@
-﻿var http = require("http");
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+var http = require("http");
 var https = require("https");
 var cookieSession = require('cookie-session');
 var express = require("express");

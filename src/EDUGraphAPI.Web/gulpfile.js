@@ -1,4 +1,8 @@
-﻿var gulp = require('gulp'),
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+var gulp = require('gulp'),
     path = require('path'),
     Builder = require('systemjs-builder'),
     ts = require('gulp-typescript'),

@@ -1,4 +1,8 @@
-﻿export class UrlHelper {
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+export class UrlHelper {
     
     public static getHashValue(key): string {
         var matches = window.location.hash.match(new RegExp(key + '=([^&]*)'));

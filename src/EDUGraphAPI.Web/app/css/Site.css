@@ -1,4 +1,8 @@
-﻿@font-face {
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+@font-face {
   font-family: 'Helvetica Neue LT Std Light';
   src: url("../fonts/HelveticaNeueLTStd-Light.eot"); /* IE9 Compat Modes */
   src: url("../fonts/HelveticaNeueLTStd-Light.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */

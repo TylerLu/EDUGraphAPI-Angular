@@ -1,4 +1,8 @@
-﻿import { Component, Input, OnInit, Injectable, Inject } from '@angular/core';
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+import { Component, Input, OnInit, Injectable, Inject } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 import { DemoHelperPage } from './demoHelperPage';

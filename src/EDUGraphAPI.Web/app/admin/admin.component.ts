@@ -1,4 +1,8 @@
-﻿import { Component, OnInit, Inject } from '@angular/core';
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MapUtils } from '../utils/jsonhelper';
 import { AdminService } from './admin.service';

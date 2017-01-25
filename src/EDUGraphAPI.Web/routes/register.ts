@@ -1,4 +1,8 @@
-﻿import express = require('express');
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+import express = require('express');
 import * as Storage from '../data/dbContext';
 import * as Sequelize from 'sequelize';
 import { UserService } from '../services/userService';

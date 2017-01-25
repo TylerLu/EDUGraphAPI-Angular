@@ -1,4 +1,8 @@
-﻿import { Injectable, Inject } from '@angular/core';
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+import { Injectable, Inject } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { UserInfo } from '../models/common/userInfo';
 import 'rxjs/add/operator/toPromise';

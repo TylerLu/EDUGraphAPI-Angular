@@ -1,4 +1,8 @@
-﻿export class ConvertHelper {
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+export class ConvertHelper {
 
     /**
      * Convert binary to base64 string
