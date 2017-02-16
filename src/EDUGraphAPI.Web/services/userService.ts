@@ -274,6 +274,16 @@ export class UserService {
             })
     }
 
+    public GetUserFavoriteColorByO365Email(o365Email: string): Promise<string> {
+        return this.dbContext.User
+            .findOne({ where: { o365Email: o365Email } })
+            .then(user => {
+                if (user != null)
+                    return user.favoriteColor;
+                return "";
+            });
+    }
+
     private updateUser(userId: string, user: any): Promise<any> {
         return this.getUserById(userId).then(u => {
             let promises = new Array<Promise<any>>();

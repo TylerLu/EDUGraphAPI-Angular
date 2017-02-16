@@ -18,6 +18,7 @@ import * as moment from 'moment';
 import { MeService } from "../services/meService";
 import { SchoolService } from './school.service';
 import { UserPhotoService } from '../services/userPhotoService';
+import { UserService } from '../services/userService';
 
 @Component({
     moduleId: module.id,
@@ -53,7 +54,9 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
         private route: ActivatedRoute,
         @Inject('me') private meService: MeService,
         @Inject('schoolService') private schoolService: SchoolService,
-        @Inject('userPhotoService') private userPhotoService: UserPhotoService) {
+        @Inject('userPhotoService') private userPhotoService: UserPhotoService,
+        @Inject('user') private userService: UserService
+       ) {
     }
 
     ngOnInit() {
@@ -113,11 +116,17 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
                                                         this.classEntity.Teachers.push(user);
                                                     }
                                                     if (user.ObjectType == "Student") {
-                                                        this.classEntity.Students.push(user);
+                                                        this.userService.GetUserFavoriteColorByO365Email(user.Email)
+                                                            .subscribe((color) => {
+                                                                user.FavoriteColor = color;
+                                                                this.classEntity.Students.push(user);
+                                                                this.setSeatings();
+                                                                this.sortMembers();
+                                                            });
+                                                        
                                                     }
                                                 });
-                                                this.setSeatings();
-                                                this.sortMembers();
+                                                
                                             });
                                     });
                             });
@@ -178,7 +187,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
 
                     if (this.me.O365UserId == stu.O365UserId) {
                         stu.ContainerClass = "deskcontainer green";
-                        stu.BackgroundColor = this.favoriteColor;
+                        //stu.BackgroundColor = this.favoriteColor;
                     }
                 }
             });

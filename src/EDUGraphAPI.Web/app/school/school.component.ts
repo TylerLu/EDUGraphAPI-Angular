@@ -90,7 +90,7 @@ export class SchoolComponent implements OnInit {
 
     gotoClasses(school: SchoolModel) {
         setTimeout(() => {
-            this.router.navigate(['classes', school.ObjectId, school.SchoolId]);
+            this.router.navigate(['myclasses', school.ObjectId, school.SchoolId]);
         }, 100);
     }
 

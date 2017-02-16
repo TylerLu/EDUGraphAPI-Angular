@@ -10,6 +10,8 @@ import { AboutMeModel } from './aboutme';
 import { ClassesModel } from '../school/classes';
 import { MapUtils } from '../utils/jsonHelper';
 import { Constants } from '../constants';
+import { SchoolService } from '../school/school.service';
+import { UserModel } from '../school/user';
 
 @Component({
     moduleId: module.id,
@@ -21,11 +23,16 @@ import { Constants } from '../constants';
 export class AboutMe implements OnInit {
 
     model: AboutMeModel = new AboutMeModel();
+    me: UserModel;
+    userRole: string = "";
+    isAdmin: boolean = false;
 
     constructor(
         @Inject('aboutMeService') private aboutMeservice,
         private route: ActivatedRoute,
-        private router: Router) {
+        private router: Router,
+        @Inject('schoolService') private schoolService: SchoolService
+    ) {
         this.model.FavoriteColors = Constants.FavoriteColors;
     }
 
@@ -38,7 +45,20 @@ export class AboutMe implements OnInit {
                 this.model.UserName = (user.firstName + " " + user.lastName).trim();
                 this.model.MyFavoriteColor = user.favoriteColor || this.model.FavoriteColors[0].Value;
                 this.model.IsLinked = user.areAccountsLinked();
+                this.isAdmin = this.isUserAdmin(data);
+                if (!this.isAdmin) {
+                    this.schoolService
+                        .getMe()
+                        .subscribe((result) => {
+                            this.me = MapUtils.deserialize(UserModel, result);
+                            this.userRole = this.me.ObjectType;
+                        });
+                } else {
+                    this.userRole = "Admin";
+                }
+                
             });
+
 
         this.aboutMeservice
             .getMyClasses()
@@ -52,7 +72,19 @@ export class AboutMe implements OnInit {
                 });
             });
     }
-
+    isUserAdmin(user: UserInfo): boolean {
+        let result = false;
+        let roles = user.roles;
+        if (roles == undefined || roles == null || roles.length == 0)
+            return result;
+        for (let i = 0; i < roles.length; i++) {
+            if (roles[i].toLowerCase() == "admin") {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
     updateFavoriteColor() {
         this.aboutMeservice.updateFavoriteColor(this.model.MyFavoriteColor).then((response) => {
             this.model.SaveSucceeded = response.ok;

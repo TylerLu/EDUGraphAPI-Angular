@@ -35,6 +35,7 @@ export class UserModel {
     public ContainerClass: string = "deskcontainer unsaved";
     public BackgroundColor: string = "";
     public SeatingArrangment: string = "0";
+    public FavoriteColor: string = "";
 
     constructor() {
         this.Email = undefined;
@@ -46,6 +47,7 @@ export class UserModel {
         this.TeacherId = undefined;
         this.StudentId = undefined;
         this.Photo = undefined;
+        this.FavoriteColor = undefined;
     }
 }
 

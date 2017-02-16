@@ -138,7 +138,7 @@
                                 </li>
                             </ul>
                             <div id="hidtiles" class="hideitem" *ngIf="classEntity">
-                                <div *ngFor="let stu of classEntity.Students" [position]="stu.SeatingArrangment" [userid]="stu.O365UserId" [class]="stu.ContainerClass" [style.background-color]="stu.BackgroundColor">
+                                <div *ngFor="let stu of classEntity.Students" [position]="stu.SeatingArrangment" [userid]="stu.O365UserId" [class]="stu.ContainerClass" [style.background-color]="stu.FavoriteColor">
                                     <div class="deskclose" [hidden]="!isEditing"><img src="/app/Images/close.png"></div>
                                     <div class="deskicon">
                                         <img [src]="stu.Photo || 'app/images/header-default.jpg'" />

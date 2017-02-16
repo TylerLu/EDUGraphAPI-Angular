@@ -12,6 +12,7 @@ import { AuthHelper } from "../authHelper/authHelper";
 export class UserService {
 
     private usersAPIUrl = 'api/users';
+    private favoriteColorURL = "/FavoriteColor";
     private loginUrl = '/account/login';
     private registerAPIUrl = 'api/register';
 
@@ -40,5 +41,11 @@ export class UserService {
     public localLogin(userInfo: UserInfo): Promise<any> {
         return this._http.post(this.loginUrl, userInfo)
             .toPromise();
+    }
+
+    
+    public GetUserFavoriteColorByO365Email(o365Email: string){
+        return this._http.get(this.usersAPIUrl + "/" + o365Email + this.favoriteColorURL, {} )
+            .map((response: Response) => response.json());
     }
 }

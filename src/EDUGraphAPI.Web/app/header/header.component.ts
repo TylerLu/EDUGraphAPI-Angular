@@ -9,6 +9,9 @@ import { UserInfo } from '../models/common/userinfo';
 import { AuthHelper } from "../authHelper/authHelper";
 import { MeService } from "../services/meService";
 import { Cookie } from "../services/cookieService";
+import { SchoolService } from '../school/school.service';
+import { UserModel } from '../school/user';
+import { MapUtils } from '../utils/jsonHelper';
 
 @Component({
     moduleId: module.id,
@@ -23,11 +26,14 @@ export class Header implements OnInit {
     ifShowContextMenu: boolean;
     fullName: string;
     isAdmin: boolean;
+    userRole: string = "";
+    me: UserModel;
 
     constructor(
         private router: Router,
         @Inject('me') private meService: MeService,
-        @Inject('auth') private authService: AuthHelper) {
+        @Inject('auth') private authService: AuthHelper,
+        @Inject('schoolService') private schoolService: SchoolService) {
     }
 
     ngOnInit() {
@@ -105,6 +111,16 @@ export class Header implements OnInit {
                     ? (user.firstName + " " + user.lastName)
                     : user.email
                 this.isAdmin = this.isUserAdmin(user);
+                if (this.isAdmin)
+                    this.userRole = "Admin";
+                else {
+                    this.schoolService
+                        .getMe()
+                        .subscribe((result) => {
+                            this.me = MapUtils.deserialize(UserModel, result);
+                            this.userRole = this.me.ObjectType;
+                        });
+                }
             });
     }
 

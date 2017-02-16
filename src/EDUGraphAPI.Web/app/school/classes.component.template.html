@@ -24,7 +24,10 @@
         </div>
         <div>
             <div class="col-md-6 usericon">
-                <div class="icon"></div><div>Non-Class</div>
+                <div class="icon"></div>
+                <div *ngIf="legendText">
+                    {{legendText}}
+                </div>
                 <div class="icon my-class"></div>
                 <div>My Class</div>
             </div>

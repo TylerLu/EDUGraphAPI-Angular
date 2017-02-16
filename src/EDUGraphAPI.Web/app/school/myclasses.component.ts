@@ -26,6 +26,9 @@ export class MyClassesComponent implements OnInit {
     myClassesArray: ClassesModel[] = [];
     school: SchoolModel;
     showNoData: boolean = false;
+    legendText: string = "";
+    me: UserModel;
+
 
     constructor(
         private router: Router,
@@ -37,7 +40,16 @@ export class MyClassesComponent implements OnInit {
         this.sub = this.route.params.subscribe(params => {
             this.schoolGuId = params['id'];
             this.schoolId = params['id2'];
-
+            this.schoolService
+                .getMe()
+                .subscribe((result) => {
+                    this.me = MapUtils.deserialize(UserModel, result);
+                    if (this.me.ObjectType == "Student") {
+                        this.legendText = "Not Enrolled";
+                    } else {
+                        this.legendText = "Not Teaching";
+                    }
+                });
             this.schoolService
                 .getSchoolById(this.schoolGuId)
                 .subscribe((result) => {

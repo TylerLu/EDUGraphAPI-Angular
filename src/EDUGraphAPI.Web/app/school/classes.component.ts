@@ -29,7 +29,8 @@ export class ClassesComponent implements OnInit {
     nextLink: string;
     isGettingData: boolean = false;
     showNoData: boolean = false;
-
+    legendText: string = "";
+    me: UserModel;
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -47,6 +48,16 @@ export class ClassesComponent implements OnInit {
                 });
             this.getClasses();
         });
+        this.schoolService
+            .getMe()
+            .subscribe((result) => {
+                this.me = MapUtils.deserialize(UserModel, result);
+                if (this.me.ObjectType == "Student") {
+                    this.legendText = "Not Enrolled";
+                } else {
+                    this.legendText = "Not Teaching";
+                }
+            });
     }
 
     ngOnDestroy() {

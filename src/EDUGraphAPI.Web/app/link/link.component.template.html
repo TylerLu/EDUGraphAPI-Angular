@@ -10,8 +10,7 @@
         <div class="form-horizontal" id="linkAccountPrompt" *ngIf="isLocalAccount">
             <hr />
             <p>
-                <input type="submit" value="Use Existing O365 account" class="btn btn-primary" (click)="loginO365(this)" /> &nbsp; &nbsp;
-                <a class="btn btn-primary" href="/schools">Cancel</a>
+                <input type="submit" value="Link to existing O365 account" class="btn btn-primary" (click)="loginO365(this)" />
             </p>
         </div>
         <div *ngIf="isLocalAccount==false">
@@ -19,10 +18,11 @@
             <div class="form-horizontal">
                 <p *ngIf="localAccountExisted">{{localAccountExistedMessage}}</p>
                 <p>
-                    <a class="btn btn-primary" href="/link-loginLocal">Use Existing Local Account</a>
-                    <input type="button" [disabled]="localAccountExisted" value="Create Local Account" class="btn btn-primary" (click)="createLocalAccount(this)" />
-                    &nbsp; &nbsp;
-                    <a class="btn btn-primary" href="/schools">Cancel</a>
+                    <input type="button" [disabled]="localAccountExisted" value="Continue with new Local Account" class="btn btn-primary" (click)="createLocalAccount(this)" />
+                    &nbsp;&nbsp;
+                    <a class="btn btn-primary" href="/link-loginLocal">Link with existing Local Account</a>
+               
+                    
                 </p>
             </div>
         </div>

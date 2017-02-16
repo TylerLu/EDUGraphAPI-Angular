@@ -19,6 +19,8 @@ export class AboutMeModel {
 
     public SaveSucceeded: boolean = false;
 
+    public UserRole: string;
+
     constructor() {
         this.UserName = undefined;
         this.IsLinked = undefined;
@@ -26,5 +28,6 @@ export class AboutMeModel {
         this.FavoriteColors = undefined;
         this.Groups = undefined;
         this.ShowFavoriteColor = undefined;
+        this.UserRole = undefined;
     }
 }
