@@ -70,6 +70,13 @@ export class Link implements OnInit {
         this.router.navigate(['link-local']);
     }
 
+    linkExistingLocalAccount() {
+        this.linkService.linkMatchingLocalUser()
+            .subscribe(
+                (result) => this.router.navigate(["schools"]),
+                (err) => this.error = err.json().error);
+    }
+
     initMessage() {
         var msg = UrlHelper.getUrlQueryValue(window.location.href, 'error')
         if (msg != null && msg.length > 0) {

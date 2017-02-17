@@ -19,8 +19,7 @@ import { UserService } from "../services/userService";
 })
 
 export class LinkCreateLocal implements OnInit {
-
-    userInfo: UserInfo;
+    
     localModel: CreateLocalModel;
     favoriteColors: ColorEntity[];
     checkPwdRequired: boolean = true;
@@ -37,38 +36,17 @@ export class LinkCreateLocal implements OnInit {
 
     ngOnInit() {
         this.localModel = new CreateLocalModel();
-        this.initCurrentUser();
         this.favoriteColors = Constants.FavoriteColors;
+        this.localModel.favoriteColor = this.favoriteColors[0].Value;
     }
-
-    initCurrentUser() {
-        this.userInfo = new UserInfo();
-        this.linkService.getCurrentUser()
-            .subscribe((user) => {
-                this.userInfo.readFromJson(user);
-                if (!this.userInfo.email) {
-                    this.userInfo.email = this.userInfo.o365Email;
-                }
-                if (!this.userInfo.favoriteColor) {
-                    this.localModel.favoriteColor = this.favoriteColors[0].Value;
-                }
-                else {
-                    this.localModel.favoriteColor = this.userInfo.favoriteColor;
-                }
-            });
-    }
-
+    
     checkValid() {
-        this.checkPwdRequired = !this.linkService.isEmpty(this.localModel.password);
-        this.checkConfirmPwdRequried = !this.linkService.isEmpty(this.localModel.confirmPassword);
-        this.checkPwdEqualConfirmPwd = this.localModel.confirmPassword == this.localModel.password;
-        return this.checkPwdRequired && this.checkConfirmPwdRequried && this.checkPwdEqualConfirmPwd;
+        return true;
     }
 
     createLocal() {
-        if (!this.checkValid())
-            return;
-        this.linkService.createLocalUser(this.userInfo.email, this.localModel.password, this.localModel.favoriteColor)
+        if (!this.checkValid()) return;
+        this.linkService.createLocalUser(this.localModel.favoriteColor)
             .subscribe((result) => {
                 if (result == 200) {
                     this.router.navigate(["schools"]);

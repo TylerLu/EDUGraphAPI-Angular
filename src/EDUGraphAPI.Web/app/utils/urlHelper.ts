@@ -12,7 +12,7 @@ export class UrlHelper {
     }
 
     public static getQueryValue(key): string {
-        var matches = window.location.hash.match(new RegExp(key + '=([^&]*)'));
+        var matches = window.location.search.match(new RegExp(key + '=([^&]*)'));
         var value = matches ? matches[1] : null;
         if (value == null) return null;
         return decodeURIComponent(decodeURI(value)).replace(/\+/g, ' ')

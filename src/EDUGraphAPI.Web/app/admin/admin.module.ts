@@ -11,6 +11,7 @@ import { AuthHelper } from "../authHelper/authHelper";
 import { AdminService } from './admin.service';
 import { DataService } from '../services/DataService';
 import { AdminComponent } from './admin.component';
+import { ConsentComponent } from './consent.component';
 import { LinkedAccountsComponent } from './linkedAccounts.component';
 import { routing } from './admin-routing';
 
@@ -23,7 +24,9 @@ import { routing } from './admin-routing';
     ],
     declarations: [
         AdminComponent,
-        LinkedAccountsComponent],
+        ConsentComponent,
+        LinkedAccountsComponent
+    ],
     providers: [
         { provide: 'adminService', useClass: AdminService },
         { provide: 'auth', useClass: AuthHelper },

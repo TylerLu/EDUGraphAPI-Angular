@@ -41,14 +41,17 @@ export class LinkService {
             email: email,
             password: password
         };
-        return this.http.post(this.linkUrl + "/ExistingLocalUser", body)
+        return this.http.post(this.linkUrl + "/LocalUser", body)
             .map((response: Response) => response.json());
     }
 
-    createLocalUser(email: string, password: string, favoriteColor: string) {
+    linkMatchingLocalUser() {
+        return this.http.post(this.linkUrl + "/LocalMatchingUser", null)
+            .map((response: Response) => response.json());
+    }
+
+    createLocalUser(favoriteColor: string) {
         var body = {
-            email: email,
-            password: password,
             favoriteColor: favoriteColor
         };
         return this.http.post(this.linkUrl + "/CreateLocalUser", body)

@@ -10,54 +10,11 @@
             </ul>
         </div>
         <div class="form-group">
-            <label class="col-md-2 control-label" for="Email">Email</label>
-            <div class="col-md-10">
-                <input class="form-control" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." disabled="disabled" id="Email" name="Email" type="text" value="{{userInfo.email}}">
-                <input id="Email" name="Email" type="hidden" value="{{userInfo.email}}">
-                <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label" for="FirstName">First name</label>
-            <div class="col-md-10">
-                <input class="form-control" disabled="disabled" id="FirstName" name="FirstName" type="text" value="{{userInfo.firstName}}">
-                <input id="FirstName" name="FirstName" type="hidden" value="{{userInfo.firstName}}">
-                <span class="field-validation-valid text-danger" data-valmsg-for="FirstName" data-valmsg-replace="true"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label" for="LastName">Last name</label>
-            <div class="col-md-10">
-                <input class="form-control" disabled="disabled" id="LastName" name="LastName" type="text" value="{{userInfo.lastName}}">
-                <input id="LastName" name="LastName" type="hidden" value="{{userInfo.lastName}}">
-                <span class="field-validation-valid text-danger" data-valmsg-for="LastName" data-valmsg-replace="true"></span>
-            </div>
-        </div>
-        <div class="form-group">
             <label class="col-md-2 control-label" for="FavoriteColor">Favorite color</label>
             <div class="col-md-10">
                 <select name="FavoriteColor" id="FavoriteColor" class="form-control valid" aria-invalid="false" [(ngModel)]="localModel.favoriteColor">
                     <option *ngFor="let color of favoriteColors" [value]="color.Value">{{color.DisplayName}}</option>
                 </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label" for="Password">Password</label>
-            <div class="col-md-10">
-                <input class="form-control validate-equalTo-blur input-validation-error" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="Password" name="Password" type="password" aria-required="true" aria-describedby="Password-error" aria-invalid="true" [(ngModel)]="localModel.password">
-                <span [hidden]="checkPwdRequired" class="text-danger field-validation-error" data-valmsg-for="Password" data-valmsg-replace="true"><span id="Password-error" class="">The Password field is required.</span></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label" for="ConfirmPassword">Confirm password</label>
-            <div class="col-md-10">
-                <input class="form-control input-validation-error" data-val="true" data-val-equalto="The password and confirmation password do not match." data-val-equalto-other="*.Password" id="ConfirmPassword" name="ConfirmPassword" [(ngModel)]="localModel.confirmPassword" type="password" aria-describedby="ConfirmPassword-error" aria-invalid="true">
-                <span [hidden]="checkConfirmPwdRequried" class="text-danger field-validation-error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true">
-                    <span id="ConfirmPassword-error" class="">The ConfirmPassword field is required.</span>
-                </span>
-                <span [hidden]="checkPwdEqualConfirmPwd" class="text-danger field-validation-error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true">
-                    <span id="ConfirmPassword-equal-error" class="">The password and confirmation password do not match.</span>
-                </span>
             </div>
         </div>
         <div class="form-group">

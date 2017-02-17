@@ -22,6 +22,7 @@ var registerRoute = require("./routes/register");
 var schoolsRoute = require("./routes/schools");
 var linkRoute = require("./routes/link");
 var tenantRoute = require("./routes/tenant");
+var adminRoute = require("./routes/admin"); 
 
 var app = express();
 
@@ -70,6 +71,7 @@ app.use('/api/register', registerRoute);
 app.use('/api/schools', auth.ensureAuthenticated, schoolsRoute);
 app.use('/api/link', auth.ensureAuthenticated, linkRoute);
 app.use('/api/tenant', auth.ensureAuthenticated, tenantRoute);
+app.use('/api/admin', adminRoute);
 
 //configure aad/local auth route
 auth.initAuthRoute(app);

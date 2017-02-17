@@ -39,7 +39,7 @@ export class MSGraphClient {
             })
     }
 
-    private getMe(): Promise<any> {
+    public getMe(): Promise<any> {
         return new Promise((resolve, reject) => {
             request
                 .get(Constants.MSGraphResource + "/v1.0/me/?$select=id,givenName,surname,userPrincipalName,assignedLicenses")
@@ -53,7 +53,7 @@ export class MSGraphClient {
         })
     }
 
-    private getOrganization(tenantID: string): Promise<any> {
+    public getOrganization(tenantID: string): Promise<any> {
         return new Promise((resolve, reject) => {
             request
                 .get(Constants.MSGraphResource + "/v1.0/organization/" + tenantID +"?$select=id,displayName")

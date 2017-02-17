@@ -34,9 +34,18 @@ export class TenantService {
             })
     }
 
-    private getTenant(tenantId: string): Promise<OrganizationInstance> {
+    public getTenant(tenantId: string): Promise<OrganizationInstance> {
         return this.dbContext.Organization
             .find({ where: { tenantId: tenantId } });
+    }
+
+    public createTenant(tenantId: string, name: string, adminConsented: boolean): Promise<any> {
+        return this.dbContext.Organization.create({
+            tenantId: tenantId,
+            name: name,
+            isAdminConsented: adminConsented,
+            created: new Date()
+        });
     }
 
 }

@@ -20,7 +20,9 @@ export class UserService {
             .then(user => {
                 if (user == null) {
                     let passwordSalt = bcrypt.genSaltSync();
-                    let passwordHash = bcrypt.hashSync(password, passwordSalt);
+                    let passwordHash = password != null
+                        ? bcrypt.hashSync(password, passwordSalt)
+                        : null;
                     return this.dbContext.User.create(
                         {
                             id: uuid.v4(),
@@ -218,7 +220,7 @@ export class UserService {
             })
     }
 
-    public linkExistingLocalUser(o365User: any, localEmail: string, localPassword: string): Promise<any> {
+    public linkLocalUser(o365User: any, localEmail: string, localPassword: string): Promise<any> {
         let localUserId: string;
         return this.dbContext.User
             .findOne({ where: { email: localEmail } })
@@ -229,7 +231,7 @@ export class UserService {
                     }
                     else {
                         localUserId = user.id;
-                        return this.getO365User(o365User.oid, o365User._json.tid)
+                        return this.getO365User(o365User.oid, o365User.tid)
                     }
                 }
                 else {
@@ -241,9 +243,31 @@ export class UserService {
             })
     }
 
-    public linkCreateLocalUser(o365User: any, localEmail: string, localPassword: string, favoriteColor: string): Promise<any> {
+    public linkMatchingLocalUser(o365User: any): Promise<any> {
         let localUserId: string;
-        return this.creatUser(localEmail, localPassword, null, null, favoriteColor).
+        return this.dbContext.User
+            .findOne({ where: { email: o365User.upn } })
+            .then(user => {
+                if (user == null) {
+                    throw "No local user matching your Office 365 account."
+                }
+                else if (user.o365UserId != null && user.o365UserId.length > 0) {
+                    throw "The local account has already been linked to another Office 365 account.";
+                }
+                else {
+                    localUserId = user.id;
+                    return this.getO365User(o365User.oid, o365User.tid)
+                }
+            })
+            .then((o365UserInfo) => {
+                return this.updateUser(localUserId, o365UserInfo);
+            })
+    }
+
+
+    public linkCreateLocalUser(o365User: any, favoriteColor: string): Promise<any> {
+        let localUserId: string;
+        return this.creatUser(o365User.upn, null, null, null, favoriteColor).
             then((localUser) => {
                 localUserId = localUser.id;
                 return this.getO365User(o365User.oid, o365User._json.tid)
@@ -254,7 +278,7 @@ export class UserService {
     }
 
     public linkO365User(accessToken: string, oid: string, o365email: string, localUserId: string, tenantId: string): Promise<any> {
-        let updateUserInfo; 
+        let updateUserInfo;
         return this.validHasO365User(oid)
             .then(bExist => {
                 if (bExist) {

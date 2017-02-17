@@ -5,6 +5,7 @@
 /**
  * Class Cookie - Holds static functions to deal with Cookies
  */
+import { Constants } from '../constants';
 export class Cookie {
 
 	/**
@@ -116,5 +117,14 @@ export class Cookie {
             Cookie.delete(cookieName, path, domain);
         }
 
+    }
+
+    public static SetCookiesForO365Users(username: string, email: string) {
+        this.set(Constants.UsernameCookie, username);
+        this.set(Constants.EmailCookie, email);
+    }
+    public static RemoveAllO365UsersCookies() {
+        this.delete(Constants.UsernameCookie);
+        this.delete(Constants.EmailCookie);
     }
 }

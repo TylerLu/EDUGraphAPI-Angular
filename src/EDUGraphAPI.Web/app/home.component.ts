@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { Inject } from '@angular/core';
 import { AuthHelper } from "./authHelper/authHelper";
 import { MeService } from "./services/meService";
+import { Cookie } from './services/cookieService';
+import { Constants } from './constants';
 
 @Component({
     moduleId: module.id,
@@ -30,7 +32,13 @@ export class HomeComponent implements OnInit {
                 });
         }
         else {
-            this.router.navigate(['login']);
+            var username = Cookie.get(Constants.UsernameCookie);
+            if (username) {
+                this.router.navigate(['O365login']);
+            }
+            else {
+                this.router.navigate(['login']);
+            }
         }
     }
 }

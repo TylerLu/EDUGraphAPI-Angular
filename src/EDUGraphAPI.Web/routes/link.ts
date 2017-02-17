@@ -12,14 +12,25 @@ import { TokenUtils } from '../utils/tokenUtils'
 var router = express.Router();
 var userService = new UserService();
 
-router.post('/ExistingLocalUser', function (req, res) {
+router.post('/LocalUser', function (req, res) {
     var u = req.user;
     if (u.authType == 'O365') {
         var localUser = req.body;
-        userService.linkExistingLocalUser(u, localUser.email, localUser.password)
+        userService.linkLocalUser(u, localUser.email, localUser.password)
             .then(() => res.json(200))
             .catch(error => res.json(500, { error: error }))
+    }
+    else {
+        res.json(500, { error: "Invalid login attempt." });
+    }
+});
 
+router.post('/LocalMatchingUser', function (req, res) {
+    var u = req.user;
+    if (u.authType == 'O365') {
+        userService.linkMatchingLocalUser(u)
+            .then(() => res.json(200))
+            .catch(error => res.json(500, { error: error }))
     }
     else {
         res.json(500, { error: "Invalid login attempt." });
@@ -30,7 +41,7 @@ router.post('/CreateLocalUser', function (req, res) {
     var u = req.user;
     if (u.authType == 'O365') {
         var localUser = req.body;
-        userService.linkCreateLocalUser(u, localUser.email, localUser.password, localUser.favoriteColor)
+        userService.linkCreateLocalUser(u, localUser.favoriteColor)
             .then(() => res.json(200))
             .catch(error => res.json(500, { error: error }))
     }

@@ -14,7 +14,7 @@ import { MapUtils } from '../utils/jsonHelper'
 import { UserModel } from './user'
 import { Constants } from '../constants';
 import { MeService } from "../services/meService";
-
+import { Cookie } from '../services/cookieService';
 @Component({
     moduleId: module.id,
     selector: 'schools-list',
@@ -44,6 +44,7 @@ export class SchoolComponent implements OnInit {
             .getMe()
             .subscribe((result) => {
                 this.me = MapUtils.deserialize(UserModel, result);
+                Cookie.SetCookiesForO365Users(this.me.DisplayName, this.me.Email);
                 this.schoolService
                     .getSchools()
                     .subscribe((result) => {

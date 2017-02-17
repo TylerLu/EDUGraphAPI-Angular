@@ -11,6 +11,7 @@ import { CustomFormsModule } from 'ng2-validation'
 
 import { AppComponent } from './app.component';
 import { Login } from './login/login.component';
+import { O365login } from './O365login/O365login.component';
 import { Header } from './header/header.component';
 import { DemoHelper } from './demoHelper/demoHelper.component';
 import { DemoHelperService } from './demoHelper/demoHelperService';
@@ -30,7 +31,7 @@ import { HomeComponent } from './home.component';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, ReactiveFormsModule, CustomFormsModule, routing, HttpModule, SchoolModule, AdminModule, LinkModule],
-    declarations: [AppComponent, Login, Register, Header, DemoHelper, AboutMe, HomeComponent],
+    declarations: [AppComponent, Login, O365login, Register, Header, DemoHelper, AboutMe, HomeComponent],
     bootstrap: [AppComponent],
     providers: [
         { provide: 'auth', useClass: AuthHelper },
