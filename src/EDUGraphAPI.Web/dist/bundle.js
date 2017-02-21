@@ -43599,7 +43599,7 @@ $__System.registerDynamic("dist/link/link.component.js", ["npm:@angular/core/bun
         };
         Link.prototype.createLocalAccount = function () {
             console.log('createLocalAccount');
-            this.router.navigate(['link-local']);
+            this.router.navigate(['link/create-local']);
         };
         Link.prototype.initMessage = function () {
             var msg = urlHelper_1.UrlHelper.getUrlQueryValue(window.location.href, 'error');
@@ -43612,7 +43612,7 @@ $__System.registerDynamic("dist/link/link.component.js", ["npm:@angular/core/bun
     Link = __decorate([core_1.Component({
         moduleId: module.id,
         selector: 'linkPage',
-        template: '<div *ngIf="error" class="message-container bg-danger"><p>{{error}}</p></div><div class="link-component"><h2>Link Office 365 & Local Account</h2><div *ngIf="areAccountsLinked==false"><p>This page will enable you to link your Office 365 & Local Account together to successfully use the demo application.</p><div class="form-horizontal" id="linkAccountPrompt" *ngIf="isLocalAccount"><hr><p><input type="submit" value="Use Existing O365 account" class="btn btn-primary" (click)="loginO365(this)"> &nbsp; &nbsp; <a class="btn btn-primary" href="/schools">Cancel</a></p></div><div *ngIf="isLocalAccount==false"><hr><div class="form-horizontal"><p *ngIf="localAccountExisted">{{localAccountExistedMessage}}</p><p><a class="btn btn-primary" href="/link-loginLocal">Use Existing Local Account</a> <input type="button" [disabled]="localAccountExisted" value="Create Local Account" class="btn btn-primary" (click)="createLocalAccount(this)"> &nbsp; &nbsp; <a class="btn btn-primary" href="/schools">Cancel</a></p></div></div></div><div *ngIf="areAccountsLinked"><p>Your local account and Office 365 account are now linked.</p><ul><li>Local account: {{userInfo.email}}</li><li>Office 365 account: {{userInfo.o365Email}}</li></ul><p><a class="btn btn-primary" href="/schools">Return to home</a></p></div></div>'
+        template: '<div *ngIf="error" class="message-container bg-danger"><p>{{error}}</p></div><div class="link-component"><h2>Link Office 365 & Local Account</h2><div *ngIf="areAccountsLinked==false"><p>This page will enable you to link your Office 365 & Local Account together to successfully use the demo application.</p><div class="form-horizontal" id="linkAccountPrompt" *ngIf="isLocalAccount"><hr><p><input type="submit" value="Use Existing O365 account" class="btn btn-primary" (click)="loginO365(this)"> &nbsp; &nbsp; <a class="btn btn-primary" href="/schools">Cancel</a></p></div><div *ngIf="isLocalAccount==false"><hr><div class="form-horizontal"><p *ngIf="localAccountExisted">{{localAccountExistedMessage}}</p><p><a class="btn btn-primary" href="/link/login-local">Use Existing Local Account</a> <input type="button" [disabled]="localAccountExisted" value="Create Local Account" class="btn btn-primary" (click)="createLocalAccount(this)"> &nbsp; &nbsp; <a class="btn btn-primary" href="/schools">Cancel</a></p></div></div></div><div *ngIf="areAccountsLinked"><p>Your local account and Office 365 account are now linked.</p><ul><li>Local account: {{userInfo.email}}</li><li>Office 365 account: {{userInfo.o365Email}}</li></ul><p><a class="btn btn-primary" href="/schools">Return to home</a></p></div></div>'
     }), __param(0, core_1.Inject('linkService')), __param(2, core_1.Inject('me')), __param(3, core_1.Inject('user')), __metadata("design:paramtypes", [link_service_1.LinkService, router_1.Router, Object, Object])], Link);
     exports.Link = Link;
 
@@ -43635,13 +43635,13 @@ $__System.registerDynamic("dist/link/link-routing.js", ["npm:@angular/router/bun
         path: 'link',
         component: link_component_1.Link
     }, {
-        path: 'link-local',
+        path: 'link/create-local',
         component: link_createLocal_component_1.LinkCreateLocal
     }, {
-        path: 'link-loginLocal',
+        path: 'link/login-local',
         component: link_loginLocal_component_1.LinkLoginLocal
     }, {
-        path: 'link-loginO365Requried',
+        path: 'link/login-o365-requried',
         component: link_loginO365Required_component_1.LinkLoginO365Requried
     }];
     exports.routing = router_1.RouterModule.forChild(routes);
@@ -43729,7 +43729,7 @@ $__System.registerDynamic("dist/link/link.createLocal.component.js", ["npm:@angu
     }();
     LinkCreateLocal = __decorate([core_1.Component({
         moduleId: module.id,
-        selector: 'link-local',
+        selector: 'link/create-local',
         template: '<h4>Link to your local account - Create new local account</h4><hr><section id="createLocalAccount"><form class="form-horizontal" method="post" role="form" novalidate><div class="validation-summary-errors text-danger" [hidden]="serverCheckValid"><ul><li *ngFor="let error of errorMsgs">{{error}}</li></ul></div><div class="form-group"><label class="col-md-2 control-label" for="Email">Email</label><div class="col-md-10"><input class="form-control" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." disabled id="Email" name="Email" type="text" value="{{userInfo.email}}"> <input id="Email" name="Email" type="hidden" value="{{userInfo.email}}"> <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span></div></div><div class="form-group"><label class="col-md-2 control-label" for="FirstName">First name</label><div class="col-md-10"><input class="form-control" disabled id="FirstName" name="FirstName" type="text" value="{{userInfo.firstName}}"> <input id="FirstName" name="FirstName" type="hidden" value="{{userInfo.firstName}}"> <span class="field-validation-valid text-danger" data-valmsg-for="FirstName" data-valmsg-replace="true"></span></div></div><div class="form-group"><label class="col-md-2 control-label" for="LastName">Last name</label><div class="col-md-10"><input class="form-control" disabled id="LastName" name="LastName" type="text" value="{{userInfo.lastName}}"> <input id="LastName" name="LastName" type="hidden" value="{{userInfo.lastName}}"> <span class="field-validation-valid text-danger" data-valmsg-for="LastName" data-valmsg-replace="true"></span></div></div><div class="form-group"><label class="col-md-2 control-label" for="FavoriteColor">Favorite color</label><div class="col-md-10"><select name="FavoriteColor" id="FavoriteColor" class="form-control valid" aria-invalid="false" [(ngModel)]="localModel.favoriteColor"><option *ngFor="let color of favoriteColors" [value]="color.Value">{{color.DisplayName}}</option></select></div></div><div class="form-group"><label class="col-md-2 control-label" for="Password">Password</label><div class="col-md-10"><input class="form-control validate-equalTo-blur input-validation-error" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="Password" name="Password" type="password" aria-required="true" aria-describedby="Password-error" aria-invalid="true" [(ngModel)]="localModel.password"> <span [hidden]="checkPwdRequired" class="text-danger field-validation-error" data-valmsg-for="Password" data-valmsg-replace="true"><span id="Password-error">The Password field is required.</span></span></div></div><div class="form-group"><label class="col-md-2 control-label" for="ConfirmPassword">Confirm password</label><div class="col-md-10"><input class="form-control input-validation-error" data-val="true" data-val-equalto="The password and confirmation password do not match." data-val-equalto-other="*.Password" id="ConfirmPassword" name="ConfirmPassword" [(ngModel)]="localModel.confirmPassword" type="password" aria-describedby="ConfirmPassword-error" aria-invalid="true"> <span [hidden]="checkConfirmPwdRequried" class="text-danger field-validation-error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"><span id="ConfirmPassword-error">The ConfirmPassword field is required.</span></span> <span [hidden]="checkPwdEqualConfirmPwd" class="text-danger field-validation-error" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"><span id="ConfirmPassword-equal-error">The password and confirmation password do not match.</span></span></div></div><div class="form-group"><div class="col-md-offset-2 col-md-10"><input type="submit" value="Create and Link" class="btn btn-primary" (click)="createLocal()"></div></div></form></section>'
     }), __param(0, core_1.Inject('linkService')), __param(2, core_1.Inject('me')), __param(3, core_1.Inject('user')), __metadata("design:paramtypes", [link_service_1.LinkService, router_1.Router, Object, Object])], LinkCreateLocal);
     exports.LinkCreateLocal = LinkCreateLocal;
@@ -43827,7 +43827,7 @@ $__System.registerDynamic("dist/link/link.loginLocal.component.js", ["npm:@angul
     }();
     LinkLoginLocal = __decorate([core_1.Component({
         moduleId: module.id,
-        selector: 'link-loginLocal',
+        selector: 'link/login-local',
         template: '<h4>Link to your local account - Log in with your local account:</h4><section id="loginForm"><form class="form-horizontal" method="post" role="form" novalidate><div class="validation-summary-errors text-danger" [hidden]="serverCheckValid"><ul><li *ngFor="let error of errorMsgs">{{error}}</li></ul></div><div class="form-group"><label class="col-md-2 control-label" for="Email">Email</label><div class="col-md-10"><input class="form-control" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Email" name="Email" type="text" [(ngModel)]="loginLocalModel.email"> <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true" [hidden]="checkEmailRequried"><span id="Email-error">The Email field is required.</span></span></div></div><div class="form-group"><label class="col-md-2 control-label" for="Password">Password</label><div class="col-md-10"><input class="form-control" data-val="true" data-val-required="The Password field is required." id="Password" name="Password" type="password" [(ngModel)]="loginLocalModel.password"> <span class="field-validation-valid text-danger" data-valmsg-for="Password" data-valmsg-replace="true" [hidden]="checkPwdRequired"><span id="Password-error">The Password field is required.</span></span></div></div><div class="form-group"><div class="col-md-offset-2 col-md-10"><input type="submit" value="Log in and Link" class="btn btn-default" (click)="loginLocal()"></div></div></form></section>'
     }), __param(0, core_1.Inject('linkService')), __param(2, core_1.Inject('me')), __param(3, core_1.Inject('user')), __metadata("design:paramtypes", [link_service_1.LinkService, router_1.Router, Object, Object])], LinkLoginLocal);
     exports.LinkLoginLocal = LinkLoginLocal;
@@ -44041,7 +44041,7 @@ $__System.registerDynamic("dist/link/link.loginO365Required.component.js", ["npm
     }();
     LinkLoginO365Requried = __decorate([core_1.Component({
         moduleId: module.id,
-        selector: 'link-loginO365Requried',
+        selector: 'link/login-o365-requried',
         template: '<h2>Login to Office 365 is required</h2><p>You were redirected to this page for one of the following reasons:</p><p></p><ul><li>The app could not find your token.</li><li>Your token has expired.</li></ul><p></p><p>To continue, please click the button below to login with your Office 365 account.</p><p><a class="btn btn-primary" (click)="reLoginO365()">Login with Office 365 account</a></p>'
     }), __param(0, core_1.Inject('linkService')), __param(2, core_1.Inject('me')), __param(3, core_1.Inject('user')), __metadata("design:paramtypes", [link_service_1.LinkService, router_1.Router, Object, Object])], LinkLoginO365Requried);
     exports.LinkLoginO365Requried = LinkLoginO365Requried;

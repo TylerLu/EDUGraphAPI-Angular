@@ -16,7 +16,7 @@ import { UrlHelper } from '../utils/urlHelper';
 
 @Component({
     moduleId: module.id,
-    selector: 'link-loginO365Requried',
+    selector: '',
     templateUrl: 'link.loginO365Required.component.template.html'
 })
 

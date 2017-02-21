@@ -21,7 +21,7 @@
                     <input type="button" [disabled]="localAccountExisted" value="Continue with new Local Account" class="btn btn-primary" (click)="createLocalAccount(this)" />
                     &nbsp;&nbsp;
                     <a *ngIf="localAccountExisted" class="btn btn-primary" (click)="linkExistingLocalAccount()">Link with existing Local Account</a>
-                    <a *ngIf="!localAccountExisted" class="btn btn-primary" href="/link-loginLocal">Link with existing Local Account</a>
+                    <a *ngIf="!localAccountExisted" class="btn btn-primary" href="/link/login-local">Link with existing Local Account</a>
                 </p>
             </div>
         </div>

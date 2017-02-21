@@ -163,11 +163,17 @@ export class appAuth {
             res.redirect('/o365login/aadgraph');
         });
 
-        app.get('/o365login/aadgraph', passport.authenticate('azuread-openidconnect', {
-            resourceURL: Constants.AADGraphResource,
-            customState: 'my_state',
-            failureRedirect: '/'
-        }));
+
+        app.get('/o365login/aadgraph', function (req, res, next) {
+            var email = req.cookies[Constants.EmailCookie];
+            passport.authenticate('azuread-openidconnect', {
+                resourceURL: Constants.AADGraphResource,
+                customState: 'my_state',
+                failureRedirect: '/',
+                login_hint: email
+            })(req, res, next);
+
+        });
 
         app.get('/o365login/windowsgraph', passport.authenticate('azuread-openidconnect', {
             resourceURL: Constants.MSGraphResource,

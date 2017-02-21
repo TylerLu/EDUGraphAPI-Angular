@@ -14,15 +14,15 @@ const routes: Routes = [
         component: Link
     },
     {
-        path: 'link-local',
+        path: 'link/create-local',
         component: LinkCreateLocal
     },
     {
-        path: 'link-loginLocal',
+        path: 'link/login-local',
         component: LinkLoginLocal
     },
     {
-        path: 'link-loginO365Requried',
+        path: 'link/login-o365-requried',
         component: LinkLoginO365Requried
     }
 ];

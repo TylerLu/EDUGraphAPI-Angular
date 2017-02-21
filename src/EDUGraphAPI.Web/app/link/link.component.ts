@@ -12,7 +12,7 @@ import { UserService } from "../services/userService";
 
 @Component({
     moduleId: module.id,
-    selector: 'linkPage',
+    selector: '',
     templateUrl: 'link.component.template.html',
 })
 
@@ -67,7 +67,7 @@ export class Link implements OnInit {
 
     createLocalAccount() {
         console.log('createLocalAccount');
-        this.router.navigate(['link-local']);
+        this.router.navigate(['link/create-local']);
     }
 
     linkExistingLocalAccount() {

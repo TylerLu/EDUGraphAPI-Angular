@@ -14,7 +14,7 @@ import { UserService } from "../services/userService";
 
 @Component({
     moduleId: module.id,
-    selector: 'link-local',
+    selector: '',
     templateUrl: 'link.createLocal.component.template.html'
 })
 

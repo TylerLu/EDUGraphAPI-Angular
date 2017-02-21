@@ -47,11 +47,16 @@ export class Constants {
     // The url you need to go to destroy the session with AAD
     public static readonly DestroySessionUrl: string = Constants.Authority + 'oauth2/logout?post_logout_redirect_uri=';
 
+    public static readonly  UsernameCookie = "O365CookieUsername";
+    public static readonly  EmailCookie = "O365CookieEmail";
+
+
     //SQL config 
     public static readonly SQLServerDatabase: string = process.env.SQLServerDatabase as string;
     public static readonly SQLServerUsername: string = process.env.SQLServerUsername as string;
     public static readonly SQLServerPassword: string = process.env.SQLServerPassword as string;
     public static readonly SQLServerHost: string = process.env.SQLServerHost as string;
+
 }
 
 export class O365ProductLicenses {
