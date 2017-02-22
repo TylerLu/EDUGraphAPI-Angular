@@ -27,6 +27,7 @@ export class MyClassesComponent implements OnInit {
     school: SchoolModel;
     showNoData: boolean = false;
     legendText: string = "";
+    noDataText: string = "";
     me: UserModel;
 
 
@@ -46,8 +47,10 @@ export class MyClassesComponent implements OnInit {
                     this.me = MapUtils.deserialize(UserModel, result);
                     if (this.me.ObjectType == "Student") {
                         this.legendText = "Not Enrolled";
+                        this.noDataText = "Not enrolled in any classes.";
                     } else {
                         this.legendText = "Not Teaching";
+                        this.noDataText = "Not teaching any classes.";
                     }
                 });
             this.schoolService
@@ -68,7 +71,6 @@ export class MyClassesComponent implements OnInit {
                     if (this.myClassesArray.length == 0) {
                         this.showNoData = true;
                     }
-
                     this.myClassesArray.forEach((obj) => {
                         obj.IsMyClasses = true;
                         this.schoolService

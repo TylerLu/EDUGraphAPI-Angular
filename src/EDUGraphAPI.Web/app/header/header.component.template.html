@@ -1,5 +1,5 @@
 ﻿<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license. -->
-<!-- See LICENSE in the project root for license information --> 
+<!-- See LICENSE in the project root for license information -->
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -18,7 +18,7 @@
                 <li [hidden]="!isAdmin"><a href="/admin">Admin</a></li>
             </ul>
             <form class="navbar-right" id="logoutForm" method="post">
-                <div class="userinfo">
+                <div class="userinfo" *ngIf="userRole">
                     <a href="javascript:void(0);" id="userinfolink" (click)="showContextMenu(this)">Logged in as: {{userRole}}. Hello {{fullName}}!</a>
                     <span class="caret" id="caret" [class.transformcaret]="ifShowContextMenu"></span>
                 </div>
