@@ -217,10 +217,28 @@
       },
       {
         "title": "Router",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/app/app.routing.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/app.routing.ts"
       }
     ]
   },
+  {
+    "component": "O365login",
+    "links": [
+      {
+        "title": "Component",
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/O365login/O365login.component.ts"
+      },
+      {
+        "title": "Template",
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/O365login/O365login.component.template.html"
+      },
+      {
+        "title": "Router",
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/app.routing.ts"
+      }
+    ]
+  },
+
   {
     "component": "register",
     "links": [
