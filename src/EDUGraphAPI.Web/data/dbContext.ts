@@ -91,9 +91,12 @@ export class DbContext {
     }
 
     private init() {
-        this.sequelize = new Sequelize("", "", "", {
-            dialect: 'sqlite',
-            storage: Constants.SQLiteDB
+        this.sequelize = new Sequelize(Constants.SQLServerDatabase, Constants.SQLServerUsername, Constants.SQLServerPassword, {
+            dialect: 'mssql',
+            host: Constants.SQLServerHost,
+            dialectOptions: {
+                encrypt: true
+            }
         });
 
         this.User = this.sequelize.define<UserInstance, UserAttributes>('User',

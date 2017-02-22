@@ -55,7 +55,6 @@ export class DemoHelper implements OnInit {
             .subscribe(res => {
                 this.DemoPage = res;
                 this.HasDemo = this.DemoPage != {};
-                console.log(this.DemoPage);
             });
     }
 }
