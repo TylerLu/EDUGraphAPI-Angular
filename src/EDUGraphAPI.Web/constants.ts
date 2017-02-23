@@ -52,10 +52,7 @@ export class Constants {
 
 
     //SQL config 
-    public static readonly SQLServerDatabase: string = process.env.SQLServerDatabase as string;
-    public static readonly SQLServerUsername: string = process.env.SQLServerUsername as string;
-    public static readonly SQLServerPassword: string = process.env.SQLServerPassword as string;
-    public static readonly SQLServerHost: string = process.env.SQLServerHost as string;
+    public static readonly SQLiteDB: string = process.env.SQLiteDB as string;
 
 }
 
