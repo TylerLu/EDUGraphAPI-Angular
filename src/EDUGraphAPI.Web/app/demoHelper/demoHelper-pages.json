@@ -143,7 +143,7 @@
       },
       {
         "title": "SeatingArrangement",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/school/seatingarrangement.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/school/seatingarrangements.ts"
       },
       {
         "title": "Module",
@@ -209,7 +209,7 @@
       },
       {
         "title": "UserInfo",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/commoon/userInfo.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/common/userInfo.ts"
       },
       {
         "title": "Module",
@@ -264,7 +264,7 @@
       },
       {
         "title": "Router",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/app/app.routing.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/app.routing.ts"
       }
     ]
   },
@@ -343,7 +343,7 @@
       },
       {
         "title": "UserInfo",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/commoon/userInfo.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/common/userInfo.ts"
       },
       {
         "title": "Module",
@@ -380,7 +380,7 @@
       },
       {
         "title": "UserInfo",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/commoon/userInfo.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/common/userInfo.ts"
       },
       {
         "title": "LoginLocalModel",
@@ -421,7 +421,7 @@
       },
       {
         "title": "UserInfo",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/commoon/userInfo.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/common/userInfo.ts"
       },
       {
         "title": "CreateLocalModel",
@@ -429,7 +429,7 @@
       },
       {
         "title": "ColorEntity",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/commoon/colorEntity.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/common/colorEntity.ts"
       },
       {
         "title": "Module",
@@ -466,7 +466,7 @@
       },
       {
         "title": "UserInfo",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/commoon/userInfo.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/models/common/userInfo.ts"
       },
       {
         "title": "Module",
@@ -503,7 +503,7 @@
       },
       {
         "title": "Router",
-        "url": "/blob/master/src/EDUGraphAPI.Web/app/app/app.routing.ts"
+        "url": "/blob/master/src/EDUGraphAPI.Web/app/app.routing.ts"
       }
     ]
   }

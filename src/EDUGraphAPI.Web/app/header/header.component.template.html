@@ -18,9 +18,9 @@
                 <li [hidden]="!isAdmin"><a href="/admin">Admin</a></li>
             </ul>
             <form class="navbar-right" id="logoutForm" method="post">
-                <div class="userinfo" *ngIf="userRole">
-                    <a href="javascript:void(0);" id="userinfolink" (click)="showContextMenu(this)">Logged in as: {{userRole}}. Hello {{fullName}}!</a>
-                    <span class="caret" id="caret" [class.transformcaret]="ifShowContextMenu"></span>
+                <div class="userinfo">
+                    <a href="javascript:void(0);" id="userinfolink" (click)="showContextMenu(this)"><span  *ngIf="userRole"> Logged in as: {{userRole}}.</span> <span *ngIf="fullName">Hello {{fullName}}!</span></a>
+                    <span *ngIf="fullName" class="caret" id="caret" [class.transformcaret]="ifShowContextMenu"></span>
                 </div>
                 <div class="" id="userinfoContainer" [hidden]="!ifShowContextMenu">
                     <div class="popuserinfo">
