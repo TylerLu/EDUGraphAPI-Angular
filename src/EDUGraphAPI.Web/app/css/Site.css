@@ -528,3 +528,17 @@ top: -10px;cursor:pointer;}
 .register .form-group .control-label { padding-top: 7px; margin-bottom: 0; text-align: right;}
 .linkcontrol select{margin-right:6px;}
 .table > tbody + tbody{border-top:none;}
+
+
+
+#lstproducts img, .deskicon img, #studentsTable img, .userinfo img, .aboutme img {
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border: 1px solid #e4e4e4;
+    max-width: 50px;
+    height: auto;
+}
+.userinfo img, .aboutme img {
+    max-width: 36px;
+}

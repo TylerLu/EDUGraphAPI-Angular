@@ -64,7 +64,7 @@ router.post('/consented', function (req, res, next) {
 
     var idToken = jwt.decode(req.body.id_token);
     var tenantId = idToken.tid;
-    var redirectUrl = '/admin/consent?message=' + encodeURIComponent('Admin consented successfully!');
+    var redirectUrl = '/admin/consent?message=' + encodeURIComponent('Admin Consent has been applied.');
 
     tenantService.getTenant(tenantId)
         .then(tenant => {

@@ -77,7 +77,7 @@ export class AdminComponent implements OnInit {
         var idToken = UrlHelper.getQueryValue('id_token')
         if (idToken != null && idToken.length > 0) {
             this.adminService.setIsAdminConsented().then(() => {
-                this.message = 'Admin consented successfully!';
+                this.message = 'Admin Consent has been applied.';
             }).catch((error) => {
                 this.error = error;
             });

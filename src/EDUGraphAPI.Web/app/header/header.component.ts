@@ -12,6 +12,7 @@ import { Cookie } from "../services/cookieService";
 import { SchoolService } from '../school/school.service';
 import { UserModel } from '../school/user';
 import { MapUtils } from '../utils/jsonHelper';
+import { UserPhotoService } from '../services/userPhotoService';
 
 @Component({
     moduleId: module.id,
@@ -28,11 +29,14 @@ export class Header implements OnInit {
     isAdmin: boolean;
     userRole: string = "";
     me: UserModel;
+    userPhoto: string = "app/images/header-default.jpg";
+
 
     constructor(
         private router: Router,
         @Inject('me') private meService: MeService,
         @Inject('auth') private authService: AuthHelper,
+        @Inject('userPhotoService') private userPhotoService: UserPhotoService,
         @Inject('schoolService') private schoolService: SchoolService) {
     }
 
@@ -111,6 +115,10 @@ export class Header implements OnInit {
                     ? (user.firstName + " " + user.lastName)
                     : user.email
                 this.isAdmin = this.isUserAdmin(user);
+                if (user.o365UserId) {
+                    this.userPhotoService.getUserPhotoUrl(user.o365UserId)
+                        .then(url => this.userPhoto = url);
+                }
                 if (this.isAdmin)
                     this.userRole = "Admin";
                 else {

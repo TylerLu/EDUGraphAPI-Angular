@@ -12,6 +12,8 @@ import { MapUtils } from '../utils/jsonHelper';
 import { Constants } from '../constants';
 import { SchoolService } from '../school/school.service';
 import { UserModel } from '../school/user';
+import { UserPhotoService } from '../services/userPhotoService';
+
 
 @Component({
     moduleId: module.id,
@@ -26,11 +28,13 @@ export class AboutMe implements OnInit {
     me: UserModel;
     userRole: string = "";
     isAdmin: boolean = false;
+    userPhoto: string = "app/images/header-default.jpg";
 
     constructor(
         @Inject('aboutMeService') private aboutMeservice,
         private route: ActivatedRoute,
         private router: Router,
+        @Inject('userPhotoService') private userPhotoService: UserPhotoService,
         @Inject('schoolService') private schoolService: SchoolService
     ) {
         this.model.FavoriteColors = Constants.FavoriteColors;
@@ -55,6 +59,12 @@ export class AboutMe implements OnInit {
                         });
                 } else {
                     this.userRole = "Admin";
+                }
+
+                //user.o365UserId
+                if (user.o365UserId) {
+                    this.userPhotoService.getUserPhotoUrl(user.o365UserId)
+                        .then(url => this.userPhoto = url);
                 }
                 
             });

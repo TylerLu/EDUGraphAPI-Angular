@@ -2,8 +2,9 @@
 <!-- See LICENSE in the project root for license information --> 
 <div class="container ">
     <h2>About Me</h2>
-    <div class="margin-top-12 margin-btm-12">
+    <div class="margin-top-12 margin-btm-12 aboutme">
         <b>Username:</b><br> {{model.UserName}}
+        <img  src="{{userPhoto}}" >
     </div>
     <div class="margin-top-12 margin-btm-12" *ngIf="userRole">
         <b>Logged in as:</b><br> {{userRole}}
