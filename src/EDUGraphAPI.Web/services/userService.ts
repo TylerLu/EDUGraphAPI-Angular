@@ -8,7 +8,9 @@ import * as bcrypt from 'bcryptjs';
 import { DbContext, UserInstance } from '../data/dbContext';
 import { TokenCacheService } from '../services/TokenCacheService';
 import { MSGraphClient } from "../services/msGraphClient";
+import { AuthenticationHelper } from '../utils/authenticationHelper';
 import { Roles } from '../constants';
+import { Constants } from '../constants';
 
 export class UserService {
 
@@ -158,19 +160,26 @@ export class UserService {
             });
     }
 
-    public getLinkedUsers(): Promise<UserInstance[]> {
-        return this.dbContext.User.findAll({
-            where: {
-                $and: [{
-                    o365UserId: { $ne: null },
-                    o365Email: { $ne: null }
-                },
-                {
-                    o365UserId: { $ne: '' },
-                    o365Email: { $ne: '' }
-                }]
-            }
-        });
+    public getLinkedUsers(tenantId: string): Promise<UserInstance[]> {
+        return this.dbContext.Organization.findOne({ where: { tenantId: tenantId } })
+            .then(org => {
+                return org["id"];
+            }).then(orgId => {
+                return this.dbContext.User.findAll({
+                    where: {
+                        $and: [
+                            {
+                                o365UserId: { $ne: null },
+                                o365Email: { $ne: null },
+                                OrganizationId: { $eq: orgId }
+                            },
+                            {
+                                o365UserId: { $ne: '' },
+                                o365Email: { $ne: '' }
+                            }]
+                    }
+                });
+            });
     }
 
     public updateFavoriteColor(userId: string, color: string): Promise<UserInstance> {
@@ -200,18 +209,9 @@ export class UserService {
     }
 
     public getO365User(o365UserId: string, tenantId: string): Promise<any> {
-        let tokenService = new TokenCacheService();
-        return tokenService.getTokenCacheByOID(o365UserId)
-            .then((cach) => {
-                if (cach != null && cach.msgAccessToken != null) {
-                    return cach.msgAccessToken;
-                }
-                else {
-                    throw ("Access Token Is Null")
-                }
-            })
+        return AuthenticationHelper.getAccessToken(o365UserId, Constants.MSGraphResource)
             .then((accessToken) => {
-                let msgraphClient: MSGraphClient = new MSGraphClient(accessToken);
+                let msgraphClient: MSGraphClient = new MSGraphClient(accessToken.value);
                 return msgraphClient.getO365User(tenantId)
             })
             .then((o365UserInfo) => {
@@ -264,7 +264,6 @@ export class UserService {
             })
     }
 
-
     public linkCreateLocalUser(o365User: any, favoriteColor: string): Promise<any> {
         let localUserId: string;
         return this.creatUser(o365User.upn, null, null, null, favoriteColor).
@@ -307,6 +306,7 @@ export class UserService {
                 return "";
             });
     }
+
 
     private updateUser(userId: string, user: any): Promise<any> {
         return this.getUserById(userId).then(u => {

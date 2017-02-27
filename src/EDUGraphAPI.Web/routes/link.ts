@@ -8,6 +8,7 @@ import { UserService } from '../services/userService';
 import { Constants } from '../constants';
 import { TokenCacheService } from '../services/TokenCacheService';
 import { TokenUtils } from '../utils/tokenUtils'
+import { AuthenticationHelper } from '../utils/authenticationHelper'
 
 var router = express.Router();
 var userService = new UserService();
@@ -62,19 +63,10 @@ router.post('/O365User', function (req, res) {
     localUser.oid = idToken.oid;
     localUser.tid = tentantId;
 
-    TokenUtils.getTokenByCode(code, tentantId, Constants.MSGraphResource,'api/link/O365User')
-        .then(msToken => {
-            return tokenService.updateMSGToken(idToken.oid, msToken.access_token, msToken.refresh_token, msToken.expires_on * 1000);
-        })
-        .then(tokenObject => {
-            accessToken = tokenObject.msgAccessToken;
-            return TokenUtils.getTokenByRefreshToken(tokenObject.msgRefreshgToken, Constants.AADGraphResource)
-        })
-        .then(aadToken => {
-            return tokenService.updateAADGToken(idToken.oid, aadToken.access_token, aadToken.refresh_token, aadToken.expires_on * 1000);
-        })
-        .then(tokenObject => {
-            return userService.linkO365User(accessToken, idToken.oid, idToken.upn, localUser.id, tentantId)
+    //
+    AuthenticationHelper.getAccessTokenByCode(req.user.oid, code, Constants.MSGraphResource, 'api/link/O365User')
+        .then(authResult => {
+            return userService.linkO365User(authResult.accessToken, idToken.oid, idToken.upn, localUser.id, tentantId)
         })
         .then(() => {
             res.redirect(redirectUrl);

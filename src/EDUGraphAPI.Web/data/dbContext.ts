@@ -61,18 +61,13 @@ export interface ClassroomSeatingArrangementModel extends Sequelize.Model<Classr
 
 
 export interface TokenCacheAttributes {
-    oid: string;
-    msgAccessToken?: string;
-    msgRefreshgToken?: string;
-    msgExpires?: number;
-    aadgAccessToken?: string;
-    aadgRefreshgToken?: string;
-    aadgExpires?: number;
+    userId: string;
+    refreshToken: string;
+    accessTokens: string;
 }
 export interface TokenCacheInstance extends Sequelize.Instance<TokenCacheAttributes>, TokenCacheAttributes {
 }
 export interface TokenCacheModel extends Sequelize.Model<TokenCacheInstance, TokenCacheAttributes> { }
-
 
 export class DbContext {
     public sequelize: Sequelize.Sequelize;
@@ -154,13 +149,9 @@ export class DbContext {
 
         this.TokenCache = this.sequelize.define<TokenCacheInstance, TokenCacheAttributes>('TokenCache',
             {
-                oid: Sequelize.STRING,
-                msgAccessToken: Sequelize.TEXT,
-                msgRefreshgToken: Sequelize.TEXT,
-                msgExpires: { type: Sequelize.BIGINT, allowNull: true },
-                aadgAccessToken: Sequelize.TEXT,
-                aadgRefreshgToken: Sequelize.TEXT,
-                aadgExpires: { type: Sequelize.BIGINT, allowNull: true },
+                userId: Sequelize.STRING,
+                refreshToken: Sequelize.TEXT,
+                accessTokens: Sequelize.TEXT,
             },
             {
                 timestamps: false,

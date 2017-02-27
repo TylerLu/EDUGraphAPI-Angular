@@ -49,7 +49,7 @@ export class AuthHelper {
         } else {
             var token = this.getTokenFromServer("/api/me/accessToken?resource=" + encodeURIComponent(siteURL) + "&t=" + new Date().getTime());
             token.subscribe((result) => {
-                Cookie.set(tokenName, result.accessToken, new Date(result.expires - 5 * 60 * 1000));
+                Cookie.set(tokenName, result.value, new Date(new Date(result.expiresOn).valueOf() - 5 * 60 * 1000));
             });
             return token.map(result => result.accessToken);
         }

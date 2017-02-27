@@ -9,7 +9,7 @@ var router = express.Router();
 var userService = new UserService();
 
 router.get('/linked', function (req, res, next) {
-    userService.getLinkedUsers()
+    userService.getLinkedUsers(req.user.tid)
         .then(users => res.json(users))
         .catch(error => res.json(500, { error: error }));
 });

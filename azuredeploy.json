@@ -9,19 +9,6 @@
         "description": "The name of the web client app that you wish to create."
       }
     },
-    "sqlAdministratorLoginUsername": {
-      "type": "string",
-      "defaultValue": "EDUGraphAPI",
-      "metadata": {
-        "description": "The database admin username that you wish to create."
-      }
-    },
-    "sqlAdministratorLoginPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for database admin user that you wish to use."
-      }
-    },
     "hostingPlanName": {
       "type": "string",
       "defaultValue": "EDUGraphAPI",
@@ -75,20 +62,17 @@
   "variables": {
     "location": "[resourceGroup().location]",
     "lowerSiteName": "[toLower(parameters('siteName'))]",
-    "sqlServerName": "[concat(variables('lowerSiteName'), '-dbserver')]",
-    "sqlDatabaseName": "EDUGraphAPI",
-    "webSiteName": "[variables('lowerSiteName')]",
-    "apiSiteName": "[concat(variables('lowerSiteName'), '-api')]"
+    "webSiteName": "[variables('lowerSiteName')]"
   },
   "resources": [
     {
       "type": "Microsoft.Web/serverfarms",
       "sku": {
-        "name": "B1",
-        "tier": "Basic",
-        "size": "B1",
-        "family": "B",
-        "capacity": 1
+        "name": "F1",
+        "tier": "Free",
+        "size": "F1",
+        "family": "F",
+        "capacity": 0
       },
       "name": "[parameters('hostingPlanName')]",
       "apiVersion": "2015-08-01",
@@ -97,49 +81,6 @@
         "name": "[parameters('hostingPlanName')]",
         "numberOfWorkers": 1
       }
-    },
-    {
-      "type": "Microsoft.Sql/servers",
-      "kind": "v12.0",
-      "name": "[variables('sqlServerName')]",
-      "apiVersion": "2014-04-01-preview",
-      "location": "[variables('location')]",
-      "properties": {
-        "administratorLogin": "[parameters('sqlAdministratorLoginUsername')]",
-        "administratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
-        "version": "12.0"
-      },
-      "resources": [
-        {
-          "type": "databases",
-          "kind": "v12.0,user",
-          "name": "[variables('sqlDatabaseName')]",
-          "apiVersion": "2014-04-01-preview",
-          "location": "[variables('location')]",
-          "properties": {
-            "edition": "Basic",
-            "maxSizeBytes": "2147483648"
-          },
-          "resources": [ ],
-          "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
-          ]
-        },
-        {
-          "type": "firewallRules",
-          "kind": "v12.0",
-          "name": "AllowAllInternalIPs",
-          "apiVersion": "2014-04-01-preview",
-          "location": "[variables('location')]",
-          "properties": {
-            "startIpAddress": "0.0.0.0",
-            "endIpAddress": "0.0.0.0"
-          },
-          "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
-          ]
-        }
-      ]
     },
     {
       "type": "Microsoft.Web/sites",
@@ -164,27 +105,9 @@
             "clientId": "[parameters('clientId')]",
             "clientSecret": "[parameters('clientSecret')]",
             "sourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]",
-            "SQLServerHost": "[reference(concat('Microsoft.Sql/servers/', variables('sqlServerName'))).fullyQualifiedDomainName]",
-            "SQLServerUsername": "[parameters('sqlAdministratorLoginUsername')]",
-            "SQLServerPassword": "[parameters('sqlAdministratorLoginPassword')]",
-            "SQLServerDatabase": "[variables('sqlDatabaseName')]",
+            "SQLiteDB": "database.sqlite",
             "BingMapKey": "[parameters('bingMapKey')]",
             "command": "src\\EDUGraphAPI.Web\\deploy.cmd"
-          }
-        },
-        {
-          "apiVersion": "2015-08-01",
-          "type": "config",
-          "name": "connectionstrings",
-          "dependsOn": [
-            "[concat('Microsoft.Web/sites/', variables('webSiteName'))]",
-            "[resourceId('Microsoft.Sql/servers/', variables('sqlServerName'))]"
-          ],
-          "properties": {
-            "DefaultConnection": {
-              "value": "[concat('Server=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerName'))).fullyQualifiedDomainName, ',1433;Database=', variables('sqlDatabaseName'), ';User Id=', parameters('sqlAdministratorLoginUsername'), '@', variables('sqlServerName'), ';Password=', parameters('sqlAdministratorLoginPassword'), ';')]",
-              "type": "SQLAzure"
-            }
           }
         },
         {
@@ -193,8 +116,7 @@
           "type": "sourcecontrols",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]",
-            "[resourceId('Microsoft.Web/Sites/config', variables('webSiteName'), 'appsettings')]",
-            "[resourceId('Microsoft.Web/Sites/config', variables('webSiteName'), 'connectionstrings')]"
+            "[resourceId('Microsoft.Web/Sites/config', variables('webSiteName'), 'appsettings')]"
           ],
           "properties": {
             "RepoUrl": "[parameters('sourceCodeRepositoryURL')]",

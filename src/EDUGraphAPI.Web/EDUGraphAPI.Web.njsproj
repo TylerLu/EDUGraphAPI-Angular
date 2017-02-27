@@ -239,6 +239,7 @@ SQLiteDB=database.sqlite</Environment>
     <TypeScriptCompile Include="services\schoolService.ts" />
     <TypeScriptCompile Include="services\tokenCacheService.ts" />
     <TypeScriptCompile Include="services\userService.ts" />
+    <TypeScriptCompile Include="utils\authenticationHelper.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />

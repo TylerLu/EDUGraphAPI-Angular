@@ -2,17 +2,18 @@
 * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 * See LICENSE in the project root for license information.
 */
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ViewEncapsulation } from '@angular/core';
 import { Response } from '@angular/http';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { RegisterModel } from './register'
 import { UserService } from "../services/userService";
 
 @Component({
+    encapsulation: ViewEncapsulation.None,
     moduleId: module.id,
     selector: '',
     templateUrl: 'register.component.template.html',
-    styles: []
+    styles: [`.navbar-collapse .nav.navbar-nav, .userinfo{display: none;}`]
 })
 
 export class Register implements OnInit {

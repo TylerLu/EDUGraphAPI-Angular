@@ -85,16 +85,17 @@ export class appAuth {
             profile.authType = 'O365';
             req.res.cookie('authType', 'O365');
 
-            if (params.resource.toLowerCase() == Constants.MSGraphResource.toLowerCase()) {
-                tokenCache.updateMSGToken(profile.oid, access_token, refresh_token, params.expires_on * 1000);
-            }
-            if (params.resource.toLowerCase() == Constants.AADGraphResource.toLowerCase()) {
-                tokenCache.updateAADGToken(profile.oid, access_token, refresh_token, params.expires_on * 1000);
-            }
-            // asynchronous verification, for effect...
-            process.nextTick(function () {
-                return done(null, profile);
+            var tokenCacheService = new TokenCacheService();
+            tokenCacheService.createOrUpdate(profile.oid, Constants.AADGraphResource, {
+                refreshToken: refresh_token,
+                accessToken: access_token,
+                expiresOn: new Date(parseInt(params.expires_on) * 1000)
+            }).then(item => {
+                done(null, profile);
             });
+            //process.nextTick(function () {
+            //    return done(null, profile);
+            //});
         });
     }
 
@@ -158,13 +159,7 @@ export class appAuth {
     // it will call `passport.authenticate` to ask for user to log in.
     //-----------------------------------------------------------------------------
     public initAuthRoute(app: any) {
-        app.get('/o365login', function (req, res) {
-            req.session.authtokentype = 'aadgraph';
-            res.redirect('/o365login/aadgraph');
-        });
-
-
-        app.get('/o365login/aadgraph', function (req, res, next) {
+        app.get('/o365login', function (req, res, next) {
             var email = req.cookies[Constants.EmailCookie];
             passport.authenticate('azuread-openidconnect', {
                 resourceURL: Constants.AADGraphResource,
@@ -172,14 +167,7 @@ export class appAuth {
                 failureRedirect: '/',
                 login_hint: email
             })(req, res, next);
-
         });
-
-        app.get('/o365login/windowsgraph', passport.authenticate('azuread-openidconnect', {
-            resourceURL: Constants.MSGraphResource,
-            customState: 'my_state',
-            failureRedirect: '/'
-        }));
 
         // 'GET returnURL'
         // `passport.authenticate` will try to authenticate the content returned in
@@ -194,13 +182,7 @@ export class appAuth {
         // body (such as authorization code). If authentication fails, user will be
         // redirected to '/' (home page); otherwise, it passes to the next middleware.
         app.post('/auth/openid/return', passport.authenticate('azuread-openidconnect', { failureRedirect: '/' }), function (req, res) {
-            if (req.session.authtokentype == 'aadgraph') {
-                req.session.authtokentype = null;
-                res.redirect('/o365login/windowsgraph');
-            }
-            else {
-                res.redirect('/');
-            }
+            res.redirect('/');
         });
 
         // 'logout' route, logout from passport, and destroy the session with AAD.
