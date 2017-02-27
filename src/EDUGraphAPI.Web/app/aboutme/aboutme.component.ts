@@ -28,7 +28,8 @@ export class AboutMe implements OnInit {
     me: UserModel;
     userRole: string = "";
     isAdmin: boolean = false;
-    userPhoto: string = "app/images/header-default.jpg";
+    userPhoto: string = "";
+    showFavorite: string = "";
 
     constructor(
         @Inject('aboutMeService') private aboutMeservice,
@@ -46,8 +47,12 @@ export class AboutMe implements OnInit {
             .subscribe((data) => {
                 let user: UserInfo = new UserInfo();
                 user.readFromJson(data);
-                this.model.UserName = (user.firstName + " " + user.lastName).trim();
+                if (user.firstName && user.lastName)
+                    this.model.UserName = (user.firstName + " " + user.lastName).trim();
+                else
+                    this.model.UserName = "";
                 this.model.MyFavoriteColor = user.favoriteColor || this.model.FavoriteColors[0].Value;
+                this.showFavorite = user.favoriteColor;
                 this.model.IsLinked = user.areAccountsLinked();
                 this.isAdmin = this.isUserAdmin(data);
                 if (!this.isAdmin) {

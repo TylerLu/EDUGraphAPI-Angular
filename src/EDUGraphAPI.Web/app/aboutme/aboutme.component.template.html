@@ -4,14 +4,14 @@
     <h2>About Me</h2>
     <div class="margin-top-12 margin-btm-12 aboutme">
         <b>Username:</b><br> {{model.UserName}}
-        <img  src="{{userPhoto}}" >
+        <img *ngIf="userPhoto"  src="{{userPhoto}}" >
     </div>
     <div class="margin-top-12 margin-btm-12" *ngIf="userRole">
         <b>Logged in as:</b><br> {{userRole}}
     </div>
     <div class="margin-btm-12">
         <b>Favorite Color:</b>
-        <div *ngIf="model.IsLinked" class="linkcontrol">
+        <div *ngIf="showFavorite" class="linkcontrol">
             <select name="favoritecolor" [(ngModel)]="model.MyFavoriteColor">
                 <option *ngFor="let color of model.FavoriteColors" [value]="color.Value">{{color.DisplayName}}</option>
             </select>

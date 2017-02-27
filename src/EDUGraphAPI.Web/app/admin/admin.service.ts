@@ -75,10 +75,8 @@ export class AdminService {
         });
     }
 
-    unconsent(): Promise<string> {
+    unconsent(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            const errorMessage: string = "Admin unconsent failed.";
-            const successMessage: string = "Admin unconsent succeeded!"
             this.getAADGraphToken()
                 .then((accessToken) => {
                     let headers = new Headers();
@@ -87,16 +85,16 @@ export class AdminService {
                     this.getServicePrincipal(authHeaders).then((servicePrincipal) => {
                         if (servicePrincipal) {
                             this.deleteServicePrincipal(authHeaders, servicePrincipal.objectId).then((result) => {
-                                this.cleanUpTanent().then(() => resolve(successMessage)).catch(() => reject(errorMessage));
-                            }).catch(() => reject(errorMessage));
+                                this.cleanUpTanent().then(() => resolve(true)).catch(() => reject(false));
+                            }).catch(() => reject(false));
                         }
                         else {
-                            this.cleanUpTanent().then(() => resolve(successMessage)).catch(() => reject(errorMessage));
+                            this.cleanUpTanent().then(() => resolve(true)).catch(() => reject(false));
                         }
                     })
-                        .catch(() => reject(errorMessage));
+                        .catch(() => reject(false));
                 })
-                .catch(() => reject(errorMessage));
+                .catch(() => reject(false));
         });
     }
 

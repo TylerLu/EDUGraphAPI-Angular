@@ -48,10 +48,13 @@ export class AdminComponent implements OnInit {
     }
 
     unconsent() {
-        this.adminService.unconsent().then((message) => {
-            this.message = message;
-        }).catch((message) => {
-            this.error = message;
+        const errorMessage: string = "Admin unconsent failed.";
+        this.adminService.unconsent().then((succeed) => {
+            if (succeed ) {
+                window.location.href = "/admin/consent";
+            }
+        }).catch((result) => {
+            this.error = errorMessage;
         });
     }
 

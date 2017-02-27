@@ -29,7 +29,7 @@ export class Header implements OnInit {
     isAdmin: boolean;
     userRole: string = "";
     me: UserModel;
-    userPhoto: string = "app/images/header-default.jpg";
+    userPhoto: string = "";
 
 
     constructor(

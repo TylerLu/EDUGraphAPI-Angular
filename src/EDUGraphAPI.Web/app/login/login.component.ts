@@ -11,6 +11,7 @@ import 'rxjs/add/operator/mergeMap';
 import { UserInfo } from '../models/common/userInfo'
 import { AuthHelper } from "../authHelper/authHelper";
 import { UserService } from "../services/userService";
+import { MeService } from "../services/meService";
 
 @Component({
     encapsulation: ViewEncapsulation.None,
@@ -59,6 +60,7 @@ export class Login implements OnInit {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         @Inject('auth') private auth: AuthHelper,
+        @Inject('me') private meService: MeService,
         @Inject('user') private userService: UserService) {
         this.model.email = "";
         this.model.password = "";
@@ -98,7 +100,16 @@ export class Login implements OnInit {
         this.userService.localLogin(this.model)
             .then((result) => {
                 if (result.status == "200") {
-                    window.location.href = "/schools";
+                    this.meService.getCurrentUser()
+                        .subscribe((user) => {
+                            if (user.areAccountsLinked) {
+                                window.location.href = "/schools";
+                            }
+                            else {
+                                window.location.href = "/link";
+                            }
+                        });
+                   
                 } else {
                     this.showLoginFailed = true;
                 }
