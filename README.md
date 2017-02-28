@@ -1,24 +1,83 @@
 # EDUGraphAPI - Office 365 Education Code Sample#
 
-## What is EDUGraphAPI?##
+In this sample we show you how to integrate with school roles/roster data as well as O365 services available via the Graph API. 
 
-EDUGraphAPI is a sample that demonstrates:
+School data is kept in sync in O365 Education tenants by [Microsoft School Data Sync](http://sds.microsoft.com).  
 
-* Linking locally-managed user accounts and Office 365 (Azure Active Directory) user accounts. 
+**Table of contents**
+
+- [Sample Goals](#sample-goals)
+- [Prerequisites](#prerequisites)
+- [Register the application in Azure Active Directory](#register-the-application-in-azure-active-directory)
+- [Build and debug locally](#build-and-debug-locally)
+- [Deploy the sample to Azure](#deploy-the-sample-to-azure)
+- [Understand the code](#understand-the-code)
+- [[Optional] Build and debug the WebJob locally](#optional-build-and-debug-the-webjob-locally)
+- [Questions and comments](#questions-and-comments)
+- [Contributing](#contributing)
+
+## Sample Goals
+
+The sample demonstrates:
+
+- Calling Graph APIs, including:
+
+  - [Microsoft Azure Active Directory Graph API](https://www.nuget.org/packages/Microsoft.Azure.ActiveDirectory.GraphClient/)
+  - [Microsoft Graph API](https://www.nuget.org/packages/Microsoft.Graph/)
+
+- Linking locally-managed user accounts and Office 365 (Azure Active Directory) user accounts. 
 
   After linking accounts, users can use either local or Office 365 accounts to log into the sample web site and use it.
 
-* Geting schools, sections, teachers, and students from Office 365 Education:
+- Getting schools, sections, teachers, and students from Office 365 Education:
 
-  * [Office 365 Schools REST API reference](https://msdn.microsoft.com/office/office365/api/school-rest-operations)
-
-* Calling Graph APIs, including:
-
-  - [Microsoft Graph API](https://www.nuget.org/packages/Microsoft.Graph/)
-  - [Microsoft Azure Active Directory Graph API](https://www.nuget.org/packages/Microsoft.Azure.ActiveDirectory.GraphClient/)
-
+  - [Office 365 Schools REST API reference](https://msdn.microsoft.com/office/office365/api/school-rest-operations)
 
 EDUGraphAPI is based on NodeJS (the server side) and Angular 2 (the client side).
+
+## Prerequisites
+
+**Deploying and running this sample requires**:
+
+- An Azure subscription with permissions to register a new application, and deploy the web app.
+
+- An O365 Education tenant with Microsoft School Data Sync enabled
+
+  - One of the following browsers: Edge, Internet Explorer 9, Safari 5.0.6, Firefox 5, Chrome 13, or a later version of one of these browsers.
+
+    Additionally: Developing/running this sample locally requires the following:  
+
+  - Visual Studio 2015 (any edition), [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409) is available for free.
+
+  - [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409)
+
+  - [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593)
+
+  - [Node.js Tools 1.2](http://aka.ms/ntvs1.2.RTW.2015)
+
+  - [Git](https://git-scm.com/download/win)
+
+  - Familiarity with Node.js, TypeScript, Angular and web services.
+
+**Optional configuration**:
+
+A feature in this sample demonstrates calling the Bing Maps API which requires a key to enable the Bing Maps feature. 
+
+Create a key to enable Bing Maps API features in the app:
+
+1. Open [https://www.bingmapsportal.com/](https://www.bingmapsportal.com/) in your web browser and sign in.
+
+2. Click  **My account** -> **My keys**.
+
+3. Create a **Basic** key, select **Public website** as the application type.
+
+4. Copy the **Key** and save it. 
+
+   ![](Images/bing-maps-key.png)
+
+   > **Note:** The key is used in the app configuration steps for debug and deploy.
+
+
 
 ## How To: Configure your Development Environment
 

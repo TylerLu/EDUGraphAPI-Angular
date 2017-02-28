@@ -51,7 +51,7 @@ export class AuthHelper {
             token.subscribe((result) => {
                 Cookie.set(tokenName, result.value, new Date(new Date(result.expiresOn).valueOf() - 5 * 60 * 1000));
             });
-            return token.map(result => result.accessToken);
+            return token.map(result => result.value);
         }
     }
 

@@ -109,27 +109,29 @@ export class Header implements OnInit {
     }
 
     initFullName() {
-        this.meService.getCurrentUser()
-            .subscribe((user) => {
-                this.fullName = (user.areAccountsLinked || user.authType == 'O365')
-                    ? (user.firstName + " " + user.lastName)
-                    : user.email
-                this.isAdmin = this.isUserAdmin(user);
-                if (user.o365UserId) {
-                    this.userPhotoService.getUserPhotoUrl(user.o365UserId)
-                        .then(url => this.userPhoto = url);
-                }
-                if (this.isAdmin)
-                    this.userRole = "Admin";
-                else {
-                    this.schoolService
-                        .getMe()
-                        .subscribe((result) => {
-                            this.me = MapUtils.deserialize(UserModel, result);
-                            this.userRole = this.me.ObjectType;
-                        });
-                }
-            });
+        if (this.authService.IsLogin()) {
+            this.meService.getCurrentUser()
+                .subscribe((user) => {
+                    this.fullName = (user.areAccountsLinked || user.authType == 'O365')
+                        ? (user.firstName + " " + user.lastName)
+                        : user.email
+                    this.isAdmin = this.isUserAdmin(user);
+                    if (user.o365UserId) {
+                        this.userPhotoService.getUserPhotoUrl(user.o365UserId)
+                            .then(url => this.userPhoto = url);
+                    }
+                    if (this.isAdmin)
+                        this.userRole = "Admin";
+                    else {
+                        this.schoolService
+                            .getMe()
+                            .subscribe((result) => {
+                                this.me = MapUtils.deserialize(UserModel, result);
+                                this.userRole = this.me.ObjectType;
+                            });
+                    }
+                });
+        }
     }
 
     isUserAdmin(user: UserInfo): boolean {

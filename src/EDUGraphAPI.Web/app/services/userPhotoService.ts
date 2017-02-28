@@ -32,7 +32,9 @@ export class UserPhotoService {
                             var dataUrl = `data:image/jpeg;base64,${ConvertHelper.BinaryToBase64(data)}`;
                             resolve(dataUrl);
                         },
-                        error: reject
+                        error:  function(ex) {
+                            resolve("app/images/header-default.jpg");
+                        }
                     });
                 });
         });
