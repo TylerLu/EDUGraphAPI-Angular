@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { Link } from './link.component';
 import { LinkCreateLocal } from './link.createLocal.component';
 import { LinkLoginLocal } from './link.loginLocal.component';
-import { LinkLoginO365Requried } from './link.loginO365Required.component';
+import { LinkLoginO365Required } from './link.loginO365Required.component';
 
 const routes: Routes = [
     {
@@ -22,8 +22,8 @@ const routes: Routes = [
         component: LinkLoginLocal
     },
     {
-        path: 'link/login-o365-requried',
-        component: LinkLoginO365Requried
+        path: 'link/login-o365-required',
+        component: LinkLoginO365Required
     }
 ];
 

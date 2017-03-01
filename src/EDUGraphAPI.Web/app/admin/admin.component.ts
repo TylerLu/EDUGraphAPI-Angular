@@ -38,9 +38,14 @@ export class AdminComponent implements OnInit {
                     this.auth.reLogin();
                 } else {
                     this.initMessage();
-                    this.IsAdminConsented = true;
+                    this.IsAdminConsented = result.organization.isAdminConsented;
                 }
             });
+        this.initConsentResult();
+    }
+
+    private initConsentResult() {
+        this.message = UrlHelper.getQueryValue('message');
     }
 
     consent() {
@@ -77,7 +82,7 @@ export class AdminComponent implements OnInit {
             return;
         }
 
-        var idToken = UrlHelper.getQueryValue('id_token')
+        var idToken = UrlHelper.getHashValue('id_token')
         if (idToken != null && idToken.length > 0) {
             this.adminService.setIsAdminConsented().then(() => {
                 this.message = 'Admin Consent has been applied.';

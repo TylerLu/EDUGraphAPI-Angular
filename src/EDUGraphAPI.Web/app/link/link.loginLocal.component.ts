@@ -22,7 +22,7 @@ export class LinkLoginLocal implements OnInit {
     userInfo: UserInfo;
     loginLocalModel: LoginLocalModel;
     checkPwdRequired: boolean = true;
-    checkEmailRequried: boolean = true;
+    checkEmailRequired: boolean = true;
     errorMsgs: string[];
     serverCheckValid: boolean = true;
 
@@ -47,8 +47,8 @@ export class LinkLoginLocal implements OnInit {
 
     checkValid() {
         this.checkPwdRequired = !this.linkService.isEmpty(this.loginLocalModel.password);
-        this.checkEmailRequried = !this.linkService.isEmpty(this.loginLocalModel.email);
-        return this.checkPwdRequired && this.checkEmailRequried;
+        this.checkEmailRequired = !this.linkService.isEmpty(this.loginLocalModel.email);
+        return this.checkPwdRequired && this.checkEmailRequired;
     }
 
     loginLocal() {

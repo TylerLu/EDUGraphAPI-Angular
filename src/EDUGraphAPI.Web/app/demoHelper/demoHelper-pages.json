@@ -442,7 +442,7 @@
     ]
   },
   {
-    "component": "link/login-o365-requried",
+    "component": "link/login-o365-required",
     "links": [
       {
         "title": "Component",

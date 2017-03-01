@@ -4,6 +4,7 @@
 */
 import { Component, OnInit, Inject } from '@angular/core';
 import { UrlHelper } from '../utils/urlHelper';
+import { Router } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -17,6 +18,8 @@ export class ConsentComponent implements OnInit {
     error: string;
     message: string;
 
+    constructor(private router: Router) {    }
+
     ngOnInit() {
         this.initMessage();
     }
@@ -28,5 +31,8 @@ export class ConsentComponent implements OnInit {
     private initMessage() {
         this.error = UrlHelper.getQueryValue('error');
         this.message = UrlHelper.getQueryValue('message');
+        if (this.message) {
+            window.location.href = '/admin?message=' + this.message;
+        }
     }
 }

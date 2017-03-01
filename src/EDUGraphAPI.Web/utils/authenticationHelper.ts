@@ -27,12 +27,12 @@ export class AuthenticationHelper {
                 var accessTokens = JSON.parse(tokenCache.accessTokens);
                 var accessToken = accessTokens[resource];
                 if (accessToken == undefined || new Date(accessToken.expiresOn).valueOf() < (Date.now() + 60 * 5 * 1000)) {
-                    this.getTokenWithRefreshToken(tokenCache.refreshToken, resource)
+                    return this.getTokenWithRefreshToken(tokenCache.refreshToken, resource)
                         .then(result => {
                             return tokenCacheService.update(tokenCache, resource, result)
-                                .then(tokenCache => {
-                                    return JSON.parse(tokenCache.accessTokens)[resource]
-                                });
+                        })
+                        .then(tokenCache => {
+                            return JSON.parse(tokenCache.accessTokens)[resource]
                         });
                 }
                 else

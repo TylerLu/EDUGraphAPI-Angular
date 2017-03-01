@@ -16,7 +16,7 @@ import { Link } from './link.component';
 import { routing } from './link-routing';
 import { LinkCreateLocal } from './link.createLocal.component';
 import { LinkLoginLocal } from './link.loginLocal.component';
-import { LinkLoginO365Requried } from './link.loginO365Required.component';
+import { LinkLoginO365Required } from './link.loginO365Required.component';
 
 @NgModule({
     imports: [
@@ -29,7 +29,7 @@ import { LinkLoginO365Requried } from './link.loginO365Required.component';
         Link,
         LinkCreateLocal,
         LinkLoginLocal,
-        LinkLoginO365Requried
+        LinkLoginO365Required
     ],
     providers: [
         { provide: 'linkService', useClass: LinkService },

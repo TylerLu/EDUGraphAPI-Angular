@@ -124,6 +124,15 @@ export class UserService {
             })
     }
 
+    public getIsAdminConsented(tenantId: string): Promise<boolean> {
+        return this.dbContext.Organization.findOne({ where: { tenantId: tenantId } })
+            .then(org => {
+                if (org != null)
+                    return org.isAdminConsented;
+                return false;
+            })
+    }
+
     public getUserModel(where: any): Promise<any> {
         return this.dbContext.User.findOne({ where: where })
             .then(user => {
@@ -215,8 +224,12 @@ export class UserService {
                 return msgraphClient.getO365User(tenantId)
             })
             .then((o365UserInfo) => {
-                let userInfo = this.convertO365UserToLocal(o365UserInfo);
-                return userInfo;
+                return this.getIsAdminConsented(o365UserInfo.organization.id).then(result => {
+                    let userInfo = this.convertO365UserToLocal(o365UserInfo);
+                    userInfo.organization.isAdminConsented = result;
+                    return userInfo;
+                });
+                
             })
     }
 
@@ -365,7 +378,7 @@ export class UserService {
             organization: o365UserInfo.organization == null ? null : {
                 tenantId: o365UserInfo.organization.id,
                 name: o365UserInfo.organization.displayName,
-                isAdminConsented: false
+                //isAdminConsented: isAdminConsented
             },
             roles: o365UserInfo.roles
         };

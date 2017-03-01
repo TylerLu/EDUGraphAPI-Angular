@@ -23,7 +23,7 @@ export class LinkCreateLocal implements OnInit {
     localModel: CreateLocalModel;
     favoriteColors: ColorEntity[];
     checkPwdRequired: boolean = true;
-    checkConfirmPwdRequried: boolean = true;
+    checkConfirmPwdRequired: boolean = true;
     checkPwdEqualConfirmPwd: boolean = true;
     serverCheckValid: boolean = true;
     errorMsgs: string[];

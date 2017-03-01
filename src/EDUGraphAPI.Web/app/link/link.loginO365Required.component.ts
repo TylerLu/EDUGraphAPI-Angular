@@ -20,7 +20,7 @@ import { UrlHelper } from '../utils/urlHelper';
     templateUrl: 'link.loginO365Required.component.template.html'
 })
 
-export class LinkLoginO365Requried implements OnInit {
+export class LinkLoginO365Required implements OnInit {
 
     userInfo: UserInfo;
     error: string;

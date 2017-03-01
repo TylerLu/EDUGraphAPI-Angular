@@ -1,6 +1,6 @@
 # EDUGraphAPI - Office 365 Education Code Sample#
 
-In this sample we show you how to integrate with school roles/roster data as well as O365 services available via the Graph API. 
+In this sample, we show you how to integrate with school roles/roster data as well as O365 services available via the Graph API. 
 
 School data is kept in sync in O365 Education tenants by [Microsoft School Data Sync](http://sds.microsoft.com).  
 
@@ -12,7 +12,6 @@ School data is kept in sync in O365 Education tenants by [Microsoft School Data 
 - [Build and debug locally](#build-and-debug-locally)
 - [Deploy the sample to Azure](#deploy-the-sample-to-azure)
 - [Understand the code](#understand-the-code)
-- [[Optional] Build and debug the WebJob locally](#optional-build-and-debug-the-webjob-locally)
 - [Questions and comments](#questions-and-comments)
 - [Contributing](#contributing)
 
@@ -27,7 +26,7 @@ The sample demonstrates:
 
 - Linking locally-managed user accounts and Office 365 (Azure Active Directory) user accounts. 
 
-  After linking accounts, users can use either local or Office 365 accounts to log into the sample web site and use it.
+  After linking accounts, users can use either local or Office 365 accounts to log into the sample website and use it.
 
 - Getting schools, sections, teachers, and students from Office 365 Education:
 
@@ -45,18 +44,13 @@ EDUGraphAPI is based on NodeJS (the server side) and Angular 2 (the client side)
 
   - One of the following browsers: Edge, Internet Explorer 9, Safari 5.0.6, Firefox 5, Chrome 13, or a later version of one of these browsers.
 
-    Additionally: Developing/running this sample locally requires the following:  
+  Additionally: Developing/running this sample locally requires the following:  
 
   - Visual Studio 2015 (any edition), [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409) is available for free.
-
   - [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409)
-
   - [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593)
-
   - [Node.js Tools 1.2](http://aka.ms/ntvs1.2.RTW.2015)
-
   - [Git](https://git-scm.com/download/win)
-
   - Familiarity with Node.js, TypeScript, Angular and web services.
 
 **Optional configuration**:
@@ -78,31 +72,85 @@ Create a key to enable Bing Maps API features in the app:
    > **Note:** The key is used in the app configuration steps for debug and deploy.
 
 
+## Register the application in Azure Active Directory
 
-## How To: Configure your Development Environment
+1. Sign into the new azure portal: [https://portal.azure.com/](https://portal.azure.com/).
 
-Download and install the following tools to run, build and/or develop this application locally.
+2. Choose your Azure AD tenant by selecting your account in the top right corner of the page:
+
+   ![](Images/aad-select-directory.png)
+
+3. Click **Azure Active Directory** -> **App registrations** -> **+Add**.
+
+   ![](Images/aad-create-app-01.png)
+
+4. Input a **Name**, and select **Web app / API** as **Application Type**.
+
+   Input **Sign-on URL**: https://localhost:44380/
+
+   ![](Images/aad-create-app-02.png)
+
+   Click **Create**.
+
+5. Once completed, the app will show in the list.
+
+   ![](/Images/aad-create-app-03.png)
+
+6. Click it to view its details. 
+
+   ![](/Images/aad-create-app-04.png)
+
+7. Click **All settings**, if the setting window did not show.
+
+   - Click **Properties**, then set **Multi-tenanted** to **Yes**.
+
+     ![](/Images/aad-create-app-05.png)
+
+     Copy aside **Application ID**, then Click **Save**.
+
+   - Click **Required permissions**. Add the following permissions:
+
+     | API                            | Application Permissions | Delegated Permissions                    |
+     | ------------------------------ | ----------------------- | ---------------------------------------- |
+     | Microsoft Graph                |                         | Read all users' full profiles<br>Read all groups<br>Read directory data<br>Access directory as the signed in user<br>Sign users in |
+     | Windows Azure Active Directory |                         | Sign in and read user profile<br>Read and write directory data |
+
+     ![](/Images/aad-create-app-06.png)
+
+   - Click **Keys**, then add a new key:
+
+     ![](Images/aad-create-app-07.png)
+
+     Click **Save**, then copy aside the **VALUE** of the key. 
+
+   Close the Settings window.
+
+## Build and debug locally
+
+This project can be opened with the edition of Visual Studio 2015 you already have, or download and install the Community edition to run, build and/or develop this application locally.
 
 - [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409)
+
+The following tools are also required:
+
 - [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593)
 - [Node.js Tools 1.2](http://aka.ms/ntvs1.2.RTW.2015)
 - [Git](https://git-scm.com/download/win)
 
-Ensure your Nodejs is v6.9.2 or above and NPM is v3.10.8 or above.
+Debug the **EDUGraphAPI.Web**:
 
-Configure Visual Studio to use the global external web tools instead of the tools that ship with Visual Studio.
+1. Configure **Environment Variables**. Right click the project in Solution Explorer, then click **Properties**.
 
-* Open the Options dialog with **Tools | Options**.
+   ![](/Images/web-app-properties.png)
 
-* In the tree on the left, select **Projects and Solutions | External Web Tools**.
+   - **clientId**: use the Client Id of the app registration you created earlier.
+   - **clientSecret**: use the Key value of the app registration you created earlier.
+   - **BingMapKey**: use the key of Bing Map you got earlier. This setting is optional.
+   - **SourceCodeRepositoryURL**: use the repository URL of your fork.
 
-* On the right, move the `$(PATH)` entry above the `$(DevEnvDir)` entries. 
+2. Press **F5**. 
 
-  > This tells Visual Studio to use the external tools (such as npm) found in the global path before using its own version of the external tools.
-
-* Click **OK** to close the dialog.
-
-* Restart Visual Studio for this change to take effect.
+## Deploy the sample to Azure
 
 **GitHub Authorization**
 
@@ -112,7 +160,9 @@ Configure Visual Studio to use the global external web tools instead of the tool
    - Sign into your GitHub account where you forked this repository.
    - Click **Generate Token**
    - Enter a value in the **Token description** text box
-   - Select all the **check boxes**
+   - Select the followings (your selections should match the screenshot below):
+     - repo (all) -> repo:status, repo_deployment, public_repo
+     - admin:repo_hook -> read:repo_hook
 
    ![](Images/github-new-personal-access-token.png)
 
@@ -132,126 +182,49 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
    - Click **PUT**
 
-**Create a key to use the Bing Maps**
+**Deploy the Azure Components from GitHub**
 
-1. Open [https://www.bingmapsportal.com/](https://www.bingmapsportal.com/) in your web browser and sign in.
+1. Check to ensure that the build is passing VSTS Build.
 
-2. Click  **My account** -> **My keys**.
+2. Fork this repository to your GitHub account.
 
-3. Create a **Basic** key, select **Public website** as the application type.
+3. Click the Deploy to Azure Button:
 
-4. Copy the **Key** and save it. 
-
-   ![](Images/bing-maps-key.png)
-
-   >**Note:** The key is used in a subsequent step.
-
-**Create an Application in your Azure Active Directory (AAD)**
-
-1. Sign into the traditional azure portal: [https://manage.windowsazure.com](https://manage.windowsazure.com).
-
-2. Open the AAD where you plan to create the application.
-
-3. Click **ADD** on the bottom bar.
-
-   ![](Images/aad-applications.png)
-
-4. Click **Add an application my organization is developing**.
-
-   ![](Images/aad-create-app-01.png)
-
-5. Input a **Name**, and select **WEB APPLICATION AND/OR WEB API**. 
-
-   ![](Images/aad-create-app-02.png)
-
-6. Click **➔**.
-
-
-7. Enter the following values:
-
-   * **SIGN-ON URL:** https://localhost:44380/
-
-   * **APP ID URI:** https://**\<\<YOUR TENANT>>**/EDUGraphAPI
-
-   >**Note**: A domain from your tenant must be used here, since this is a multi-tenant application.
-
-   ![](Images/aad-create-app-03.png)
-
-8. Click the **✓**.
-
-9. Click **CONFIGURE**.
-
-   ![](Images/aad-configure-app-01.png)
-
-10. Enable **APPLICATION IS MULTI-TENANT**.
-
-   ![](Images/aad-configure-app-02.png)
-
-11. [Optional] Enable **USER ASSIGNMENT REQUIRED TO ACCESS APP**.
-
-   ![](Images/aad-configure-app-05.png)
-
-12. Configure the following **permissions to other applications**.
-
-|                                | Application Permissions       | Delegated Permissions                    |
-| ------------------------------ | ----------------------------- | ---------------------------------------- |
-| Microsoft Graph                | Read all users' full profiles | Read all groups<br>Read directory data<br>Access directory as the signed in user<br>Sign user in |
-| Windows Azure Active Directory | Read and write directory data | Sign in and read user profile<br>Read and write directory data |
-
-12. In the keys section, click the dropdown list and select a duration, then click **Save**.
-
-   ![](Images/aad-configure-app-03.png)
-
-13. Copy aside the Client ID and the key value.
-
-   ![](Images/aad-configure-app-04.png)
-
-
-**Deploy the Azure Components**
-
-1. Check to ensure that the build is passing VSTS Build
-
-2. Fork this repository to your GitHub account
-
-3. Click the Deploy to Azure Button
-
-   [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fTylerLu%2fEDUGraphAPI2%2fmaster%2fazuredeploy.json)
+   [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FOfficeDev%2FO365-EDU-AspNetMVC-Samples%2Fmaster%2Fazuredeploy.json)
 
 4. Fill in the values in the deployment page and select the **I agree to the terms and conditions stated above** checkbox.
 
    ![](Images/azure-auto-deploy.png)
 
-   * **Resource group**: we suggest you create a new group.
+   - **Resource group**: we suggest you create a new group.
 
-   * **Site Name**: please input a name, like EDUGraphAPICanviz or EDUGraphAPI993.
+   - **Site Name**: please input a name. Like EDUGraphAPICanviz or EDUGraphAPI993.
 
-     > Note: If the name you try is already taken, you will get some validation errors:
+     > Note: If the name you input is taken, you will get some validation errors:
      >
      > ![](Images/azure-auto-deploy-validation-errors-01.png)
      >
-     > Click the error message to see more details.  For example:  The storage account is already in another resource group/subscription.
+     > Click it you will get more details like storage account is already in other resource group/subscription.
      >
      > In this case, please use another name.
 
-   * **Sql Administrator Login Password**: please DO use a strong password.
+   - **Source Code Repository URL**: replace <YOUR REPOSITORY> with the repository name of your fork.
 
-   * **Source Code Repository URL**: replace \<YOUR REPOSITORY> with the repository name of your fork.
+   - **Source Code Manual Integration**: choose **false**, since you are deploying from your own fork.
 
-   * **Source Code Manual Integration**: choose **false**, since you are deploying from your own fork.
+   - **Client Id**: use the Client Id of the app registration you created earlier.
 
-   * **Client Id**: use the Client Id of the AAD Application your created.
+   - **Client Secret**: use the Key value of the app registration you created earlier.
 
-   * **Client Secret**: use the Key value of the AAD Application your created.
+   - **Bing Map Key**: use the key of Bing Map you got earlier. This setting is optional.
 
-   * **Bing Map Key**: use the Bing Map key created.
-
-   * Check **I agree to the terms and conditions stated above**.
+   - Check **I agree to the terms and conditions stated above**.
 
 5. Click **Purchase**.
 
-**Add REPLY URL to the AAD Application**
+**Add REPLY URL to the app registration**
 
-1. After the deployment is finished, open the resource group:
+1. After the deployment, open the resource group:
 
    ![](Images/azure-resource-group.png)
 
@@ -259,37 +232,19 @@ Configure Visual Studio to use the global external web tools instead of the tool
 
    ![](Images/azure-web-app.png)
 
-   Copy the URL aside and change the schema to **https**. This is the reply URL and will be used in next step.
+   Copy the URL aside and change the schema to **https**. This is the replay URL and will be used in next step.
 
-3. Navigate to the AAD application in the traditional Azure portal, then click the **Configure** tab.
+3. Navigate to the app registration in the new azure portal, then open the setting windows.
 
    Add the reply URL:
 
    ![](Images/aad-add-reply-url.png)
 
+   > Note: to debug the sample locally, make sure that https://localhost:44380/ is in the reply URLs.
+
 4. Click **SAVE**.
 
-**Debug the sample locally**
-
-First, configure the environment variables. 
-
-For some OSs (like Windows 10), you can configure them by right clicking the EDUGraphAPI.Web project and selecting **Properties**.
-
-![](Images/web-app-properties.png)
-
-Below are all the environments variables used:
-
-* **WEBSITE_HOSTNAME**: the host name of the app, used for the ADAL authentication. For local machine, please use the value: localhost:44380; On a azure website, it will be the default domain name.
-* **Client Id**: use the Client Id of the AAD Application you created.
-* **Client Secret**: use the Key value of the AAD Application you created.
-* **Bing Map Key**: use the key of Bing Map you created.
-* **SQLServerHost**: the host name of the SQL server.
-* **SQLServerDatabase**: the database name of the SQL database.
-* **SQLServerUsername**: the username for the SQL server.
-* **SQLServerPassword**: the password for the SQL user.
-* **sourceCodeRepositoryUrl**: the repository URL, used by the demo helper control. If you fork this repository, you can update it to point to your repository.
-
-## Documentation
+## Understand the code
 
 ### Introduction
 
@@ -325,16 +280,18 @@ The 2 kinds of authentication are implemented in the **/auth/appAuth.ts** file.
 
 The server app exposes several Web APIs:
 
-| Path                                  | Method   | Description                              |
-| ------------------------------------- | -------- | ---------------------------------------- |
-| /me                                   | GET      | Return the current user and the user's organization and roles |
-| /me/favoriteColor                     | POST     | Update current user's favorite color     |
-| /me/accesstoken                       | GET      | Get current user's access token          |
-| /tenant                               | POST     | Update information (isAdminConsented) of current user's tenant |
-| /tenant/unlinkAllUsers                | POST     | Unlink all users in current user's tenant |
-| /users/linked                         | GET      | Get all linked users                     |
-| /users/:userId/unlink                 | POST     | Unlink the specified user                |
-| /schools/seatingArrangements/:classId | GET/POST | Get or set the seating arrangement of the specified class |
+| Path                                     | Method   | Description                              |
+| ---------------------------------------- | -------- | ---------------------------------------- |
+| /api/me                                  | GET      | Return the current user and the user's organization and roles |
+| /api/me/favoriteColor                    | POST     | Update current user's favorite color     |
+| /api/me/accesstoken                      | GET      | Get current user's access token          |
+| /api/tenant                              | POST     | Update information (isAdminConsented) of current user's tenant |
+| /api/tenant/unlinkAllUsers               | POST     | Unlink all users in current user's tenant |
+| /api/users/linked                        | GET      | Get all linked users                     |
+| /api/users/:userId/unlink                | POST     | Unlink the specified user                |
+| /api/admin/consent                       | GET      | Redirect the user to login page to perform admin consent |
+| /api/admin/consented                     | POST     | Will be invoked after admin consented    |
+| /api/schools/seatingArrangements/:classId | GET/POST | Get or set the seating arrangement of the specified class |
 
 These APIs are defined in the **/routes** folder.
 
@@ -348,8 +305,8 @@ The tables used in this demo:
 
 | Table                        | Description                              |
 | ---------------------------- | ---------------------------------------- |
-| Users                        | Contains the users information name, email, hased password...<br>*O365UserId* and *O365Email* are used to connect the local user with a O365 user. |
-| UserRoles                    | Contains users' role. Three roles are used in this sample: admin, teacher and student. |
+| Users                        | Contains the user's information: name, email, hashed password...<br>*O365UserId* and *O365Email* are used to connect the local user with an O365 user. |
+| UserRoles                    | Contains users' role. Three roles are used in this sample: admin, teacher, and student. |
 | Organizations                | A row in this table represents a tenant in AAD.<br>*IsAdminConsented* column records than if the tenant consented by an administrator. |
 | TokenCache                   | Contains the users' access/refresh tokens. |
 | ClassroomSeatingArrangements | Contains the classroom seating arrangements. |
@@ -376,7 +333,7 @@ This web application is a **multi-tenant app**. In the AAD, we enabled the optio
 
 ![](Images/app-is-multi-tenant.png)
 
-Users from any Azure Active Directory tenant can access this app. Because this app uses some application permissions, an administrator of the tenant must sign up (consent) first before users can use it. Otherwise, users will see this error:
+Users from any Azure Active Directory tenant can access this app. Some permissions used by this app require an administrator of the tenant to consent before users can use the app. Otherwise, users will see this error:
 
 ![](Images/app-requires-admin-to-consent.png)
 
@@ -402,6 +359,7 @@ These components are used in the client app.
 | /aboutme    | AboutMe               |
 | /admin      | Admin                 |
 |             | LinkedAccounts        |
+|             | Consent               |
 | /demoHeoper | DemoHelper            |
 | /header     | Header                |
 | /link       | Link                  |
@@ -409,6 +367,7 @@ These components are used in the client app.
 |             | LinkLoginLocal        |
 |             | LinkLoginO365Requried |
 | /login      | Login                 |
+| /O365login  | O365login             |
 | /register   | Register              |
 | /schools    | Schools               |
 |             | Classes               |
@@ -422,6 +381,7 @@ These components are used in the client app.
 | /aboutme    | AboutMeService    |
 | /admin      | AdminService      |
 | /demoHelper | DemoHelperService |
+| /link       | LinkService       |
 | /services   | MeService         |
 |             | UserService       |
 |             | UserPhotoService  |
@@ -429,7 +389,7 @@ These components are used in the client app.
 
 ### Office 365 Education API
 
-The [Office 365 Education APIs](https://msdn.microsoft.com/office/office365/api/school-rest-operations) return data from any Office 365 tenant which has been synced to the cloud by Microsoft School Data Sync. The APIs provide information about schools, sections, teachers, students and rosters. The Schools REST API provides access to school entities in Office 365 for Education tenants.
+The [Office 365 Education APIs](https://msdn.microsoft.com/office/office365/api/school-rest-operations) return data from any Office 365 tenant which has been synced to the cloud by Microsoft School Data Sync. The APIs provide information about schools, sections, teachers, students, and rosters. The Schools REST API provides access to school entities in Office 365 for Education tenants.
 
 In this sample, the **Microsoft.Education** Class Library project encapsulates the Office 365 Education API. 
 
@@ -438,13 +398,13 @@ The **EducationServiceClient** is the core class of the library. It is used to e
 **Get schools**
 
 ~~~typescript
-getSchools(): Observable<SchoolModel[]> {
-    return this.dataService.getArray<SchoolModel>(this.urlBase + "/administrativeUnits?api-version=beta");
-    }
+getSchools(): Observable<any[]> {
+    return this.dataService.getArray<any>(this.urlBase + "/administrativeUnits?api-version=beta");
+}
 ~~~
 
 ~~~typescript
-getSchoolById(id: string): Observable<SchoolModel> {
+getSchoolById(id: string): Observable<any> {
     return this.dataService.getObject(this.urlBase + '/administrativeUnits/' + id + '?api-version=beta');
 }
 ~~~
@@ -452,25 +412,25 @@ getSchoolById(id: string): Observable<SchoolModel> {
 **Get classes**
 
 ~~~typescript
-getClasses(schoolId: string, nextLink: string): Observable<PagedCollection<ClassesModel>> {
+getClasses(schoolId: string, nextLink: string): Observable<PagedCollection<any>> {
     let url: string = this.urlBase + "/groups?api-version=beta&$top=12&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Section'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId + "'" +
         (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
-    return this.dataService.getPagedCollection<ClassesModel>(url);
+    return this.dataService.getPagedCollection<any>(url);
 }
 ~~~
 
 ```typescript
-getClassById(classId: string): Observable<ClassesModel> {
-    return this.dataService.getObject<ClassesModel>(this.urlBase + "/groups/" + classId + "?api-version=beta&$expand=members");
+getClassById(classId: string): Observable<any> {
+    return this.dataService.getObject<any>(this.urlBase + "/groups/" + classId + "?api-version=beta&$expand=members");
 }
 ```
 **Get users**
 
 ```typescript
-getUsers(schoolId: string, nextLink: string): Observable<PagedCollection<UserModel>> {
+getUsers(schoolId: string, nextLink: string): Observable<PagedCollection<any>> {
     var url = this.urlBase + "/administrativeUnits/" + schoolId + "/members?api-version=beta&$top=12" +
         (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
-    return this.dataService.getPagedCollection<UserModel>(url);
+    return this.dataService.getPagedCollection<any>(url);
 }
 ```
 Below are some screenshots of the sample app that show the education data.
@@ -483,11 +443,13 @@ Below are some screenshots of the sample app that show the education data.
 
 ![](Images/edu-class.png)
 
-In the **EducationServiceClient**, three private methods prefixed with HttpGet simplify the invoking of REST APIs.
+In **/app/services/dataService.ts**, three generic methods simplify the invoking of REST APIs.
 
-* **HttpGetAsync**: sends a http GET request to the target endpoint,  and returns the JSON response string.  An access token is included in the bearer authentication header.
-* **HttpGetObjectAsync<T>**:  deserializes the JSON string returned by HttpGetAsync to the target type T, and returns the result object.
-* **HttpGetArrayAsync<T>**: deserializes the JSON string returned by HttpGetAsync to the target array type T[], and returns the array. 
+* **getObject<T>**: sends a http GET request to the target endpoint, and deserializes the JSON response string to T, and return the result object.  
+* **getPagedCollection<T>**:  sends a http GET request to the target endpoint, and deserializes the JSON response string to PagedCollection<T>, and return the result object. 
+* **getArray<T>**: sends a http GET request to the target endpoint, and deserializes the JSON response string to array, and return the array.
+
+For http GET request sent by the 3 methods above, an access token is included in the bearer authentication header.
 
 ### Authentication Flows
 
@@ -519,14 +481,14 @@ This flow is implemented in the AdminController.
 
 There are two distinct Graph APIs used in this sample:
 
-|              | [Azure AD Graph API](https://msdn.microsoft.com/en-us/library/azure/ad/graphInstall-Package) | [Microsoft Graph API](https://graph.microsoft.io/) |
+|              | [Azure AD Graph API](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-graph-api) | [Microsoft Graph API](https://graph.microsoft.io/) |
 | ------------ | ---------------------------------------- | ---------------------------------------- |
 | Description  | The Azure Active Directory Graph API provides programmatic access to Azure Active Directory through REST API endpoints. Apps can use the Azure AD Graph API to perform create, read, update, and delete (CRUD) operations on directory data and directory objects, such as users, groups, and organizational contacts | A unified API that also includes APIs from other Microsoft services like Outlook, OneDrive, OneNote, Planner, and Office Graph, all accessed through a single endpoint with a single access token. |
 | Client       | Install-Package [Microsoft.Azure.ActiveDirectory.GraphClient](https://www.nuget.org/packages/Microsoft.Azure.ActiveDirectory.GraphClient/) | Install-Package [Microsoft.Graph](https://www.nuget.org/packages/Microsoft.Graph/) |
 | End Point    | https://graph.windows.net                | https://graph.microsoft.com              |
 | API Explorer | https://graphexplorer.cloudapp.net/      | https://graph.microsoft.io/graph-explorer |
 
-> **IMPORTANT NOTE:** Microsoft is investing heavily in the new Microsoft Graph API, and they are not investing in the Azure AD Graph API any more (except fixing security issues).
+> **IMPORTANT NOTE:** Microsoft is investing heavily in the new Microsoft Graph API, and they are not investing in the Azure AD Graph API anymore (except fixing security issues).
 
 > Therefore, please use the new Microsoft Graph API as much as possible and minimize how much you use the Azure AD Graph API.
 
@@ -546,42 +508,21 @@ public getMe(): Promise<any> {
 }
 ```
 
-
-
 Note that in the AAD Application settings, permissions for each Graph API are configured separately:
 
-![](Images/aad-app-permissions.png) 
+![](Images/aad-create-app-06.png) 
 
-## Contributors
+## Questions and comments
 
-| Roles                                    | Author(s)                                |
-| ---------------------------------------- | ---------------------------------------- |
-| Project Lead / Architect / Documentation | Todd Baginski (Microsoft MVP, Canviz Consulting) @tbag |
-| PM                                       | John Trivedi (Canviz Consulting)         |
-| Development Leader / Documentation       | Tyler Lu (Canviz Consulting) @TylerLu    |
-| Developer (Education pages)              | Benny Zhang (Canviz Consulting)          |
-| Developer (Authentications)              | Theodore Shi (Canviz Consulting)         |
-| Developer (Link)                         | Albert Xie (Canviz Consulting)           |
-| Developer (Web APIs)                     | Cloris Sun (Canviz Consulting)           |
-| Developer (Education pages)              | Luis Lu (Canviz Consulting)              |
-| Testing                                  | Ring Li (Canviz Consulting)              |
-| Testing                                  | Cindy Yan (Canviz Consulting)            |
-| UX Design                                | Justin So (Canviz Consulting)            |
-| Code Reviews / Documentation             | Michael Sherman (Canviz Consulting) @canvizsherm |
-| Sponsor / Support                        | TJ Vering (Microsoft) @TJVering          |
-| Sponsor / Support                        | Alok Kumar Bansal (Microsoft)            |
-| Sponsor / Support                        | Kaushik Barat (Microsoft) @kaubar        |
-| Sponsor / Support                        | Kundana Palagiri (Microsoft)             |
-| Sponsor / Support                        | Zion Brewer (Microsoft) @zckb            |
+- If you have any trouble running this sample, please [log an issue](https://github.com/OfficeDev/O365-EDU-AspNetMVC-Samples/issues).
+- Questions about GraphAPI development in general should be posted to [Stack Overflow](http://stackoverflow.com/questions/tagged/office-addins). Make sure that your questions or comments are tagged with [ms-graph-api]. 
 
-## Version history
+## Contributing
 
-| Version | Date         | Comments        |
-| ------- | ------------ | --------------- |
-| 1.0     | Nov 26, 2016 | Initial release |
+We encourage you to contribute to our samples. For guidelines on how to proceed, see [our contribution guide](/Contributing.md).
 
-## Disclaimer
-**THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-## Copyright
-Copyright (c) 2016 Microsoft Corporation. All rights reserved.
+
+
+**Copyright (c) 2017 Microsoft. All rights reserved.**

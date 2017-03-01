@@ -105,7 +105,7 @@ router.post('/O365UserLogin', function (req, res) {
             else {
                 errorMsg = 'unknown error'
             }
-            res.redirect('/link/login-o365-requried?error=' + encodeURI(errorMsg as string));
+            res.redirect('/link/login-o365-required?error=' + encodeURI(errorMsg as string));
         });
 })
 

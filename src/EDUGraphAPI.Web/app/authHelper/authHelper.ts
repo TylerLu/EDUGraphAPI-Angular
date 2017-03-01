@@ -67,7 +67,7 @@ export class AuthHelper {
                     this.router.navigate(['login']);
                 }
                 else {
-                    window.location.href = "/link/login-o365-requried";
+                    window.location.href = "/link/login-o365-required";
                 }
                 activeProject.complete();
             });
