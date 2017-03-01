@@ -5,8 +5,9 @@
 </div>
 
 <h2 >Admin</h2>
-<div *ngIf="message" class="message-container bg-success">
+<div *ngIf="message" >
     <p>{{message}}</p>
+    <hr />
 </div>
 <div *ngIf="IsAdminConsented==false">
     <h3>Admin Consent</h3>
