@@ -31,8 +31,5 @@ export class ConsentComponent implements OnInit {
     private initMessage() {
         this.error = UrlHelper.getQueryValue('error');
         this.message = UrlHelper.getQueryValue('message');
-        if (this.message) {
-            window.location.href = '/admin?message=' + this.message;
-        }
     }
 }
