@@ -8,7 +8,6 @@ import { Constants } from '../constants';
 import { UserService } from '../services/userService';
 import { TokenCacheService } from '../services/tokenCacheService';
 import { AuthenticationHelper } from '../utils/authenticationHelper'
-import { TokenUtils } from '../utils/tokenUtils'
 
 var router = express.Router();
 var userService = new UserService();
