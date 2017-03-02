@@ -190,7 +190,7 @@ Debug the **EDUGraphAPI.Web**:
 
 3. Click the Deploy to Azure Button:
 
-   [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FOfficeDev%2FO365-EDU-AspNetMVC-Samples%2Fmaster%2Fazuredeploy.json)
+   [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FOfficeDev%2FO365-EDU-AngularJS-Samples%2Fmaster%2Fazuredeploy.json)
 
 4. Fill in the values in the deployment page and select the **I agree to the terms and conditions stated above** checkbox.
 
@@ -216,7 +216,7 @@ Debug the **EDUGraphAPI.Web**:
 
    - **Client Secret**: use the Key value of the app registration you created earlier.
 
-   - **Bing Map Key**: use the key of Bing Map you got earlier. This setting is optional.
+   - **Bing Map Key**: use the key of Bing Map you got earlier. This setting is optional. It will hide Bing map icon on schools page if this field is empty.
 
    - Check **I agree to the terms and conditions stated above**.
 
@@ -471,7 +471,7 @@ This flow shows how an administrator logs into the system and performs administr
 
 After logging into the app with an office 365 account,the administrator will be asked to link to a local account. This step is not required and can be skipped. 
 
-As mentioned earlier, the web app is a mutli-tenant app which uses some application permissions, so tenant administrator must consent the app first.  
+As mentioned earlier, the web app is a multi-tenant app which uses some application permissions, so tenant administrator must consent the app first.  
 
 This flow is implemented in the AdminController. 
 
