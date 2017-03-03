@@ -43,6 +43,7 @@ export class UserService {
     }
 
     public validUser(email: string, password: string): Promise<any> {
+        email = email.toLowerCase();
         let retUser;
         return this.dbContext.User
             .findOne({ where: { email: email } })
@@ -235,6 +236,7 @@ export class UserService {
     }
 
     public linkLocalUser(o365User: any, localEmail: string, localPassword: string): Promise<any> {
+        localEmail = localEmail.toLowerCase();
         let localUserId: string;
         return this.dbContext.User
             .findOne({ where: { email: localEmail } })
@@ -258,6 +260,7 @@ export class UserService {
     }
 
     public linkMatchingLocalUser(o365User: any): Promise<any> {
+        o365User.upn = o365User.upn.toLowerCase()
         let localUserId: string;
         return this.dbContext.User
             .findOne({ where: { email: o365User.upn } })
@@ -312,6 +315,7 @@ export class UserService {
     }
 
     public GetUserFavoriteColorByO365Email(o365Email: string): Promise<string> {
+        o365Email = o365Email.toLowerCase();
         return this.dbContext.User
             .findOne({ where: { o365Email: o365Email } })
             .then(user => {
