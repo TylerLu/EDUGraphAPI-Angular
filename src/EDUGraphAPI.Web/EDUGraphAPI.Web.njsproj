@@ -15,7 +15,7 @@
 clientId=
 clientSecret=
 BingMapKey=
-sourceCodeRepositoryUrl=https://github.com/TylerLu/EDUGraphAPI2
+sourceCodeRepositoryUrl=
 SQLiteDB=database.sqlite</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
