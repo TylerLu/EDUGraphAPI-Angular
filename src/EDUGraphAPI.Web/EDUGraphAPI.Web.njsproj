@@ -12,9 +12,9 @@
     <NameOfLastUsedPublishProfile>edugraphapi2dev - Web Deploy</NameOfLastUsedPublishProfile>
     <LaunchUrl>https://localhost</LaunchUrl>
     <Environment>WEBSITE_HOSTNAME=localhost:44380
-clientId=37443f61-5fe1-4a1b-8778-e251b3df885b
-clientSecret=6kigm8YcEGyQ1BSeGvOo6lSN0oyvYizvT1lvNIdBzsU=
-BingMapKey=AgWV4amBPg2dzbgGPB8Ya5GDfGqBnueTJUfu1oAAilDje_vXB0RpKGF4mDabOmwB
+clientId=
+clientSecret=
+BingMapKey=
 sourceCodeRepositoryUrl=https://github.com/TylerLu/EDUGraphAPI2
 SQLiteDB=database.sqlite</Environment>
   </PropertyGroup>
