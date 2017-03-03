@@ -99,6 +99,7 @@ export class UserService {
     }
 
     public validUserHasSameEmail(email: string): Promise<boolean> {
+        email = email.toLowerCase();
         return this.dbContext.User
             .findOne({ where: { email: email } })
             .then(user => {
@@ -229,7 +230,7 @@ export class UserService {
                     userInfo.organization.isAdminConsented = result;
                     return userInfo;
                 });
-                
+
             })
     }
 
@@ -319,7 +320,6 @@ export class UserService {
                 return "";
             });
     }
-
 
     private updateUser(userId: string, user: any): Promise<any> {
         return this.getUserById(userId).then(u => {

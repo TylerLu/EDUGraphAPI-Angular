@@ -215,8 +215,6 @@ SQLiteDB=database.sqlite</Environment>
     <Content Include="app\tabs\tab.html" />
     <Content Include="app\tabs\tabs.css" />
     <Content Include="app\tabs\tabs.html" />
-    <None Include="edugraphapi2dev - Web Deploy.pubxml" />
-    <None Include="edugraphapi2dev - FTP.pubxml" />
     <Content Include="deploy.cmd" />
     <Content Include="Index.prod.html" />
     <Content Include="Index.html" />
@@ -274,7 +272,6 @@ SQLiteDB=database.sqlite</Environment>
   <ItemGroup>
     <Compile Include="app\models\common\pagedCollection.ts" />
     <Compile Include="app\utils\urlHelper.ts" />
-    <Compile Include="dist\bundle.js" />
     <Compile Include="gulpfile.js" />
     <Compile Include="systemjs.config.js" />
   </ItemGroup>
