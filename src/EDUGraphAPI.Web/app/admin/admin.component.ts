@@ -88,6 +88,7 @@ export class AdminComponent implements OnInit {
             this.adminService.setIsAdminConsented().then(() => {
                 this.message = 'Admin Consent has been applied.';
                 this.IsAdminConsented = true;
+                window.location.hash = '';
             }).catch((error) => {
                 this.error = error;
             });

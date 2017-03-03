@@ -17,6 +17,7 @@ export class UserService {
     private dbContext = new DbContext();
 
     public creatUser(email: string, password: string, firstName: string, lastName: string, favoriteColor: string): Promise<UserInstance> {
+        email = email.toLowerCase();
         return this.dbContext.User
             .findOne({ where: { email: email } })
             .then(user => {
@@ -332,7 +333,7 @@ export class UserService {
             if (user.firstName != undefined) u.firstName = user.firstName;
             if (user.lastName != undefined) u.lastName = user.lastName;
             if (user.o365UserId != undefined) u.o365UserId = user.o365UserId;
-            if (user.o365Email != undefined) u.o365Email = user.o365Email
+            if (user.o365Email != undefined) u.o365Email = user.o365Email.toLowerCase();
             if (user.favoriteColor != undefined) u.favoriteColor = user.favoriteColor;
             promises.push(u.save());
 
