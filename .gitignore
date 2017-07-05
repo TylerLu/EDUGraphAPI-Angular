@@ -375,3 +375,7 @@ bundle.js
 *.js
 !gulpfile.js
 !systemjs.config.js
+
+
+### SQLite ###
+*.sqlite
