@@ -7,7 +7,7 @@ import { UserModel } from './user'
 
 export class ClassesModel {
 
-    @JsonProperty("objectId")
+    @JsonProperty("id")
     public ObjectId: string;
 
     @JsonProperty("objectType")

@@ -14,7 +14,7 @@ import { DataService } from "../services/dataService";
 @Injectable()
 export class AboutMeService {
 
-    private graphUrlBase: string = Constants.AADGraphResource + '/' + Constants.TenantId;
+    private graphUrlBase: string = Constants.AADGraphResource + '/beta';
 
     constructor(private http: Http,
         @Inject('me') private meService: MeService,
@@ -26,7 +26,7 @@ export class AboutMeService {
     }
 
     getMyClasses(): any {
-        return this.dataService.get(this.graphUrlBase + "/me/memberOf?api-version=1.5")
+        return this.dataService.get(this.graphUrlBase + "/me/memberOf")
             .map((response: Response): ClassesModel[] => {
                 var classes: ClassesModel[] = new Array<ClassesModel>();
                 var groups: any[] = <any[]>response.json().value;

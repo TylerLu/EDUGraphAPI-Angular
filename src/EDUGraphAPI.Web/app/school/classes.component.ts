@@ -95,7 +95,7 @@ export class ClassesComponent implements OnInit {
             .getClasses(this.schoolId, this.nextLink)
             .subscribe((result) => {
                 this.isGettingData = false;
-                this.nextLink = result["odata.nextLink"];
+                this.nextLink = result["@odata.nextLink"];
                 if (this.classesArray === undefined) {
                     this.classesArray = [];
                 }
