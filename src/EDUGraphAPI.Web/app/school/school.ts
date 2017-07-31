@@ -57,10 +57,6 @@ export class SchoolModel {
     @JsonProperty("extension_fe2174665583431c953114ff7268b7b3_Education_StateId")
     public StateId: string;
 
-    public Latitude: string;
-
-    public Longitude: string;
-
     public IsMySchool: boolean = false;
 
     public get CompoundAddress(): string {
