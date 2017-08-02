@@ -493,7 +493,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
                 $("#studoc .table-green-header th:eq(3)").addClass("headerSortUp");
                 this.sortDocAsc = true;
             }
-            var sort = CompareHelper.createComparer("lastModifiedDateTime", this.sortDocAsc);
+            var sort = CompareHelper.createDateComparer("lastModifiedDateTime", this.sortDocAsc);
             this.documents.sort(sort);
         }
         else {

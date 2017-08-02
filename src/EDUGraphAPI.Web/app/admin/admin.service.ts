@@ -18,9 +18,9 @@ import { DataService } from "../services/dataService";
 @Injectable()
 export class AdminService {
 
-    private getMeUrl = Constants.AADGraphResource + '/beta/me';
+    private getMeUrl = Constants.MSGraphResource + '/v1.0/me';
     private getAdminUrl = '/api/me';
-    private aadBaseUrl = Constants.AADGraphResource + '/beta';
+    private aadBaseUrl = Constants.AADGraphResource + '/' + Constants.TenantId;
 
     constructor(
         private _http: Http,
@@ -149,7 +149,7 @@ export class AdminService {
 
     private getServicePrincipal(authHeaders: RequestOptionsArgs): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._http.get(`${this.aadBaseUrl}/servicePrincipals?$filter=appId%20eq%20'${Constants.ClientId}'`, authHeaders)
+            this._http.get(`${this.aadBaseUrl}/servicePrincipals?api-version=1.6&$filter=appId%20eq%20'${Constants.ClientId}'`, authHeaders)
                 .subscribe((response: Response) => {
                     if (response) {
                         var data = response.json();
@@ -171,7 +171,7 @@ export class AdminService {
     }
 
     private addAppRoleAssignmentForUsers2(authHeaders: RequestOptionsArgs, nextLink: string, servicePrincipal: any, prevPromises: Promise<any>[], resolve: (value?: any | PromiseLike<any>) => void, reject: (reason?: any) => void) {
-        let url: string = `${this.aadBaseUrl}/users?$expand=appRoleAssignments`;
+        let url: string = `${this.aadBaseUrl}/users?api-version=1.6&$expand=appRoleAssignments`;
         if (nextLink) {
             url += "&" + GraphHelper.getSkipToken(nextLink);
         }
@@ -218,18 +218,19 @@ export class AdminService {
         const userId = user.objectId;
         const body = {
             "odata.type": "Microsoft.DirectoryServices.AppRoleAssignment",
-            "creationTimestamp": new Date().toISOString(),
             "principalDisplayName": user.displayName,
             "principalId": user.objectId,
             "principalType": "User",
             "resourceId": servicePrincipal.objectId,
             "resourceDisplayName": servicePrincipal.displayName
         };
-        this._http.post(`${this.aadBaseUrl}/users/${user.objectId}/appRoleAssignments`, body, authHeaders)
+        this._http.post(`${this.aadBaseUrl}/users/${user.objectId}/appRoleAssignments?api-version=1.6`, body, authHeaders)
             .subscribe((response: Response) => {
                 resolve(response.json());
             },
-            (error) => reject(error));
+            (error) => {
+                resolve(null);
+            });
     }
 
     private addAppRoleAssignment(authHeaders: RequestOptionsArgs, user: any, servicePrincipal: any, nextLink: string): Promise<boolean> {
@@ -241,7 +242,7 @@ export class AdminService {
                     this.doAddAppRoleAssignment(user, servicePrincipal, authHeaders, resolve, reject);
                 }
                 else {
-                    this._http.get(`${this.aadBaseUrl}/users/${user.objectId}/appRoleAssignments?$filter=resourceId%20eq%20guid'${servicePrincipalId}'`, authHeaders)
+                    this._http.get(`${this.aadBaseUrl}/users/${user.objectId}/appRoleAssignments?api-version=1.6&$filter=resourceId%20eq%20guid'${servicePrincipalId}'`, authHeaders)
                         .subscribe((response: Response) => {
                             const data = response.json();
                             if (!data.value.some((ass) => ass.resourceId === servicePrincipal.objectId)) {
@@ -259,7 +260,7 @@ export class AdminService {
 
     private deleteServicePrincipal(authHeaders: RequestOptionsArgs, servicePrincipalId: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._http.delete(`${this.aadBaseUrl}/servicePrincipals/${servicePrincipalId}`, authHeaders)
+            this._http.delete(`${this.aadBaseUrl}/servicePrincipals/${servicePrincipalId}?api-version=1.6`, authHeaders)
                 .subscribe((response: Response) => {
                     resolve(response.ok);
                 },
