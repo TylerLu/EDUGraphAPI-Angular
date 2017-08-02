@@ -12,9 +12,6 @@ export class SchoolModel {
     @JsonProperty("id")
     public ObjectId: string;
 
-    @JsonProperty("objectType")
-    public ObjectType: string;
-
     @JsonProperty("displayName")
     public DisplayName: string;
 
@@ -76,7 +73,6 @@ export class SchoolModel {
     constructor() {
         this.SchoolId = undefined;
         this.ObjectId = undefined;
-        this.ObjectType = undefined;
         this.DisplayName = undefined;
         this.PrincipalName = undefined;
         this.Description = undefined;
