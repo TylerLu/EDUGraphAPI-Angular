@@ -384,13 +384,13 @@ The **EducationServiceClient** is the core class of the library. It is used to e
 
 ~~~typescript
 getSchools(): Observable<any[]> {
-    return this.dataService.getArray<any>(this.urlBase + "/administrativeUnits?api-version=beta");
+    return this.dataService.getArray<any>(this.urlBase + "/administrativeUnits");
 }
 ~~~
 
 ~~~typescript
 getSchoolById(id: string): Observable<any> {
-    return this.dataService.getObject(this.urlBase + '/administrativeUnits/' + id + '?api-version=beta');
+    return this.dataService.getObject(this.urlBase + '/administrativeUnits/' + id );
 }
 ~~~
 
@@ -398,23 +398,22 @@ getSchoolById(id: string): Observable<any> {
 
 ~~~typescript
 getClasses(schoolId: string, nextLink: string): Observable<PagedCollection<any>> {
-    let url: string = this.urlBase + "/groups?api-version=beta&$top=12&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Section'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId + "'" +
-        (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
+    let url: string = this.urlBase + "/groups?$top=12&$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Section'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId + "'" + (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
     return this.dataService.getPagedCollection<any>(url);
 }
 ~~~
 
 ```typescript
 getClassById(classId: string): Observable<any> {
-    return this.dataService.getObject<any>(this.urlBase + "/groups/" + classId + "?api-version=beta&$expand=members");
+    return this.dataService.getObject<any>(this.urlBase + "/groups/" + classId + "?$expand=members");
 }
 ```
 **Get users**
 
 ```typescript
 getUsers(schoolId: string, nextLink: string): Observable<PagedCollection<any>> {
-    var url = this.urlBase + "/administrativeUnits/" + schoolId + "/members?api-version=beta&$top=12" +
-        (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
+    var url = this.urlBase + "/administrativeUnits/" + schoolId + "/members?$top=12" +
+  (nextLink ? "&" + GraphHelper.getSkipToken(nextLink) : '');
     return this.dataService.getPagedCollection<any>(url);
 }
 ```
