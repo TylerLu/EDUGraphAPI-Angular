@@ -5,10 +5,21 @@
     <div class="header-right-shadow-mask"></div>
     <div class="body">
         <p class="desc">Code sample links for this page:</p>
-        <ul *ngIf="HasDemo">
-            <li *ngFor="let link of DemoPage.links">
+        <ul *ngIf="HasDemo" class="functions" >
+            <li *ngFor="let link of DemoPage.links" [ngClass]="{'collapsed': link.collapsed}" (click)="showFunction($event,link)">
                 <p class="title">{{link.title }}</p>
-                <p><a href='{{link.url }}' target="_blank">{{link.url }}</a></p>
+                <p class="tab">{{link.tab }}</p>
+                <ul class="files">
+                    <li *ngFor="let file of link.files">
+                        <p class="title"><a href="{{file.url}}" target="_blank">{{file.url}}</a></p>
+                        <ul class="methods">
+                            <li *ngFor="let method of file.methods">
+                                <p class="title">{{method.title}}</p>
+                                <p class="desc">{{method.description}}</p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </li>
         </ul>
         <p class="empty-result" *ngIf="!HasDemo">Links not available.</p>

@@ -91,7 +91,7 @@ export class SchoolComponent implements OnInit {
 
     gotoUsers(school: SchoolModel) {
         setTimeout(() => {
-            this.router.navigate(['users', school.ObjectId, school.SchoolId]);
+            this.router.navigate(['users', school.ObjectId, school.SchoolId], { fragment: "filterall" });
         }, 100);
     }
 
