@@ -1,13 +1,15 @@
 ﻿<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license. -->
 <!-- See LICENSE in the project root for license information -->
-<div class="demo-helper-control" [class.collapsed]="Collapsed" (click)="showDemoHelper(this)">
-    <div class="header">DEMO HELPER</div>
-    <div class="header-right-shadow-mask"></div>
+<div class="demo-helper-control" [class.collapsed]="Collapsed" >
+    <div (click)="showDemoHelper(this)">
+        <div class="header">DEMO HELPER</div>
+        <div class="header-right-shadow-mask"></div>
+    </div>
     <div class="body">
         <p class="desc">Code sample links for this page:</p>
         <ul *ngIf="HasDemo" class="functions" >
-            <li *ngFor="let link of DemoPage.links" [ngClass]="{'collapsed': link.collapsed}" (click)="showFunction($event,link)">
-                <p class="title">{{link.title }}</p>
+            <li *ngFor="let link of DemoPage.links" [ngClass]="{'collapse': link.collapsed}" >
+                <p class="title" (click)="showFunction($event,link)">{{link.title }}</p>
                 <p class="tab">{{link.tab }}</p>
                 <ul class="files">
                     <li *ngFor="let file of link.files">

@@ -495,9 +495,9 @@ ul.nav-tabs[_ngcontent-rnm-5]    > li.active[_ngcontent-rnm-5]{background-color:
 }
 .demo-helper-control ul.files{margin-left: 18px;}
 .demo-helper-control .body > ul > li  ul p.title{margin-top:6px;}
-.demo-helper-control .body > ul > li  >p.link{margin:0 0 0 21px;}
+.demo-helper-control .body > ul > li  > p.link{margin:0 0 0 21px;}
 .demo-helper-control .body > ul > li.collapse p.title{background-image:url('../Images/collapse-arrow.png');}
-.demo-helper-control .body > ul > li  >p.title{
+.demo-helper-control .body > ul > li > p.title{
     cursor:pointer;
     background-image:url('../Images/expand-arrow.png');
     background-repeat:no-repeat;
