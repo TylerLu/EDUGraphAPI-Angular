@@ -986,7 +986,7 @@ The code in the following sections is part of the full featured Angular app and 
     }
     ```
 
-34. Select **BasicSSO** project, add the a new folder named **ssl** into it.
+34. Select **BasicSSO** project, add a new folder named **ssl** into it.
 
 35. Reference [link](https://github.com/leeroybrun/node-express-https) to generate the following certificate files, copy these files into **ssl** folder that just created above step and include these files into project.
 
