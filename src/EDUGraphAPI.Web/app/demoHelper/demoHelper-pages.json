@@ -319,6 +319,15 @@
                 "description": "Save seating arrangements."
               }
             ]
+          },
+          {
+            "url": "/blob/master/src/EDUGraphAPI.Web/app/services/userService.ts",
+            "methods": [
+              {
+                "title": "GetUserFavoriteColorByO365Email",
+                "description": "Get favorite color of a user."
+              }
+            ]
           }
         ]
       }
