@@ -15,7 +15,7 @@
               },
               {
                 "title": "initLocalAndLinkedState",
-                "description": "Check current user linked state and auth type is local or not."
+                "description": "Check current user's linked state and if auth type is local or not."
               },
               {
                 "title": "gotoClasses",
@@ -45,7 +45,7 @@
             "methods": [
               {
                 "title": "getCurrentUser",
-                "description": "Get current user information from database."
+                "description": "Get current user's information from database."
               }
             ]
           }
@@ -307,7 +307,7 @@
         "title": "Display, edit and save students charts",
         "tab": "#seatingchart",
         "files": [
-         {
+          {
             "url": "/blob/master/src/EDUGraphAPI.Web/app/school/school.service.ts",
             "methods": [
               {
@@ -423,7 +423,7 @@
             "methods": [
               {
                 "title": "IsLogin",
-                "description": "Check login or not."
+                "description": "Check if users is logged in or not."
               },
               {
                 "title": "login",
@@ -741,7 +741,7 @@
               },
               {
                 "title": "isUserAdmin",
-                "description": "Check user is admin or not."
+                "description": "Check if user is admin or not."
               }
             ]
           },
