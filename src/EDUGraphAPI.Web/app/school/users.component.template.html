@@ -30,6 +30,8 @@
             </div>
             <div class="col-md-6 filterlink-container">
                 <span>FILTER:</span>
+
+                <a id="filterstudentsinmyclasses" *ngIf="isTeacher" class="filterlink" [class.selected]="view === 'studentsinmyclasses'" (click)="switchView('studentsinmyclasses','#filterstudentsinmyclasses')">Students in my classes</a><span> | </span>
                 <a id="filterteacher" class="filterlink" [class.selected]="view === 'teachers'" (click)="switchView('teachers','#filterteacher')"> Teachers</a> | <a id="filterstudnet" class="filterlink" [class.selected]="view === 'students'" (click)="switchView('students','#filterstudent')">Students</a> | <a id="filterall" class="filterlink" [class.selected]="view === 'users'" (click)="switchView('users','#filterall')">All</a>
             </div>
         </div>
@@ -84,6 +86,19 @@
                 <div *ngIf="teachersModel.nextLink || teachersModel.users.length > 12" class="pagination">
                     <span class="prev" [ngClass]="{'current' : teachersModel.curPage === 1, 'disabled': teachersModel.isGettingData}" (click)="changePage('teachers', teachersModel, false)">Previous</span>
                     <span class="next" [ngClass]="{'current' : !teachersModel.nextLink && teachersModel.curPage *12 >= teachersModel.users.length, 'disabled': teachersModel.isGettingData}" (click)="changePage('teachers', teachersModel, true)">Next</span>
+                </div>
+            </div>
+        </div>
+        <div id="studentsinmyclasses" *ngIf="isTeacher" class="tiles-secondary-container" [hidden]="view !== 'studentsinmyclasses'">
+            <div *ngIf="studentsInMyClassesModel.users.length == 0" class="nodata"> There is no data available for this page at this time.</div>
+            <div *ngIf="studentsInMyClassesModel.users.length > 0">
+                <div class="content">
+                    <div class="element" *ngFor="let user of studentsInMyClassesModel.users"  [ngClass]="user.ObjectType === 'Teacher' ? 'teacher-bg' : 'student-bg'">
+                        <div class="userimg">
+                            <img [src]="user.Photo || 'app/images/header-default.jpg'" />
+                        </div>
+                        <div class="username">{{user.DisplayName}}</div>
+                    </div>
                 </div>
             </div>
         </div>

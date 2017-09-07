@@ -404,6 +404,29 @@
             ]
           }
         ]
+      },
+      {
+        "title": "Get all students in my classes",
+        "tab": "#filterstudentsinmyclasses",
+        "files": [
+         {
+            "url": "/blob/master/src/EDUGraphAPI.Web/app/school/school.service.ts",
+            "methods": [
+              {
+                "title": "getMe",
+                "description": "Retrieve current user's properties from MS Graph."
+              },
+              {
+                "title": "getMyClasses",
+                "description": "Get my classes within a school."
+              },
+              {
+                "title": "getClassById",
+                "description": "Get class information by class id."
+              }
+            ]
+          }
+        ]
       }
     ]
   },

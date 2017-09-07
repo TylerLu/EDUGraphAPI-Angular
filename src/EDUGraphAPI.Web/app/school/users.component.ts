@@ -6,6 +6,7 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SchoolModel } from './school'
 import { UserModel, StudentModel, TeacherModel } from './user'
+import { ClassesModel } from './classes';
 import { MapUtils } from '../utils/jsonhelper'
 import { SchoolService } from './school.service';
 import { UserPhotoService } from '../services/userPhotoService';
@@ -14,11 +15,13 @@ class UsersViewModel {
 
     private static cache = {};
     private userPhotoService: any;
+    private schoolService: any;
     private id: string;
 
-    constructor(id: string, userPhotoService: any) {
+    constructor(id: string, userPhotoService: any, schoolService: any) {
         this.id = id;
         this.userPhotoService = userPhotoService;
+        this.schoolService = schoolService;
     }
 
     users: UserModel[] = new Array<UserModel>();
@@ -66,6 +69,41 @@ class UsersViewModel {
             });
     }
 
+    getStudentsInMyClassesData(myclasses) {
+        myclasses.forEach((obj) => {
+            const model: ClassesModel = MapUtils.deserialize(ClassesModel, obj);
+            this.schoolService
+                .getClassById(model.ObjectId)
+                .subscribe((result) => {
+                    let users = result.members.filter(user => MapUtils.deserialize(UserModel, user).ObjectType == 'Student');
+                    users.forEach((obj) => {
+                        var user = MapUtils.deserialize(UserModel, obj);
+                        if (this.users.filter(c => c.O365UserId == user.O365UserId).length == 0) {
+                            this.users.push(user);
+                            const userId: string = user.O365UserId;
+                            var cachedItem = UsersViewModel.cache[userId];
+                            if (!cachedItem) {
+                                cachedItem = UsersViewModel.cache[userId] = { queue: new Array<UserModel>(user) };
+                                this.userPhotoService.getUserPhotoUrl(userId)
+                                    .then(url => {
+                                        cachedItem["data"] = url;
+                                        cachedItem.queue.forEach(user => { user.Photo = url; });
+                                    });
+                            }
+                            else if (!cachedItem.data) {
+                                cachedItem.queue.push(model);
+                            }
+                            else {
+                                user.Photo = cachedItem.data;
+                            }
+                        }
+                    });
+                });
+        });
+    }
+
+
+
     changePage(usersGetter: (id: string, nextLink: string) => any, isNext: boolean) {
         if (isNext) {
             if (this.curPage * 12 < this.users.length) {
@@ -99,6 +137,8 @@ export class UsersComponent implements OnInit {
     usersModel: UsersViewModel;
     studentsModel: UsersViewModel;
     teachersModel: UsersViewModel;
+    studentsInMyClassesModel: UsersViewModel;
+    isTeacher: boolean = false;
 
     constructor(
         private router: Router,
@@ -115,16 +155,35 @@ export class UsersComponent implements OnInit {
                 .getSchoolById(objectId)
                 .subscribe((result) => {
                     this.school = MapUtils.deserialize(SchoolModel, result);
+
                 });
+            this.schoolService
+                .getMe()
+                .subscribe((result) => {
+                    var me = MapUtils.deserialize(UserModel, result);
+                    if (me.ObjectType == 'Teacher')
+                    {
+                        this.isTeacher = true;
+                        if (!this.studentsInMyClassesModel) {
+                            this.studentsInMyClassesModel = new UsersViewModel(Id, this.userPhotoService, this.schoolService);
+                        }
+                        this.schoolService.getMyClasses(Id)
+                            .subscribe((result) => {
+                                let classes = result.filter(section => MapUtils.deserialize(ClassesModel, section).SchoolId == Id);
+                                this.studentsInMyClassesModel.getStudentsInMyClassesData(classes);
+                            });
+                    }
+                })
             if (!this.usersModel) {
-                this.usersModel = new UsersViewModel(objectId, this.userPhotoService);
+                this.usersModel = new UsersViewModel(objectId, this.userPhotoService, this.schoolService);
             }
             if (!this.studentsModel) {
-                this.studentsModel = new UsersViewModel(Id, this.userPhotoService);
+                this.studentsModel = new UsersViewModel(Id, this.userPhotoService, this.schoolService);
             }
             if (!this.teachersModel) {
-                this.teachersModel = new UsersViewModel(Id, this.userPhotoService);
+                this.teachersModel = new UsersViewModel(Id, this.userPhotoService, this.schoolService);
             }
+
             this.usersModel.getData(this.schoolService.getUsers.bind(this.schoolService));
             this.studentsModel.getData(this.schoolService.getStudents.bind(this.schoolService));
             this.teachersModel.getData(this.schoolService.getTeachers.bind(this.schoolService));
