@@ -40,13 +40,14 @@
                 <div class="close" (click)="switchSchoolteachers(false)" ><img src="/app/Images/close.png"></div>
                 <div class="title">Select a teacher</div>
                 <div class="list">
-                    <ul>
+                    <ul *ngIf="schoolTeachers.length > 0">
                         <li *ngFor="let teacher of schoolTeachers">
                             <a (click)="addCoTeacher(teacher.O365UserId)">
                                 <img [src]="teacher.Photo || 'app/images/header-default.jpg'"> {{teacher.DisplayName}}
                             </a>
                         </li>
                     </ul>
+                    <div *ngIf="schoolTeachers.length == 0"> There is no data available at this time.</div>
                 </div>
             </div>
         </div>
