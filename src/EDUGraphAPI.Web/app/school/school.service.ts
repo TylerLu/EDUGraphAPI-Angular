@@ -129,6 +129,18 @@ export class SchoolService {
     }
 
     /**
+     * Get all teachers of a school
+     * @param  {string} schoolId Identification of the school
+     * Reference URL: https://msdn.microsoft.com/en-us/office/office365/api/school-rest-operations#get-school-members
+     */
+    getAllTeachers(schoolId: string): Observable<any[]> {
+        var url = this.urlBase + "/users?$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId%20eq%20'" + schoolId +
+            "'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Teacher'"
+        return this.dataService.getArray<any>(url);
+    }
+
+
+    /**
      * Get documents of a class
      * Reference URL: https://dev.onedrive.com/items/list.htm.
      */
@@ -159,5 +171,15 @@ export class SchoolService {
     saveSeatingArrangement(classId: string, seatingArrangements: SeatingArrangement[]): any {
         var url = "/api/schools/seatingArrangements/" + classId + "?t=" + new Date().getTime();
         return this.dataService.post(url, seatingArrangements);
+    }
+
+    addUserToSectionMembers(classId: string, userId: string): Observable<any> {
+        let data = { "@odata.id": "https://graph.microsoft.com/v1.0/users/" + userId };
+        return this.dataService.postToGraph(`${Constants.MSGraphResource}/v1.0/groups/${classId}/members/$ref`, data);
+    }
+
+    addUserToSectionOwners(classId: string, userId: string): Observable<any> {
+        let data = { "@odata.id": "https://graph.microsoft.com/v1.0/users/" + userId };
+        return this.dataService.postToGraph(`${Constants.MSGraphResource}/v1.0/groups/${classId}/owners/$ref`, data);
     }
 }

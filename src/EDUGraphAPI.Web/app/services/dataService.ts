@@ -85,6 +85,23 @@ export class DataService {
         return this._http.post(actionUrl, data, { headers: this.getHeaderWithoutToken() });
     }
 
+    public postToGraph(actionUrl: string, data: any): Observable<any> {
+        let activeProject: ReplaySubject<any> = new ReplaySubject(1);
+        this.authService.getGraphToken(actionUrl)
+            .subscribe(accessToken => {
+                this._http.post(actionUrl, data, { headers: this.getHeader(accessToken) })
+                    .subscribe((data) => {
+                        activeProject.next(data);
+                    },
+                    (error) => {
+                        activeProject.error(error);
+                    });
+                },
+                error => activeProject.error(error)
+            )
+        return activeProject;
+    }
+
     public getWithoutToken(actionUrl: string) {
         return this._http.get(actionUrl);
     }

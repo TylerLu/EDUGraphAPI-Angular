@@ -37,6 +37,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
     classObjectId: string;
     me: UserModel;
     classEntity: ClassesModel;
+    schoolTeachers: UserModel[] = [];
     documents: Document[] = [];
     favoriteColor: string = "";
     oneDriveURL: string = "";
@@ -49,6 +50,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
 
     sortAsc: boolean = false;
     sortDocAsc: boolean = false;
+    showSchoolteachers: boolean = false;
 
     constructor(
         private router: Router,
@@ -88,6 +90,7 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
                         this.favoriteColor = user.favoriteColor;
                         if (this.me.ObjectType == 'Teacher') {
                             $(".teacherdesk").css("background-color", user.favoriteColor);
+
                         } else {
                             $(".greenicon").css("background-color", user.favoriteColor);
                         }
@@ -127,7 +130,19 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
 
                                                     }
                                                 });
-
+                                                if (this.me.ObjectType == 'Teacher') {
+                                                    this.schoolService.getAllTeachers(this.schoolId)
+                                                        .subscribe((teachers) => {
+                                                            teachers.forEach((obj) => {
+                                                                var teacher = MapUtils.deserialize(UserModel, obj);
+                                                                if (this.classEntity.Teachers.filter(t => t.O365UserId == teacher.O365UserId).length == 0) {
+                                                                    this.userPhotoService.getUserPhotoUrl(teacher.O365UserId)
+                                                                        .then(url => teacher.Photo = url);
+                                                                    this.schoolTeachers.push(teacher);
+                                                                }
+                                                            });
+                                                        });
+                                                }
                                             });
                                     });
                             });
@@ -160,6 +175,9 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
 
     ngOnDestroy() {
         this.sub.unsubscribe();
+    }
+    switchSchoolteachers(value) {
+        this.showSchoolteachers = value;
     }
 
     sortMembers() {
@@ -199,6 +217,16 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
         this.router.navigate(['classes', school.ObjectId, school.SchoolId]);
     }
 
+    addCoTeacher(userId: string) {
+        this.schoolService.addUserToSectionMembers(this.classObjectId, userId)
+            .subscribe((data) => {
+                this.schoolService.addUserToSectionOwners(this.classObjectId, userId)
+                    .subscribe((data) => {
+                        window.location.reload();
+                    })
+            })
+
+    }
     ngAfterContentInit() {
         var interval = setInterval(() => {
             if (this.classEntity && this.classEntity.Students && this.classEntity.Students.length > 0) {
