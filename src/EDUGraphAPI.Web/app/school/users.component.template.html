@@ -31,7 +31,7 @@
             <div class="col-md-6 filterlink-container">
                 <span>FILTER:</span>
 
-                <span *ngIf="isTeacher"><a id="filterstudentsinmyclasses"  class="filterlink" [class.selected]="view === 'studentsinmyclasses'" (click)="switchView('studentsinmyclasses','#filterstudentsinmyclasses')">Students in my classes</a> | </span>
+                <span *ngIf="isTeacher"><a id="filterstudentsinmyclasses" class="filterlink" [class.selected]="view === 'studentsinmyclasses'" (click)="switchView('studentsinmyclasses','#filterstudentsinmyclasses')">Students in my classes</a> | </span>
                 <a id="filterteacher" class="filterlink" [class.selected]="view === 'teachers'" (click)="switchView('teachers','#filterteacher')"> Teachers</a> | <a id="filterstudnet" class="filterlink" [class.selected]="view === 'students'" (click)="switchView('students','#filterstudent')">Students</a> | <a id="filterall" class="filterlink" [class.selected]="view === 'users'" (click)="switchView('users','#filterall')">All</a>
             </div>
         </div>

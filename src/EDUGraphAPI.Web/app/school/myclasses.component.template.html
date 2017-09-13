@@ -62,7 +62,7 @@
                             <h5>Description:</h5>
                             <h6>{{classEntity.CourseDescription}}</h6>
                             <h5>Teachers:</h5>
-                            <h6>
+                            <h6 class="teachers">
                                 <span *ngFor="let user of classEntity.Users">
                                     <span *ngIf="user.ObjectType=='Teacher'">
                                         {{user.DisplayName}}

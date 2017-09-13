@@ -224,6 +224,7 @@ a.mysectionlink{cursor:pointer;}
 .section-tiles .tile-container:nth-child(6n) .detail,.section-tiles .tile-container:nth-child(6n-1) .detail{left:-380px;}
 .section-tiles .detail>h5{margin-top: 10px;font-weight: 800;font-size:12px;text-transform:uppercase;}
 .section-tiles .detail>h6{margin-top: 10px;font-size:12px;}
+.section-tiles .detail>h6.teachers>span{display: block; margin-top: 10px;font-size:12px;}
 .section-school-name{font-size:18px; width:100%; padding:0 20px 10px 0; text-align:right;}
 
 .sections .seemore{text-align:center; margin:20px 10px}
