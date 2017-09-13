@@ -31,7 +31,10 @@
             </div>
             <div class="col-md-6">
                 <span>Teacher:</span>
-                <span *ngFor="let user of classEntity.Teachers; let i= index" class="coteacher-name">{{user.DisplayName}}<span *ngIf="i < classEntity.Teachers.length - 1">, </span></span>
+                <span *ngFor="let user of classEntity.Teachers; let i= index" >
+                    <span class="coteacher-name">{{user.DisplayName}}</span>
+                    <span *ngIf="i < classEntity.Teachers.length - 1">, </span>
+                 </span>
                 <a *ngIf="me.ObjectType=='Teacher'" id="addateacher" (click)="switchSchoolteachers(true)">Add a teacher</a>
             </div>
             <div class="schoolteachers" *ngIf="me.ObjectType=='Teacher'"  [hidden]="!showSchoolteachers">
