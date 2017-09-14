@@ -31,7 +31,7 @@
             </div>
             <div class="col-md-6">
                 <span>Teacher:</span>
-                <span *ngFor="let user of classEntity.Teachers; let i= index" class="coteacher-name">
+                <span *ngFor="let user of classEntity.Teachers; let i= index"  class="coteacher-name">
                     <span *ngIf="i < classEntity.Teachers.length - 1">{{user.DisplayName}},</span>
                     <span *ngIf="i == classEntity.Teachers.length - 1">{{user.DisplayName}}</span>
                  </span>
