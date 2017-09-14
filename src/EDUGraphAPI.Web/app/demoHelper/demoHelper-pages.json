@@ -192,6 +192,10 @@
               {
                 "title": "gotoClasses",
                 "description": "Go to classes page."
+              },
+              {
+                "title": "addCoTeacher",
+                "description": "Add a teacher action."
               }
             ]
           },
@@ -209,6 +213,18 @@
               {
                 "title": "getClassById",
                 "description": "Get class information by class id."
+              },
+              {
+                "title": "getAllTeachers",
+                "description": "Get teachers within a school."
+              },
+              {
+                "title": "addUserToSectionMembers",
+                "description": "Add a member to class."
+              },
+              {
+                "title": "addUserToSectionOwners",
+                "description": "Add a user to the calss's owners."
               }
             ]
           },
