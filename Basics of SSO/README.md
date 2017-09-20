@@ -69,7 +69,7 @@ The starter project is a simple application with only SQL authentication configu
 
    * Click **Reply URLs**, add the following URL into it.
 
-     [https://localhost:44380/auth/openid/return](https://localhost:44380/auth/openid/return)
+     [https://localhost:44377/](https://localhost:44377)
 
      ​
 
@@ -266,7 +266,7 @@ The starter project is a simple application with only SQL authentication configu
                    }
                });
        }
-   ```
+ 
 
 
        localLogin() {
@@ -301,7 +301,7 @@ The starter project is a simple application with only SQL authentication configu
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/app/login/login.component.ts) in the Demo app.
 
-4. Edit **app\authHelper\authHelper.ts**, remove all code and paste the following.
+5. Edit **app\authHelper\authHelper.ts**, remove all code and paste the following.
 
    ```typescript
    import { Injectable, Inject } from "@angular/core";
@@ -339,7 +339,7 @@ The starter project is a simple application with only SQL authentication configu
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/app/authHelper/authHelper.ts) in the Demo app.
 
-5. Edit **auth\appAuth.ts**, remove all code and paste the following.
+6. Edit **auth\appAuth.ts**, remove all code and paste the following.
 
    ```typescript
    /*
@@ -363,7 +363,7 @@ The starter project is a simple application with only SQL authentication configu
 
        //Local authentication strategy
        private LocalStrategy = require('passport-local').Strategy;
-   ```
+   
 
 
        /******************************************************************************
@@ -555,7 +555,7 @@ The starter project is a simple application with only SQL authentication configu
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/auth\appAuth.ts) in the Demo app.
 
-6. Edit **constants.ts** on root dictionary.  Remove all code and paste the following.
+7. Edit **constants.ts** on root dictionary.  Remove all code and paste the following.
 
    ```typescript
    /*
@@ -622,7 +622,7 @@ The starter project is a simple application with only SQL authentication configu
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/constants.ts) in the Demo app.
 
-7. Edit **routes\me.ts**.  Remove all code and paste the following.
+8. Edit **routes\me.ts**.  Remove all code and paste the following.
 
    ```typescript
    /*
@@ -674,7 +674,7 @@ The starter project is a simple application with only SQL authentication configu
                .catch(error => res.json(500, { error: error }));
        }
    })
-   ```
+ 
 
 
 
@@ -699,7 +699,7 @@ The starter project is a simple application with only SQL authentication configu
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/routes/me.ts) in the Demo app.
 
-8. Add a new file **msGraphClient.ts** under root **services** folder. Remove all code and paste the following.
+9. Add a new file **msGraphClient.ts** under root **services** folder. Remove all code and paste the following.
 
    ```typescript
    /*
@@ -807,7 +807,7 @@ The starter project is a simple application with only SQL authentication configu
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/services/msGraphClient.ts) in the Demo app.
 
-9. Edit **services\userService.ts**.  Remove all code and paste the following.
+10. Edit **services\userService.ts**.  Remove all code and paste the following.
 
    ```typescript
    /*
@@ -883,7 +883,7 @@ The starter project is a simple application with only SQL authentication configu
                    return retUser;
                })
        }
-   ```
+ 
 
 
        public validUserHasSameEmail(email: string): Promise<boolean> {
@@ -984,7 +984,7 @@ The starter project is a simple application with only SQL authentication configu
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/services/userService.ts) in the Demo app.
 
-10. Create a new folder **utils** on root dictionary.  Add a new file **authenticationHelper.ts** inside **utils** folder. Remove all code and paste the following.
+11. Create a new folder **utils** on root dictionary.  Add a new file **authenticationHelper.ts** inside **utils** folder. Remove all code and paste the following.
 
     ```typescript
     /*
@@ -1077,13 +1077,13 @@ The starter project is a simple application with only SQL authentication configu
 
     To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/utils/authenticationHelper.ts) in the Demo app.
 
-11. Deploy the application locally by pressing F5.
+12. Deploy the application locally by pressing F5.
 
-12. Click the **Sign in with Office 365** button and then login to O365.
+13. Click the **Sign in with Office 365** button and then login to O365.
 
     ![](Images/proj06.png)
 
-13. After login with O365 user it will redirect to a basic page.
+14. After login with O365 user it will redirect to a basic page.
 
     ![](Images/proj05.png)
 
