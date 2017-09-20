@@ -10,6 +10,32 @@ The code in the following sections is part of the full featured Angular app and 
 * [Build and debug locally](#build-and-debug-locally)
 
 
+## Build and deploy the Starter Project
+
+Visual Studio 2015 is used as editor.
+
+The starter project is a simple application with only SQL authentication configured. By updating this project, you can see how to integrate O365 Single Sign On to an application with existing authentication.
+
+1. Open Visual Studio 2015 as administrator, open the project under Starter Project folder. The starter project you can register a new user, login and then display a basic page with login user info.
+
+2. Select **npm**, right-click and select **Install Missing npm Packages**.
+
+   ![](Images/proj09.png)
+
+3. Press **F5** to run the application.
+
+4. In the opened page, click the Register link to register as a user.
+
+   ![](Images/proj03.png)
+
+5. Complete the form to add a user.
+
+   ![](Images/proj02.png)
+
+6. Once registered, you should see a blank page.
+
+   ![](Images/proj04.png)
+
 ## Register the application in Azure Active Directory
 
 1. Sign in to the Azure portal: [https://portal.azure.com/](https://portal.azure.com/).
@@ -65,968 +91,1002 @@ The code in the following sections is part of the full featured Angular app and 
 
 
 
-## Prerequisites
+## Add Single Sign On
 
-- Visual Studio 2015 (any edition), [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409) is available for free.
+1. Open the Starter Project in Visual Studio 2015, if it isn't already open.
 
-- [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593)
+2. Right click the **EDUGraphAPI.Web** project and select **Properties**.  In Environment Variables input two keys **clientId** and **clientSecret**.
 
-- [Node.js v6.11.2](https://nodejs.org/en/download/)
+   ![](Images/proj10.png)
 
-- [Node.js Tools 1.3](https://github.com/Microsoft/nodejstools/releases/tag/v1.3)
+   **ClientId**: use the Client Id of the app registration you created earlier.
 
-- [Git](https://git-scm.com/download/win)
+   **ClientSecret**: use the Key value of the app registration you created earlier.
 
-  Familiarity with Node.js, TypeScript, Angular and web services.
+3. Edit **app\login\login.component.template.html**, delete all code and add the following code into it.
 
-  ​
-
-## Build and debug locally
-
-1. Open Visual Studio 2015 as administrator, first we will create an empty project.
-
-2. Click **File**->**New**->**Project**, select **Node.js Express4 Application**, create a web project named **BasicSSO**.
-
-   ![](Images/new-project-01.png)
-
-3. Open **package.json**  file after create project successfully.
-
-   ![](Images/new-project-02.png)
-
-4. Use the following packages to replace the **dependencies** section.
-
-   ```xml
-   "dependencies": {
-       "@angular/common": "~4.3.4",
-       "@angular/compiler": "~4.3.4",
-       "@angular/core": "~4.3.4",
-       "@angular/forms": "~4.3.4",
-       "@angular/http": "~4.3.4",
-       "@angular/platform-browser": "~4.3.4",
-       "@angular/platform-browser-dynamic": "~4.3.4",
-       "@angular/router": "~4.3.4",
-       "@angular/upgrade": "~4.3.4",
-       "adal-node": "^0.1.22",
-       "angular-in-memory-web-api": "~0.3.0",
-       "bluebird": "^3.4.6",
-       "body-parser": "^1.15.2",
-       "bootstrap": "3.3.7",
-       "cookie-parser": "^1.4.3",
-       "cookie-session": "^2.0.0-alpha.2",
-       "core-js": "^2.4.1",
-       "crypto-js": "^3.1.9-1",
-       "express": "^4.14.0",
-       "gulp": "github:gulpjs/gulp#4.0",
-       "gulp-angular-embed-templates": "^2.3.0",
-       "gulp-series": "^1.0.2",
-       "gulp-typescript": "^3.1.3",
-       "jsonwebtoken": "^7.2.1",
-       "morgan": "^1.7.0",
-       "passport": "^0.3.2",
-       "passport-azure-ad": "^3.0.3",
-       "rxjs": "5.0.1",
-       "sequelize": "^3.27.0",
-       "serve-favicon": "^2.3.2",
-       "sqlite3": "^3.1.9",
-       "stylus": "^0.54.5",
-       "systemjs": "0.19.40",
-       "systemjs-builder": "^0.15.34",
-       "typescript": "^2.1.4",
-       "zone.js": "^0.8.4"
-     },
+   ```html
+   <!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license. -->
+   <!-- See LICENSE in the project root for license information -->
+   <div class="loginbody">
+       <div class="row">
+           <div class="col-md-5">
+               <section id="loginForm">
+                   <form #form="ngForm" class="form-horizontal ng-untouched ng-pristine ng-valid">
+                       <div class="validation-summary-valid text-danger">
+                           <ul>
+                               <li [hidden]="!email.errors?.email || (email.pristine && !form.submitted)">The Email field is not a valid e-mail address.</li>
+                               <li [hidden]="!email.errors?.required || (email.pristine && !form.submitted)">The Email field is required.</li>
+                               <li [hidden]="!password.errors?.minlength || (password.pristine && !form.submitted)">The Password must be at least 6 characters long.</li>
+                               <li [hidden]="!password.errors?.maxlength || (password.pristine && !form.submitted)">The Password must be at most 100 characters long.</li>
+                               <li [hidden]="!password.errors?.required || (password.pristine && !form.submitted)">The Password field is required.</li>
+                               <li [hidden]="!showLoginFailed">Your account or password is incorrect.  </li>
+                           </ul>
+                       </div>
+                       <h4 class="margin-btm-20">Use your local account to log in.</h4>
+                       <div class="form-group">
+                           <div class="col-md-12">
+                               <input [(ngModel)]="model.email" #email="ngModel" class="form-control logincontrol" id="Email" name="Email" placeholder="Email" email required>
+                           </div>
+                       </div>
+                       <div class="form-group">
+                           <div class="col-md-12">
+                               <input [(ngModel)]="model.password" #password="ngModel" class="form-control logincontrol" id="Password" name="Password" placeholder="password" type="password" minlength="6" maxlength="100" required>
+                           </div>
+                       </div>
+                       <div class="form-group">
+                           <div class="margin-left-20 col-md-10">
+                               <div class="checkbox">
+                                   <input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" [(ngModel)]="model.remember"><input name="RememberMe" type="hidden" value="false">
+                                   <label for="RememberMe">Remember me?</label>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="form-group">
+                           <div class="col-md-10">
+                               <input type="button" class="btn btn-default btn-local-login" value="Sign in" [disabled]="!form.valid || form.pristine" (click)="localLogin()">
+                           </div>
+                       </div>
+                   </form>
+                   <p>
+                       <a href="javascript:void(0)" (click)="gotoRegister()">Register as a new user</a>
+                   </p>
+               </section>
+           </div>
+           <div class="col-md-5">
+               <section id="socialLoginForm">
+                   <h4 class="margin-btm-20">Use your school account</h4>
+                   <div id="socialLoginList">
+                       <p>
+                           <button type="submit" class="btn btn-default btn-ms-login" id="OpenIdConnect" name="provider" value="OpenIdConnect" title="Log in using your Microsoft Work or school account" (click)="login()"></button>
+                       </p>
+                   </div>
+               </section>
+           </div>
+       </div>
+   </div>
    ```
 
-5. Add the following **devDependencies** section under the **dependencies** section.
+   A new login to O365 button is added on this page. When login to O365 is clicked, it will redirect the page to O365 login page.
 
-   ```xml
-     "devDependencies": {
-       "@types/bcryptjs": "2.3.30",
-       "@types/bluebird": "3.0.37",
-       "@types/body-parser": "0.0.33",
-       "@types/cookie-parser": "1.3.30",
-       "@types/cookie-session": "2.0.32",
-       "@types/crypto-js": "3.1.32",
-       "@types/express": "4.0.34",
-       "@types/express-serve-static-core": "4.0.40",
-       "@types/jsonwebtoken": "7.2.0",
-       "@types/morgan": "1.7.32",
-       "@types/passport": "0.3.1",
-       "@types/sequelize": "4.0.39",
-       "@types/serve-favicon": "2.2.28",
-       "@types/superagent": "2.0.36"
-     }
+   To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/app/login/login.component.template.html) in the Demo app.
+
+4. Edit **app\login\login.component.ts**, delete all code and add the following code into it.
+
+   ```typescript
+   /*
+   * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+   * See LICENSE in the project root for license information.
+   */
+   import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+   import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+   import { Inject } from '@angular/core';
+   import 'rxjs/add/operator/filter';
+   import 'rxjs/add/operator/map';
+   import 'rxjs/add/operator/mergeMap';
+   import { UserInfo } from '../models/common/userInfo'
+   import { AuthHelper } from "../authHelper/authHelper";
+   import { UserService } from "../services/userService";
+   import { MeService } from "../services/meService";
+
+   @Component({
+       encapsulation: ViewEncapsulation.None,
+       moduleId: module.id,
+       selector: 'loginform',
+       templateUrl: 'login.component.template.html',
+       styles: [`
+           .containerbg{height:100%;}
+           .container{width:100% !important;}
+           .container.body-content{height :100% !important;}
+           .body-content{background-image:url('/app/Images/longin-bg.jpg') ; background-size:cover; margin:0;width:100%;}
+           .container>div.row{background-color:transparent;}
+           .loginbody{margin:auto;padding:110px 15px 0 15px;max-width:1200px;}
+           .loginbody > .row{padding:0 20px 0 65px;}
+           .btn-ms-login{border:none;background-color:transparent;background-image:url('/app/Images/SignInWithOffice365-Button.png');width:234px;height:40px;}
+           .margin-btm-20{margin-bottom:20px;}
+           .margin-left-20{margin-left:20px;}
+           .rememberme{margin-left:20px;}
+           .btn-local-login{margin: 20px 0 5px 0;text-transform:uppercase;background-color:#237e17;color:white;width:95px;height:33px;text-align:center; font-size:16px;}
+           .form-group{margin-bottom:20px;}
+           .form-control{border-radius:5px;border:1px solid #acacac;font-size:16px;}
+           ::-moz-placeholder { color: #f3f3f3 !important; font-style:italic; }
+           ::-webkit-input-placeholder { color:#f3f3f3 !important;font-style:italic; }
+           :-ms-input-placeholder { color:#f3f3f3 !important; font-style:italic;}
+           .registerlink,.registerlink:hover{color:#4b67f8;font-size:16px;}
+           h4{color:#000000;font-size:16px;}
+           input::-webkit-input-placeholder, input::-moz-placeholder, input:-ms-input-placeholder, input:-moz-placeholder {
+              font-family:'Helvetica Neue LT Std It';
+              color:#f3f3f3;
+           }
+           .navbar-right, .navbar-nav{display:none;}
+           #loginForm a{color:#4B67F8;font-size:16px;}
+           .logincontrol{width:380px !important;height:36px;max-width:380px;}
+           .loginbody .row .col-md-5:nth-child(2){margin-left:85px;}
+           .loginbody .row .col-md-5:nth-child(1){margin-left:75px;}
+           .container > .navbar-header, .container > .navbar-collapse {width: 1120px!important; margin:auto auto; float:none;}
+       `]
+   })
+
+   export class Login implements OnInit {
+
+       model: UserInfo = new UserInfo();
+       showLoginFailed: boolean = false;
+
+       constructor(
+           private router: Router,
+           private activatedRoute: ActivatedRoute,
+           @Inject('auth') private auth: AuthHelper,
+           @Inject('me') private meService: MeService,
+           @Inject('user') private userService: UserService) {
+           this.model.email = "";
+           this.model.password = "";
+           this.model.remember = false;
+       }
+
+       ngOnInit() {
+           this.router.events
+               .filter(event => event instanceof NavigationEnd)
+               .map(() => this.activatedRoute)
+               .map(route => {
+                   while (route.firstChild) route = route.firstChild;
+                   return route;
+               })
+               .filter(route => route.outlet === 'primary')
+               .mergeMap(route => route.data)
+               .subscribe((event) => {
+                   if (this.auth.IsLogin()) {
+                       window.location.href = "/schools";
+                   }
+                   else {
+                       if (this.router.url != "/register") {
+                           this.router.navigate(['login']);
+                       } else {
+                           this.router.navigate(['register']);
+                       }
+                   }
+               });
+       }
    ```
 
-6. Use the following **scripts** section to replace **scripts** section.
 
-   ```xml
-     "scripts": {
-       "gulp": "gulp"
-     },
+       localLogin() {
+           this.userService.localLogin(this.model)
+               .then((result) => {
+                   if (result.status == "200") {
+                       this.meService.getCurrentUser()
+                           .subscribe((user) => {
+                               window.location.href = "/schools";
+                           });
+    
+                   } else {
+                       this.showLoginFailed = true;
+                   }
+               })
+               .catch((erro) => {
+                   this.showLoginFailed = true;
+               });
+       }
+    
+       gotoRegister() {
+           window.location.href = "/register";
+       }
+    
+       login() {
+           this.auth.login();
+       }
+   }
    ```
 
-7. Select **npm**, right-click and select **Install Missing npm Packages**.
+   New login method is added to call login method in auth helper class. 
 
-8. Delete the following folders and files from project.
+   To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/app/login/login.component.ts) in the Demo app.
 
-   - **Typings** ,  **Scripts** ,  **public** and **Views** folders
-   - **routes/index.ts** ,  **routes/user.ts** files
-   - **typings.json** file
-   - **README.md** file
+4. Edit **app\authHelper\authHelper.ts**, remove all code and paste the following.
 
-9. Select **BasicSSO**, add a new folder named **app**.
+   ```typescript
+   import { Injectable, Inject } from "@angular/core";
+   import { Constants } from '../constants';
+   import { Cookie } from '../services/cookieService';
+   import { Http, Headers, Response } from '@angular/http';
+   import { MapUtils, JsonProperty } from '../utils/jsonhelper'
+   import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+   import { Observable, ReplaySubject } from 'rxjs/Rx';
 
-10. Select **app** folder, add the following new files into **app** folder.
+   @Injectable()
+   export class AuthHelper {
 
-    - **app.component.template.html , app.component.ts**
-    - **login.component.template.html , login.component.ts**
-    - **app.module.ts, app.routing.ts**
-    - **authHelper.ts**
-    - **site.css**
-    - **main.ts**
+       constructor(
+           private router: Router,
+           private _http: Http) {
+       }
 
-11. Open **app.component.template.html** file, delete all code and add the following code into it.
+       public IsLogin(): boolean {
+           var token = Cookie.get(Constants.AuthType);
+           return token && token != "undefined";
+       }
 
-    ```html
-    <router-outlet></router-outlet>
-    ```
+       public reLogin() {
+           Cookie.delete(Constants.AuthType);
+           this.router.navigate(['login']);
+       }
+       login() {
+           window.location.href = "/auth/login/o365";
+       }
+   }
+   ```
 
-12. Open **app.component.ts** file, delete all code and add the following code into it.
+   New login method is added to redirect user to O365 site for login.
+
+   To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/app/authHelper/authHelper.ts) in the Demo app.
+
+5. Edit **auth\appAuth.ts**, remove all code and paste the following.
+
+   ```typescript
+   /*
+   * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+   * See LICENSE in the project root for license information.
+   */
+   var express = require("express");
+   var passport = require("passport");
+   import https = require('https');
+   import { TokenCacheService } from '../services/tokenCacheService';
+   import { Constants } from '../constants';
+   import { UserService } from '../services/userService';
+
+   var tokenCache = new TokenCacheService();
+
+   export class appAuth {
+       private app: any = null;
+
+       //AAD authentication strategy
+       private OIDCStrategy = require('../node_modules/passport-azure-ad/lib/index').OIDCStrategy;
+
+       //Local authentication strategy
+       private LocalStrategy = require('passport-local').Strategy;
+   ```
+
+
+       /******************************************************************************
+       * Set up passport in the app
+       ******************************************************************************/
+       //-----------------------------------------------------------------------------
+       // To support persistent login sessions, Passport needs to be able to
+       // serialize users into and deserialize users out of the session.  Typically,
+       // this will be as simple as storing the user ID when serializing, and finding
+       // the user by ID when deserializing.
+       //-----------------------------------------------------------------------------
+       constructor(app: any) {
+           this.app = app;
+    
+           passport.serializeUser(function (user, done) {
+               done(null, user);
+           });
+    
+           passport.deserializeUser(function (user, done) {
+               done(null, user);
+           });
+
+
+           passport.use('Local', this.constructLocalStrategy());
+           passport.use('O365', this.constructOIDCStrategy());
+       }
+    
+       //-----------------------------------------------------------------------------
+       // Use the OIDCStrategy within Passport.
+       // 
+       // Strategies in passport require a `verify` function, which accepts credentials
+       // (in this case, the `oid` claim in id_token), and invoke a callback to find
+       // the corresponding user object.
+       // 
+       // The following are the accepted prototypes for the `verify` function
+       // (1) function(iss, sub, done)
+       // (2) function(iss, sub, profile, done)
+       // (3) function(iss, sub, profile, access_token, refresh_token, done)
+       // (4) function(iss, sub, profile, access_token, refresh_token, params, done)
+       // (5) function(iss, sub, profile, jwtClaims, access_token, refresh_token, params, done)
+       // (6) prototype (1)-(5) with an additional `req` parameter as the first parameter
+       //
+       // To do prototype (6), passReqToCallback must be set to true in the config.
+       //-----------------------------------------------------------------------------
+       constructOIDCStrategy() {
+           return new this.OIDCStrategy({
+               identityMetadata: Constants.IdentityMetadata,
+               clientID: Constants.ClientId,
+               responseType: 'code',
+               responseMode: 'form_post',
+               redirectUrl: this.app.get('env') === 'development'
+                   ? 'https://localhost:44380/auth/openid/return'
+                   : 'https://' + Constants.Host + '/auth/openid/return',
+               allowHttpForRedirectUrl: true,
+               clientSecret: Constants.ClientSecret,
+               validateIssuer: false,
+               isB2C: false,
+               passReqToCallback: true,
+               loggingLevel: 'info',
+               nonceLifetime: null,
+           }, function (req, iss, sub, profile, jwtClaims, access_token, refresh_token, params, done) {
+               if (!profile.oid) {
+                   return done(new Error("No oid found"), null);
+               }
+               profile.tid = profile._json.tid;
+               profile.authType = 'O365';
+               req.res.cookie('authType', 'O365');
+    
+               var tokenCacheService = new TokenCacheService();
+               tokenCacheService.createOrUpdate(profile.oid, Constants.AADGraphResource, {
+                   refreshToken: refresh_token,
+                   accessToken: access_token,
+                   expiresOn: new Date(parseInt(params.expires_on) * 1000)
+               }).then(item => {
+                   done(null, profile);
+               });
+           });
+       }
+       //-----------------------------------------------------------------------------
+       // Use the LocalStrategy within Passport.
+       //-----------------------------------------------------------------------------
+       constructLocalStrategy() {
+           return new this.LocalStrategy(
+               {
+                   usernameField: 'email',
+                   passwordField: 'password'
+               },
+               function (username, password, done) {
+                   let userSrv = new UserService();
+                   userSrv.validUser(username, password)
+                       .then((user) => {
+                           if (user) {
+                               let organization = user['organization'];
+                               done(null, {
+                                   'id': user['id'],
+                                   'oid': user['o365UserId'],
+                                   'tid': organization ? organization.tenantId : '',
+                                   'authType': "Local"
+                               });
+                           } else {
+                               done(null);
+                           }
+                       })
+                       .catch(err => {
+                           done(null);
+                       });
+               });
+       }
+    
+       ensureAuthenticated(req, res, next) {
+           if (req.isAuthenticated()) {
+               return next();
+           }
+           else if (req.baseUrl.startsWith("/api/")) {
+               res.send(401, 'missing authorization header');
+           }
+           res.redirect('/');
+       }
+    
+       // Initialize Passport!  Also use passport.session() middleware, to support
+       // persistent login sessions (recommended).
+       public initPassport(app: any) {
+           app.use(passport.initialize());
+           app.use(passport.session());
+       }
+    
+       //-----------------------------------------------------------------------------
+       // Set up the route controller
+       //
+       // 1. For 'login' route and 'returnURL' route, use `passport.authenticate`. 
+       // This way the passport middleware can redirect the user to login page, receive
+       // id_token etc from returnURL.
+       //
+       // 2. For the routes you want to check if user is already logged in, use 
+       // `ensureAuthenticated`. It checks if there is an user stored in session, if not
+       // it will call `passport.authenticate` to ask for user to log in.
+       //-----------------------------------------------------------------------------
+       public initAuthRoute(app: any) {
+    
+           app.post('/auth/login/local', passport.authenticate('Local'),
+               function (req, res) {
+                   if (req.body.remember) {
+                       res.cookie('authType', 'Local', { maxAge: 30 * 24 * 60 * 60 * 1000 });
+                   } else {
+                       res.cookie('authType', 'Local');
+                   }
+                   res.json({ status: 'validate successfully' });
+               });
+    
+           app.get('/auth/login/o365', function (req, res, next) {
+               var email = req.cookies[Constants.O365Email];
+               passport.authenticate('O365', {
+                   resourceURL: Constants.AADGraphResource,
+                   customState: 'my_state',
+                   failureRedirect: '/',
+                   login_hint: email
+               })(req, res, next);
+           });
+    
+           // 'GET returnURL'
+           // `passport.authenticate` will try to authenticate the content returned in
+           // query (such as authorization code). If authentication fails, user will be
+           // redirected to '/' (home page); otherwise, it passes to the next middleware.
+           app.get('/auth/openid/return', passport.authenticate('O365', { failureRedirect: '/' }), function (req, res) {
+               res.redirect('/');
+           });
+    
+           // 'POST returnURL'
+           // `passport.authenticate` will try to authenticate the content returned in
+           // body (such as authorization code). If authentication fails, user will be
+           // redirected to '/' (home page); otherwise, it passes to the next middleware.
+           app.post('/auth/openid/return', passport.authenticate('O365', { failureRedirect: '/' }), function (req, res) {
+               res.redirect('/');
+           });
+    
+           // 'logout' route, logout from passport, and destroy the session with AAD.
+           app.get('/logout', function (req, res) {
+               let authType = req.cookies['authType'];
+               res.clearCookie('authType');
+               req.logOut();
+               req.session = null;
+               res.redirect('/');
+           });
+       }
+   }
+   ```
+
+   A new O365 login passport is setup on this class. It will setup parameters like client id, client secret, redirect URL. 
+
+   To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/auth\appAuth.ts) in the Demo app.
+
+6. Edit **constants.ts** on root dictionary.  Remove all code and paste the following.
+
+   ```typescript
+   /*
+   * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+   * See LICENSE in the project root for license information.
+   */
+   export class Constants {
+
+       public static readonly Host: string = process.env.WEBSITE_HOSTNAME as string;
+
+       public static readonly ClientId: string = process.env.clientId as string;
+       public static readonly ClientSecret: string = process.env.clientSecret as string;
+
+       public static readonly AADInstance: string = "https://login.microsoftonline.com/";
+       public static readonly Authority: string = Constants.AADInstance + "common/";
+       public static readonly IdentityMetadata: string = Constants.Authority + '.well-known/openid-configuration';
+
+       public static readonly MSGraphResource: string = "https://graph.microsoft.com";
+       public static readonly AADGraphResource: string = "https://graph.windows.net";
+
+       public static readonly SourceCodeRepositoryUrl: string = process.env.sourceCodeRepositoryUrl as string;
+
+       public static readonly AADCompanyAdminRoleName: string = "Company Administrator";
+
+       // Cookie names
+       public static readonly O365Username = "O365Username";
+       public static readonly O365Email = "O365Email";
+
+       // Database 
+       public static readonly SQLiteDB: string = process.env.SQLiteDB as string;
+   }
+
+   export class O365ProductLicenses {
+       /// <summary>
+       /// Microsoft Classroom Preview
+       /// </summary>
+       public static readonly Classroom: string = "80f12768-d8d9-4e93-99a8-fa2464374d34";
+       /// <summary>
+       /// Office 365 Education for faculty
+       /// </summary>
+       public static readonly Faculty: string = "94763226-9b3c-4e75-a931-5c89701abe66";
+       /// <summary>
+       /// Office 365 Education for students
+       /// </summary>
+       public static readonly Student: string = "314c4481-f395-4525-be8b-2ec4bb1e9d91";
+       /// <summary>
+       /// Office 365 Education for faculty
+       /// </summary>
+       public static readonly FacultyPro: string = "78e66a63-337a-4a9a-8959-41c6654dfb56";
+       /// <summary>
+       /// Office 365 Education for students
+       /// </summary>
+       public static readonly StudentPro: string = "e82ae690-a2d5-4d76-8d30-7c6e01e6022e";
+   }
+
+   export class Roles {
+       public static readonly Admin: string = "Admin";
+       public static readonly Faculty: string = "Faculty";
+       public static readonly Student: string = "Student";
+   }
+   ```
+
+   This file defines constant parameter for login to O365.
+
+   To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/constants.ts) in the Demo app.
+
+7. Edit **routes\me.ts**.  Remove all code and paste the following.
+
+   ```typescript
+   /*
+   * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+   * See LICENSE in the project root for license information.
+   */
+   import express = require('express');
+   import { UserService } from '../services/userService';
+
+   var router = express.Router();
+   var userService = new UserService();
+
+   router.get('/', function (req, res) {
+       var u = req.user;
+       if (u.authType == 'O365') {
+           var retUser;
+           userService.getUserModel({ o365UserId: u.oid })
+               .then(user => {
+                   if (user == null) {
+                       return userService.getO365User(u.oid, u._json.tid)
+                           .then(user => {
+                               user.authType = u.authType;
+                               retUser = user;
+                               return userService.validUserHasSameEmail(retUser.o365Email);
+                           })
+                           .then((ret) => {
+                               retUser.hasSameNameLocalAccount = ret;
+                               return retUser;
+                           })
+                   }
+                   else {
+                       user.areAccountsLinked = true;
+                       user.authType = u.authType;
+                       return user;
+                   }
+               })
+               .then(usermodel => { res.json(usermodel); })
+               .catch(error => res.json(500, { error: error }));
+       }
+       else {
+           userService.getUserModel({ id: u.id })
+               .then(user => {
+                   user.authType = u.authType;
+                   user.areAccountsLinked =
+                       user.o365UserId != null && user.o365UserId != ''
+                       && user.o365Email != null && user.o365Email != '';
+                   res.json(user);
+               })
+               .catch(error => res.json(500, { error: error }));
+       }
+   })
+   ```
+
+
+
+   router.get('/accessToken', function (req, res) {
+       if (!req.isAuthenticated()) {
+           res.json(401, { error: "401 unauthorized" });
+           return;
+       }
+    
+       let userId = req.user.oid;
+       if (userId == null) {
+           res.json(null);
+           return;
+       }
+
+   });
+
+   export = router;
+   ```
+
+   New code is added to handle get user information from O365 when the current user is an O365 user.
+
+   To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/routes/me.ts) in the Demo app.
+
+8. Add a new file **msGraphClient.ts** under root **services** folder. Remove all code and paste the following.
+
+   ```typescript
+   /*
+   * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+   * See LICENSE in the project root for license information.
+   */
+   import * as request from 'superagent';
+   import * as Promise from "bluebird";
+   import { Constants, O365ProductLicenses, Roles } from '../constants';
+
+   export class MSGraphClient {
+
+       private accessToken: string;
+
+       constructor(accessToken: string) {
+           this.accessToken = accessToken;
+       }
+
+       public getO365User(tenantId: string): Promise<any> {
+           let o365UserInfo = {
+               user: null,
+               roles: [],
+               organization: null
+           };
+           return this.getMe()
+               .then((user) => {
+                   o365UserInfo.user = user
+                   return this.getRoles(user)
+               })
+               .then((roles) => {
+                   o365UserInfo.roles = roles;
+                   if (tenantId == null) {
+                       o365UserInfo.organization = null;
+                       return o365UserInfo;
+                   }
+                   return this.getOrganization(tenantId)
+               })
+               .then((org) => {
+                   o365UserInfo.organization = org;
+                   return o365UserInfo;
+               })
+       }
+
+       public getMe(): Promise<any> {
+           return new Promise((resolve, reject) => {
+               request
+                   .get(Constants.MSGraphResource + "/v1.0/me/?$select=id,givenName,surname,userPrincipalName,assignedLicenses")
+                   .set('Authorization', 'Bearer ' + this.accessToken)
+                   .end((err, res) => {
+                       if (err) {
+                           return reject(err)
+                       }
+                       resolve(res.body);
+                   })
+           })
+       }
+
+       public getOrganization(tenantID: string): Promise<any> {
+           return new Promise((resolve, reject) => {
+               request
+                   .get(Constants.MSGraphResource + "/v1.0/organization/" + tenantID + "?$select=id,displayName")
+                   .set('Authorization', 'Bearer ' + this.accessToken)
+                   .end((err, res) => {
+                       if (err) {
+                           return reject(err)
+                       }
+                       resolve(res.body);
+                   })
+           });
+       }
+
+       private getDirectoryAdminRole(): Promise<any> {
+           return new Promise((resolve, reject) => {
+               request
+                   .get(Constants.MSGraphResource + "/v1.0/directoryRoles/" + "?$expand=members")
+                   .set('Authorization', 'Bearer ' + this.accessToken)
+                   .end((err, res) => {
+                       if (err) {
+                           return reject(err)
+                       }
+                       let directoryRole = res.body.value as Array<any>;
+                       resolve(directoryRole.find(dr => dr.displayName == Constants.AADCompanyAdminRoleName));
+                   })
+           })
+       }
+
+       private getRoles(user: any): Promise<string[]> {
+           let roles: string[] = [];
+           return this.getDirectoryAdminRole()
+               .then((directoryAdminRole) => {
+                   if (directoryAdminRole.members.findIndex(i => i.id == user.id) != -1) {
+                       roles.push(Roles.Admin);
+                   }
+                   if (user.assignedLicenses.findIndex(i => i.skuId == O365ProductLicenses.Faculty || i.skuId == O365ProductLicenses.FacultyPro) != -1)
+                       roles.push(Roles.Faculty);
+                   if (user.assignedLicenses.findIndex(i => i.skuId == O365ProductLicenses.Student || i.skuId == O365ProductLicenses.StudentPro) != -1)
+                       roles.push(Roles.Student);
+                   return roles;
+               })
+       }
+   }
+   ```
+
+   This class is used to get user information from O365 with access token. 
+
+   To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/services/msGraphClient.ts) in the Demo app.
+
+9. Edit **services\userService.ts**.  Remove all code and paste the following.
+
+   ```typescript
+   /*
+   * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+   * See LICENSE in the project root for license information.
+   */
+   import * as uuid from "node-uuid";
+   import * as Promise from "bluebird";
+   import * as bcrypt from 'bcryptjs';
+   import { DbContext, UserInstance } from '../data/dbContext';
+   import { TokenCacheService } from '../services/TokenCacheService';
+   import { MSGraphClient } from "../services/msGraphClient";
+   import { AuthenticationHelper } from '../utils/authenticationHelper';
+   import { Roles } from '../constants';
+   import { Constants } from '../constants';
+
+   export class UserService {
+
+       private dbContext = new DbContext();
+
+       public creatUser(email: string, password: string, firstName: string, lastName: string, favoriteColor: string): Promise<UserInstance> {
+           email = email.toLowerCase();
+           return this.dbContext.User
+               .findOne({ where: { email: email } })
+               .then(user => {
+                   if (user == null) {
+                       let passwordSalt = bcrypt.genSaltSync();
+                       let passwordHash = password != null
+                           ? bcrypt.hashSync(password, passwordSalt)
+                           : null;
+                       return this.dbContext.User.create(
+                           {
+                               id: uuid.v4(),
+                               email: email,
+                               firstName: firstName,
+                               lastName: lastName,
+                               passwordHash: passwordHash,
+                               salt: passwordSalt,
+                               favoriteColor: favoriteColor
+                           });
+                   }
+                   else
+                       throw (`Email ${email} is used by others`);
+
+               });
+       }
+
+       public validUser(email: string, password: string): Promise<any> {
+           email = email.toLowerCase();
+           let retUser;
+           return this.dbContext.User
+               .findOne({ where: { email: email } })
+               .then((user) => {
+                   let isValid = user != null && bcrypt.hashSync(password, user.salt) == user.passwordHash;
+                   if (isValid) {
+                       retUser = user;
+                       return user;
+                   }
+                   else
+                       throw 'Invalid Username or password';
+               })
+               .then((user: UserInstance) => {
+                   return user.getOrganization();
+               })
+               .then((organization) => {
+                   if (organization != null)
+                       retUser.organization = {
+                           tenantId: organization.tenantId,
+                           name: organization.name,
+                           isAdminConsented: organization.isAdminConsented
+                       };
+
+                   return retUser;
+               })
+       }
+   ```
+
+
+       public validUserHasSameEmail(email: string): Promise<boolean> {
+           email = email.toLowerCase();
+           return this.dbContext.User
+               .findOne({ where: { email: email } })
+               .then(user => {
+                   return user != null;
+               });
+       }
+
+
+
+       public getUserModel(where: any): Promise<any> {
+           return this.dbContext.User.findOne({ where: where })
+               .then(user => {
+                   if (user == null) {
+                       return null;
+                   }
+                   var result = {
+                       id: user.id,
+                       firstName: user.firstName,
+                       lastName: user.lastName,
+                       email: user.email,
+                       o365UserId: user.o365UserId,
+                       o365Email: user.o365Email,
+                       favoriteColor: user.favoriteColor,
+                       organization: null,
+                       roles: []
+                   }
+                   var p1 = user.getOrganization()
+                       .then(organization => {
+                           if (organization != null) {
+                               result.organization = {
+                                   tenantId: organization.tenantId,
+                                   name: organization.name,
+                                   isAdminConsented: organization.isAdminConsented
+                               }
+                           }
+                       });
+                   var p2 = user.getUserRoles()
+                       .then(userRoles => userRoles.forEach(i => result.roles.push(i.name)));
+                   return Promise.all([p1, p2])
+                       .then((ret) => {
+                           return result;
+                       })
+               });
+       }
+    
+       public getO365User(o365UserId: string, tenantId: string): Promise<any> {
+           return AuthenticationHelper.getAccessToken(o365UserId, Constants.MSGraphResource)
+               .then((accessToken) => {
+                   let msgraphClient: MSGraphClient = new MSGraphClient(accessToken.value);
+                   return msgraphClient.getO365User(tenantId)
+               })
+               .then((o365UserInfo) => {
+                   let userInfo = this.convertO365UserToLocal(o365UserInfo);
+    
+                   return userInfo;
+    
+               })
+       }
+
+
+       private convertO365UserToLocal(o365UserInfo: any): any {
+           let userInfo = {
+               firstName: o365UserInfo.user.givenName,
+               lastName: o365UserInfo.user.surname,
+               o365UserId: o365UserInfo.user.id,
+               o365Email: o365UserInfo.user.mail == null ? o365UserInfo.user.userPrincipalName : o365UserInfo.user.mail,
+               organization: o365UserInfo.organization == null ? null : {
+                   tenantId: o365UserInfo.organization.id,
+                   name: o365UserInfo.organization.displayName
+               },
+               roles: o365UserInfo.roles
+           };
+           return userInfo
+       }
+       private getUserById(userId: string): Promise<UserInstance> {
+           return this.dbContext.User.findById(userId);
+       }
+    
+       private getUserRoles(userId: string): Promise<any> {
+           return this.getUserById(userId)
+               .then((user) => {
+                   return user.getUserRoles();
+               })
+               .then((roles) => {
+                   let retRoles = [];
+                   roles.forEach(i => retRoles.push(i.name));
+                   return retRoles;
+               })
+       }
+   }
+   ```
+
+   New methods are added to get O365 user and convert O365 user to local user so O365 user can login.
+
+   To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/services/userService.ts) in the Demo app.
+
+10. Create a new folder **utils** on root dictionary.  Add a new file **authenticationHelper.ts** inside **utils** folder. Remove all code and paste the following.
 
     ```typescript
-    import { Component, OnInit } from '@angular/core';
-    import { AuthHelper } from "./authHelper";
-
-    @Component({
-        moduleId: module.id,
-        selector: 'app',
-        templateUrl: 'app.component.template.html'
-    })
-
-    export class AppComponent implements OnInit {
-        constructor(
-            private auth: AuthHelper) {
-        }
-        ngOnInit() {
-        }
-    }
-    ```
-
-13. Open **login.component.template.html** file, delete all code and add the following code into it.
-
-    ```html
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Basic SSO</a>
-            </div>
-            <div class="navbar-collapse">
-                <ul class="nav navbar-nav"></ul>
-                <form class="navbar-right" id="logoutForm" method="post">
-                    <div class="userinfo">
-                        <a href="javascript:void(0);" id="userinfolink" (click)="showContextMenu(this)">
-                            <span *ngIf="fullName">Hello {{fullName}}</span>
-                            <span *ngIf="fullName" class="caret" id="caret" [class.transformcaret]="ifShowContextMenu"></span>
-                        </a>
-                    </div>
-                    <div class="" id="userinfoContainer" [hidden]="!ifShowContextMenu">
-                        <div class="popuserinfo">
-                            <div class="subitem">
-                                <a href="javascript:void(0);" (click)="doLogOff(this)">Log off</a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="containerbg">
-        <div class="container body-content">
-            <div class="loginbody">
-                <br />
-                <div class="row" [hidden]="isLogin()">
-                    <p>
-                        <button type="submit" class="btn btn-default btn-ms-login" id="OpenIdConnect" name="provider" value="OpenIdConnect" title="Log in using your Microsoft Work or school account" (click)="login()">Sign In With Office 365</button>
-                    </p>
-                </div>
-                <div class="row" [hidden]="!isLogin()">
-                    <h1>Hello World!</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-    ```
-
-14. Open **login.component.ts** file, delete all code and add the following code into it.
-
-    ```typescript
-    import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
-    import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-    import { Inject } from '@angular/core';
-    import 'rxjs/add/operator/filter';
-    import 'rxjs/add/operator/map';
-    import 'rxjs/add/operator/mergeMap';
-    import { AuthHelper } from "./authHelper";
-
-    @Component({
-        encapsulation: ViewEncapsulation.None,
-        moduleId: module.id,
-        selector: 'loginform',
-        templateUrl: 'login.component.template.html'
-    })
-
-    export class Login implements OnInit {
-        ifShowContextMenu: boolean;
-        fullName: string;
-
-        constructor(
-            private router: Router,
-            private activatedRoute: ActivatedRoute,
-            private auth: AuthHelper) {
-        }
-
-        ngOnInit() {
-            this.ifShowContextMenu = false;
-            this.initFullName();
-        }
-
-        login() {
-            this.auth.login();
-        }
-
-        isLogin() {
-            return this.auth.IsLogin();
-        }
-
-        doLogOff(): void {
-            console.log('logOff');
-            window.location.href = '/logout';
-        }
-
-        showContextMenu() {
-            this.ifShowContextMenu = !(this.ifShowContextMenu);
-        }
-
-        initFullName() {
-            if (this.auth.IsLogin()) {
-                this.auth.getCurrentUser()
-                    .subscribe((user) => {
-                        this.fullName = user.email;
-                    });
-            }
-        }
-    }
-    ```
-
-15. Open **app.module.ts** file, delete all code and add the following code into it.
-
-    ```typescript
-    import { NgModule } from '@angular/core';
-    import { FormsModule } from '@angular/forms';
-    import { BrowserModule } from '@angular/platform-browser';
-    import { HttpModule } from '@angular/http';
-    import { AppComponent } from './app.component';
-    import { Login } from './login.component';
-    import { routing } from './app.routing';
-    import { AuthHelper } from "./authHelper";
-
-    @NgModule({
-        imports: [BrowserModule, FormsModule, routing, HttpModule],
-        declarations: [AppComponent, Login],
-        bootstrap: [AppComponent],
-        providers: [
-            AuthHelper
-        ]
-    })
-
-    export class AppModule {
-    }
-    ```
-
-16. Open **app.routing.ts** file, delete all code and add the following code into it.
-
-    ```typescript
-    import { ModuleWithProviders } from '@angular/core';
-    import { Routes, RouterModule } from '@angular/router';
-    import { Login } from './login.component';
-
-    export const appRoutes: Routes = [
-        { path: '**', component: Login }
-    ];
-
-    export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
-    ```
-
-17. Open **authHelper.ts** file, delete all code and add the following code into it.
-
-    ```typescript
-    import { Injectable, Inject } from "@angular/core";
-    import { Http, Headers, Response } from '@angular/http';
-    import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-    import { Observable, ReplaySubject } from 'rxjs/Rx';
-
-    @Injectable()
-    export class AuthHelper {
-
-        private meAPIUrl = 'api/me';
-        constructor(
-            private router: Router,
-            private _http: Http) {
-        }
-
-        public IsLogin(): boolean {
-            var token = CookieHelper.get('authType');
-            return token && token != "undefined";
-        }
-
-        public getCurrentUser() {
-            return this._http.get(this.meAPIUrl + '?t=' + new Date().getTime(), {})
-                .map((response: Response) => response.json());
-        }
-
-        login() {
-            window.location.href = "/auth/login/o365";
-        }
-    }
-
-    export class CookieHelper {
-
-        public static check(name: string): boolean {
-            name = encodeURIComponent(name);
-            let regexp = new RegExp('(?:^' + name + '|;\\s*' + name + ')=(.*?)(?:;|$)', 'g');
-            let exists = regexp.test(document.cookie);
-            return exists;
-        }
-
-        public static get(name: string): string {
-            if (CookieHelper.check(name)) {
-                name = encodeURIComponent(name);
-                let regexp = new RegExp('(?:^' + name + '|;\\s*' + name + ')=(.*?)(?:;|$)', 'g');
-                let result = regexp.exec(document.cookie);
-                return decodeURIComponent(result[1]);
-            } else {
-                return null;
-            }
-        }
-    }
-    ```
-
-18. Open **site.css** file, delete all code and add the following code into it.
-
-    ```style
-    html{height:100%;}
-    body {
-        padding-top: 50px;
-        padding-bottom: 20px;
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-        height:100%;
-    }
-    a{cursor:pointer;}
-    .containerbg{    background: linear-gradient(to bottom, white, #9e9e9e);height:auto; height: auto;
-        min-height: 100%;padding-bottom:20px;
-    }
-    .body-content {
-        padding-left: 15px;
-        padding-right: 15px;
-        height:100%;
-    }
-    .navbar-inverse{background-color:#237e17;border-color:#237e17;}
-    .navbar-inverse .navbar-brand, 
-    .navbar-inverse .navbar-nav > li > a {color:white;}
-    .navbar-inverse .navbar-brand{font-size:14px}
-    .navbar-collapse form{margin-bottom:0;}
-    .navbar-right a{color:white;text-decoration:none;}
-    .userinfo .caret{color:white;font-size:20px;    }
-    .transformcaret{transform: rotate(180deg);}
-    .userinfo{height:50px;line-height:50px;}
-    .navbar-collapse{position:relative;}
-    .popuserinfo{position:absolute;top:40px;z-index:999;background-color:white;padding:15px 0;
-                 width:200px;border:1px solid #dedede;box-sizing: border-box;left:955px;}
-    @-moz-document url-prefix() 
-    {   
-        .popuserinfo{left:955px;}
-    }
-    .subitem{float:left;width:100%;}
-    .subitem a{color:black;text-decoration:none;width:100%;height:100%;display:block;padding:10px 0 10px 20px;}
-    .subitem:hover{background-color:#237e17;color:white;}
-    .subitem a:hover{color:white;}
-    .container {width: 1170px;}
-    ```
-
-19. Open **main.ts** file, delete all code and add the following code into it.
-
-    ```typescript
-    import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-    import { AppModule } from './app.module';
-    const platform = platformBrowserDynamic();
-    platform.bootstrapModule(AppModule);
-    ```
-
-20. Select **BasicSSO** project folder, add the following new files into it.
-
-    - **Index.html**
-    - **constants.ts**
-    - **gulpfile.js**
-    - **systemjs.config.js**
-    - **tsconfig.json**
-
-21. Open **Index.html** file, delete all code and add the following code into it.
-
-    ```html
-    <html>
-    <head>
-        <title>Basic SSO</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <base href="/">
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="/app/site.css" rel="stylesheet" />
-    </head>
-    <body>
-        <app></app>
-        <script src="node_modules/core-js/client/shim.min.js"></script>
-        <script src="node_modules/zone.js/dist/zone.js"></script>
-        <script src="node_modules/systemjs/dist/system.src.js"></script>
-        <script src="systemjs.config.js"></script>
-        <script>
-            System.import('app').catch(function (err) { console.error(err); });
-        </script>
-    </body>
-    </html>
-    ```
-
-22. Open **constants.ts** file, delete all code and add the following code into it.
-
-    ```typescript
-    export class Constants {
-        public static readonly Host: string = process.env.WEBSITE_HOSTNAME as string;
-        public static readonly ClientId: string = process.env.clientId as string;
-        public static readonly ClientSecret: string = process.env.clientSecret as string;
-        public static readonly AADInstance: string = "https://login.microsoftonline.com/";
-        public static readonly Authority: string = Constants.AADInstance + "common/";
-        public static readonly IdentityMetadata: string = Constants.Authority + '.well-known/openid-configuration';
-        public static readonly MSGraphResource: string = "https://graph.microsoft.com";
-        public static readonly AADGraphResource: string = "https://graph.windows.net"; 
-        public static readonly SQLiteDB: string = process.env.SQLiteDB as string;
-    }
-    ```
-
-23. Open **gulpfile.js** file, delete all code and add the following code into it.
-
-    ```javascript
-    var gulp = require('gulp'),
-        path = require('path'),
-        Builder = require('systemjs-builder'),
-        ts = require('gulp-typescript'),
-        sourcemaps = require('gulp-sourcemaps'),
-        embedTemplates = require('gulp-angular-embed-templates');
-
-    var tsProject = ts.createProject('tsconfig.json');
-
-    // build server side ts
-    gulp.task('ts-server', () => {
-        return gulp.src(['**/*.ts', '!app{,/**}', '!dist{,/**}', '!node_modules{,/**}'])
-            .pipe(sourcemaps.init({
-                loadMaps: true
-            }))
-            .pipe(tsProject())
-            .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest('./'));
-    });
-
-    // build and bundle client side ts and html
-    var appDev = 'app';
-    var appProd = 'dist';
-
-    gulp.task('ts-client', () => {
-        return gulp.src(appDev + '/**/*.ts')
-            .pipe(embedTemplates({ sourceType: 'ts' }))
-            .pipe(sourcemaps.init({
-                loadMaps: true
-            }))
-            .pipe(tsProject())
-            .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest(appProd));
-    });
-
-    gulp.task('bundle-client', function () {
-        var builder = new Builder('', 'systemjs.config.js');
-        return builder
-            .buildStatic(appProd + '/main.js', appProd + '/bundle.js', {
-                minify: false, sourceMaps: true, encodeNames: false
-            })
-            .then(function () {
-                console.log('Build complete');
-            })
-            .catch(function (err) {
-                console.log('Build error');
-                console.log(err);
-            });
-    });
-
-    gulp.task('build', gulp.series(['ts-server', 'ts-client', 'bundle-client']));
-    ```
-
-24. Open **systemjs.config.js** file, delete all code and add the following code into it.
-
-    ```javascript
-    (function (global) {
-        System.config({
-            paths: {
-                // paths serve as alias
-                'npm:': 'node_modules/'
-            },
-            // map tells the System loader where to look for things
-            map: {
-                // our app is within the app folder
-                app: 'app',
-                // angular bundles
-                '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
-                '@angular/common': 'npm:@angular/common/bundles/common.umd.js',
-                '@angular/compiler': 'npm:@angular/compiler/bundles/compiler.umd.js',
-                '@angular/platform-browser': 'npm:@angular/platform-browser/bundles/platform-browser.umd.js',
-                '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
-                '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
-                '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
-                '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
-                // other libraries
-                'rxjs': 'npm:rxjs',
-                'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
-            },
-            // packages tells the System loader how to load when no filename and/or no extension
-            packages: {
-                app: {
-                    main: './main.js',
-                    defaultExtension: 'js'
-                },
-                rxjs: {
-                    defaultExtension: 'js'
-                },
-                dist: {
-                    defaultExtension: 'js'
-                }
-            }
-        });
-    })(this);
-    ```
-
-25. Open **tsconfig.json** file, delete all code and add the following code into it.
-
-    ```typescript
-    {
-      "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "lib": [ "es2015", "dom" ],
-        "noImplicitAny": false,
-        "suppressImplicitAnyIndexErrors": true,
-        "noStrictGenericChecks": true
-      }
-    }
-    ```
-
-26. Right-click project,  **Add ->New Folder** named **services**.
-
-27. Right-click **services** folder,  add the following new files into it.
-
-    - **appAuth.ts**
-    - **dbContext.ts**
-    - **tokenCacheService.ts**
-
-28. Open **dbContext.ts** file, delete all code and add the following code into it to create token cache table.
-
-    ```typescript
-    import * as Sequelize from 'sequelize';
+    /*
+    * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+    * See LICENSE in the project root for license information.
+    */
+    import { Constants } from '../constants';
+    import { DbContext, TokenCacheInstance, TokenCacheAttributes } from '../data/dbContext';
+    import { TokenCacheService } from '../services/TokenCacheService';
     import * as Promise from "bluebird";
-    import { Constants } from '../constants';
 
-    export interface TokenCacheAttributes {
-        userId: string;
-        refreshToken: string;
-        accessTokens: string;
-    }
-    export interface TokenCacheInstance extends Sequelize.Instance<TokenCacheAttributes>, TokenCacheAttributes {
-    }
-    export interface TokenCacheModel extends Sequelize.Model<TokenCacheInstance, TokenCacheAttributes> { }
+    var AuthenticationContext = require('adal-node').AuthenticationContext;
 
-    export class DbContext {
-        public sequelize: Sequelize.Sequelize;
-        public TokenCache: TokenCacheModel;
+    export class AuthenticationHelper {
 
-        constructor() {
-            this.init();
-        }
-
-        public sync(options?: Sequelize.SyncOptions): Promise<any> {
-            return this.sequelize.sync(options);
-        }
-
-        private init() {
-            this.sequelize = new Sequelize("", "", "", {
-                dialect: 'sqlite',
-                storage: Constants.SQLiteDB
-            });
-
-            this.TokenCache = this.sequelize.define<TokenCacheInstance, TokenCacheAttributes>('TokenCache',
-                {
-                    userId: Sequelize.STRING,
-                    refreshToken: Sequelize.TEXT,
-                    accessTokens: Sequelize.TEXT,
-                },
-                {
-                    timestamps: false,
-                    tableName: "TokenCache"
-                });
-        }
-    }
-    ```
-
-29. Open **tokenCacheService.ts** file, delete all code and add the following code into it to create/update/delete token cache.
-
-    ```typescript
-    import { DbContext, TokenCacheInstance } from '../services/dbContext';
-    import * as Promise from "bluebird";
-    import { Constants } from '../constants';
-
-    export class TokenCacheService {
-
-        private dbContext = new DbContext();
-
-        public get(userId: string): Promise<TokenCacheInstance> {
-            return this.dbContext.TokenCache.findOne({ where: { userId: userId } });
-        }
-
-        public createOrUpdate(userId: string, resource: string, authResult: any): Promise<TokenCacheInstance> {
-            return this.dbContext.TokenCache.findOne({ where: { userId: userId } })
-                .then(tokenCache => {
-                    if (tokenCache == null) return this.create(userId, resource, authResult);
-                    else return this.update(tokenCache, resource, authResult);
+        static getAccessTokenByCode(userId: string, code: string, resource: string, redirectUrl: string): Promise<any> {
+            return this.getTokenWithAuthorizationCode(code, resource, redirectUrl)
+                .then(authResult => {
+                    var tokenCacheService = new TokenCacheService();
+                    return tokenCacheService.createOrUpdate(userId, resource, authResult)
+                        .thenReturn(authResult);
                 });
         }
 
-        public update(tokenCache: TokenCacheInstance, resource: string, authResult: any): Promise<TokenCacheInstance> {
-            let accessTokens = JSON.parse(tokenCache.accessTokens);
-            accessTokens[resource] = {
-                expiresOn: authResult.expiresOn,
-                value: authResult.accessToken
-            }
-            tokenCache.refreshToken = authResult.refreshToken;
-            tokenCache.accessTokens = JSON.stringify(accessTokens);
-            return tokenCache.save();
+        static getAccessToken(userId: string, resource: string): Promise<any> {
+            return this.getTokenCore(userId, resource)
         }
 
-        public create(userId: string, resource: string, authResult: any): Promise<TokenCacheInstance> {
-            let accessTokens = {};
-            accessTokens[resource] = {
-                expiresOn: authResult.expiresOn,
-                value: authResult.accessToken
-            };
-            return this.dbContext.TokenCache.create({
-                userId: userId,
-                refreshToken: authResult.refreshToken,
-                accessTokens: JSON.stringify(accessTokens)
-            })
-        }
-
-        public clearUserTokenCache(): Promise<any> {
-            return this.dbContext.TokenCache.all()
-                .then(caches => {
-                    let promises = new Array<Promise<any>>();
-                    caches.forEach(cach => {
-                        promises.push(cach.destroy());
-                    })
-                    return Promise.all(promises);
-                });
-        }
-    }
-    ```
-
-30. Open **appAuth.ts** file, delete all code and add the following code into it to authentication.
-
-    ```typescript
-    var express = require("express");
-    var passport = require("passport");
-    import https = require('https');
-    import { TokenCacheService } from '../services/tokenCacheService';
-    import { Constants } from '../constants';
-
-    var tokenCache = new TokenCacheService();
-
-    export class appAuth {
-        private app: any = null;
-
-        private OIDCStrategy = require('../node_modules/passport-azure-ad/lib/index').OIDCStrategy;
-
-        constructor(app: any) {
-            this.app = app;
-
-            passport.serializeUser(function (user, done) {
-                done(null, user);
-            });
-
-            passport.deserializeUser(function (user, done) {
-                done(null, user);
-            });
-
-            passport.use('O365', this.constructOIDCStrategy());
-        }
-
-        constructOIDCStrategy() {
-            return new this.OIDCStrategy({
-                identityMetadata: Constants.IdentityMetadata,
-                clientID: Constants.ClientId,
-                responseType: 'code',
-                responseMode: 'form_post',
-                redirectUrl: this.app.get('env') === 'development'
-                    ? 'https://localhost:44380/auth/openid/return'
-                    : 'https://' + Constants.Host + '/auth/openid/return',
-                allowHttpForRedirectUrl: true,
-                clientSecret: Constants.ClientSecret,
-                validateIssuer: false,
-                isB2C: false,
-                passReqToCallback: true,
-                loggingLevel: 'info',
-                nonceLifetime: null,
-            }, function (req, iss, sub, profile, jwtClaims, access_token, refresh_token, params, done) {
-                if (!profile.oid) {
-                    return done(new Error("No oid found"), null);
+        private static getTokenCore(userId: string, resource: string): Promise<any> {
+            var tokenCacheService = new TokenCacheService();
+            return tokenCacheService.get(userId).then(tokenCache => {
+                if (tokenCache != null) {
+                    var accessTokens = JSON.parse(tokenCache.accessTokens);
+                    var accessToken = accessTokens[resource];
+                    if (accessToken == undefined || new Date(accessToken.expiresOn).valueOf() < (Date.now() + 60 * 5 * 1000)) {
+                        return this.getTokenWithRefreshToken(tokenCache.refreshToken, resource)
+                            .then(result => {
+                                return tokenCacheService.update(tokenCache, resource, result)
+                            })
+                            .then(tokenCache => {
+                                return JSON.parse(tokenCache.accessTokens)[resource]
+                            });
+                    }
+                    else
+                        return accessToken;
                 }
-                profile.tid = profile._json.tid;
-                profile.authType = 'O365';
-                req.res.cookie('authType', 'O365');
-
-                var tokenCacheService = new TokenCacheService();
-                tokenCacheService.createOrUpdate(profile.oid, Constants.AADGraphResource, {
-                    refreshToken: refresh_token,
-                    accessToken: access_token,
-                    expiresOn: new Date(parseInt(params.expires_on) * 1000)
-                }).then(item => {
-                    done(null, profile);
-                });
+                else {
+                    throw "Could not get access token as there is no refresh token. Re-login is required.";
+                }
             });
         }
 
-        ensureAuthenticated(req, res, next) {
-            if (req.isAuthenticated()) {
-                return next();
-            }
-            else if (req.baseUrl.startsWith("/api/")) {
-                res.send(401, 'missing authorization header');
-            }
-            res.redirect('/');
-        }
-
-        public initPassport(app: any) {
-            app.use(passport.initialize());
-            app.use(passport.session());
-        }
-
-        public initAuthRoute(app: any) {
-            app.get('/auth/login/o365', function (req, res, next) {
-                var email = '';
-                passport.authenticate('O365', {
-                    resourceURL: Constants.AADGraphResource,
-                    customState: 'my_state',
-                    failureRedirect: '/',
-                    login_hint: email
-                })(req, res, next);
-            });
-
-            app.get('/auth/openid/return', passport.authenticate('O365', { failureRedirect: '/' }), function (req, res) {
-                res.redirect('/');
-            });
-
-            app.post('/auth/openid/return', passport.authenticate('O365', { failureRedirect: '/' }), function (req, res) {
-                res.redirect('/');
-            });
-
-            app.get('/logout', function (req, res) {
-                let authType = req.cookies['authType'];
-                res.clearCookie('authType');
-                req.logOut();
-                req.session = null;
-                if (authType == 'O365')
-                    res.redirect(Constants.Authority + 'oauth2/logout?post_logout_redirect_uri=' + req.protocol + '://' + req.get('host'));
-                else
-                    res.redirect('/');
+        private static getTokenWithAuthorizationCode(code: string, resouce: string, redirectUrl: string): Promise<any> {
+            var redirectUri = `https://${Constants.Host}/${redirectUrl}`;
+            return new Promise((resolve, reject) => {
+                var authenticationContext = new AuthenticationContext(Constants.Authority);
+                authenticationContext.acquireTokenWithAuthorizationCode(
+                    code,
+                    redirectUri,
+                    resouce,
+                    Constants.ClientId,
+                    Constants.ClientSecret,
+                    function (err, response) {
+                        if (err) reject(err.message);
+                        else resolve(response);
+                    }
+                );
             });
         }
-    }    
-    ```
 
-31. Right click **routes** folder, add a new file named **me.ts**.
-
-32. Add the following code to **me.ts** file to authentication.
-    ```typescript
-    import express = require('express');
-
-    var router = express.Router();
-
-    router.get('/', function (req, res) {
-        var u = req.user;
-        if (u != null && u.upn != null) {
-            res.json({ email: u.upn })
-        }
-        else {
-            res.json(500)
-        }
-    })
-
-    export = router;
-    ```
-
-33. Open **app.ts** file, delete all code and copy the following code into it.
-
-    ```typescript
-    import { appAuth } from './services/appAuth';
-    var http = require("http");
-    var https = require("https");
-    var cookieSession = require('cookie-session');
-    var express = require("express");
-    var path = require("path");
-    var logger = require("morgan");
-    var cookieParser = require("cookie-parser");
-    var bodyParser = require("body-parser");
-    var fs = require("fs");
-    var url = require("url");
-    var dbContext_1 = require("./services/dbContext");
-    var meRoute = require("./routes/me");
-    var app = express();
-
-    // Authentication
-    var auth = new appAuth(app);
-
-    // Angular
-    app.use("/app", express.static(path.join(__dirname, 'app')));
-    app.use("/node_modules", express.static(path.join(__dirname, 'node_modules'), { maxAge: 1000 * 60 * 60 * 24 }));
-    app.get("/systemjs.config.js", function (req, res) {
-        res.sendfile(path.join(__dirname, 'systemjs.config.js'));
-    });
-
-    // Config the app
-    app.use(logger('dev'));
-    app.use(cookieSession({
-        name: 'session',
-        keys: ['key1', 'key2'],
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }));
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(cookieParser());
-    app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-
-    // Initialize Passport
-    auth.initPassport(app);
-
-    app.use(express.static(path.join(__dirname, 'public')));
-
-    // APIs
-    app.use('/api/me', auth.ensureAuthenticated, meRoute);
-
-    // Configure auth route
-    auth.initAuthRoute(app);
-
-    // Pass constants to client side through cookie
-    app.get('/*', function (req, res) {
-        res.sendfile(path.join(__dirname, "index.html"));
-    });
-
-    // Catch 404 and forward to error handler
-    app.use(function (req, res, next) {
-        var err = new Error('Not Found');
-        err['status'] = 404;
-        next(err);
-    });
-
-    // Handle errors
-    if (app.get('env') === 'development') {
-        app.use(function (err, req, res, next) {
-            res.status(err['status'] || 500);
-            res.render('error', {
-                message: err.message,
-                error: err
+        private static getTokenWithRefreshToken(refreshToken: string, resource: string): Promise<any> {
+            return new Promise((resolve, reject) => {
+                var authenticationContext = new AuthenticationContext(Constants.Authority);
+                authenticationContext.acquireTokenWithRefreshToken(
+                    refreshToken,
+                    Constants.ClientId,
+                    Constants.ClientSecret,
+                    resource,
+                    function (err, response) {
+                        if (err) reject(err.message);
+                        else resolve(response);
+                    }
+                );
             });
-        });
+        }
     }
+   ```
 
-    app.use(function (err, req, res, next) {
-        res.status(err['status'] || 500);
-        res.render('error', {
-            message: err.message,
-            error: {}
-        });
-    });
+    This class is used to handle access token. 
 
-    // Sync database
-    var db = new dbContext_1.DbContext();
-    db.sync({ force: false }).then(function () { });
+    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/utils/authenticationHelper.ts) in the Demo app.
 
-    // Create server
-    var port = process.env.port || 1337;
-    if (app.get('env') === 'development') {
-        https.createServer({
-            key: fs.readFileSync('ssl/key.pem'),
-            cert: fs.readFileSync('ssl/cert.pem')
-        }, app).listen(port);
-    }
-    else {
-        http.createServer(app).listen(port, function () {
-            console.log('Express server listening on port ' + port);
-        });
-    }
-    ```
+11. Deploy the application locally by pressing F5.
 
-34. Select **BasicSSO** project, add a new folder named **ssl** into it.
+12. Click the **Sign in with Office 365** button and then login to O365.
 
-35. Reference [link](https://github.com/leeroybrun/node-express-https) to generate the following certificate files, copy these files into **ssl** folder that just created above step and include these files into project.
+    ![](Images/proj06.png)
 
-    - **cert.pem**
-    - **csr.pem**
-    - **key.pem**
+13. After login with O365 user it will redirect to a basic page.
 
-36. Select Project file, click right key and select **Properties**, 
+    ![](Images/proj05.png)
 
-    - Change Script to **app.ts**
-
-    - Change Launch URL to **https://localhost**
-
-    - Change Node.js port to **44380**
-
-    - Set the following to Environment Variables
-
-      WEBSITE_HOSTNAME=localhost:44380
-
-      clientId=INSERT YOUR CLIENT ID HERE
-
-      clientSecret=INSERT YOUR CLIENT SECRET HERE
-
-      SQLiteDB=dafztabase.sqlite
-
-      ![](Images/new-project-03.png)
-
-    ​       **clientId**: use the Client Id of the app registration you created earlier.
-
-    ​      **clientSecret**: use the Key value of the app registration you created earlier.
-
-    ​
-
-37. Press F5, click **Sign In with Office 365** button to sign in.
-
-    ![](Images/new-project-04.png)
-
-38. Hello world page is presented after login successfully . 
-
-    ![](Images/web-app-helloworld.png)
 
 
 
