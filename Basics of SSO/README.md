@@ -986,7 +986,7 @@ The starter project is a simple application with only SQL authentication configu
 
 11. Create a new folder **utils** on root dictionary.  Add a new file **authenticationHelper.ts** inside **utils** folder. Remove all code and paste the following.
 
-    ```typescript
+   ```typescript
 		/*
 		* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 		* See LICENSE in the project root for license information.
