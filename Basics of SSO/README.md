@@ -266,7 +266,8 @@ The starter project is a simple application with only SQL authentication configu
                    }
                });
        }
- 
+   ```
+
 
 
        localLogin() {
@@ -363,7 +364,7 @@ The starter project is a simple application with only SQL authentication configu
 
        //Local authentication strategy
        private LocalStrategy = require('passport-local').Strategy;
-   
+   ```
 
 
        /******************************************************************************
@@ -674,7 +675,8 @@ The starter project is a simple application with only SQL authentication configu
                .catch(error => res.json(500, { error: error }));
        }
    })
- 
+   ```
+
 
 
 
@@ -809,77 +811,78 @@ The starter project is a simple application with only SQL authentication configu
 
 10. Edit **services\userService.ts**.  Remove all code and paste the following.
 
-   ```typescript
-   import * as uuid from "node-uuid";
-   import * as Promise from "bluebird";
-   import * as bcrypt from 'bcryptjs';
-   import { DbContext, UserInstance } from '../data/dbContext';
-   import { TokenCacheService } from '../services/TokenCacheService';
-   import { MSGraphClient } from "../services/msGraphClient";
-   import { AuthenticationHelper } from '../utils/authenticationHelper';
-   import { Roles } from '../constants';
-   import { Constants } from '../constants';
+  ```typescript
+  import * as uuid from "node-uuid";
+  import * as Promise from "bluebird";
+  import * as bcrypt from 'bcryptjs';
+  import { DbContext, UserInstance } from '../data/dbContext';
+  import { TokenCacheService } from '../services/TokenCacheService';
+  import { MSGraphClient } from "../services/msGraphClient";
+  import { AuthenticationHelper } from '../utils/authenticationHelper';
+  import { Roles } from '../constants';
+  import { Constants } from '../constants';
 
-   export class UserService {
+  export class UserService {
 
-	   private dbContext = new DbContext();
+     private dbContext = new DbContext();
 
-	   public creatUser(email: string, password: string, firstName: string, lastName: string, favoriteColor: string): Promise<UserInstance> {
-		   email = email.toLowerCase();
-		   return this.dbContext.User
-			   .findOne({ where: { email: email } })
-			   .then(user => {
-				   if (user == null) {
-					   let passwordSalt = bcrypt.genSaltSync();
-					   let passwordHash = password != null
-						   ? bcrypt.hashSync(password, passwordSalt)
-						   : null;
-					   return this.dbContext.User.create(
-						   {
-							   id: uuid.v4(),
-							   email: email,
-							   firstName: firstName,
-							   lastName: lastName,
-							   passwordHash: passwordHash,
-							   salt: passwordSalt,
-							   favoriteColor: favoriteColor
-						   });
-				   }
-				   else
-					   throw (`Email ${email} is used by others`);
+     public creatUser(email: string, password: string, firstName: string, lastName: string, favoriteColor: string): Promise<UserInstance> {
+  	   email = email.toLowerCase();
+  	   return this.dbContext.User
+  		   .findOne({ where: { email: email } })
+  		   .then(user => {
+  			   if (user == null) {
+  				   let passwordSalt = bcrypt.genSaltSync();
+  				   let passwordHash = password != null
+  					   ? bcrypt.hashSync(password, passwordSalt)
+  					   : null;
+  				   return this.dbContext.User.create(
+  					   {
+  						   id: uuid.v4(),
+  						   email: email,
+  						   firstName: firstName,
+  						   lastName: lastName,
+  						   passwordHash: passwordHash,
+  						   salt: passwordSalt,
+  						   favoriteColor: favoriteColor
+  					   });
+  			   }
+  			   else
+  				   throw (`Email ${email} is used by others`);
 
-			   });
-	   }
+  		   });
+     }
 
-	   public validUser(email: string, password: string): Promise<any> {
-		   email = email.toLowerCase();
-		   let retUser;
-		   return this.dbContext.User
-			   .findOne({ where: { email: email } })
-			   .then((user) => {
-				   let isValid = user != null && bcrypt.hashSync(password, user.salt) == user.passwordHash;
-				   if (isValid) {
-					   retUser = user;
-					   return user;
-				   }
-				   else
-					   throw 'Invalid Username or password';
-			   })
-			   .then((user: UserInstance) => {
-				   return user.getOrganization();
-			   })
-			   .then((organization) => {
-				   if (organization != null)
-					   retUser.organization = {
-						   tenantId: organization.tenantId,
-						   name: organization.name,
-						   isAdminConsented: organization.isAdminConsented
-					   };
+     public validUser(email: string, password: string): Promise<any> {
+  	   email = email.toLowerCase();
+  	   let retUser;
+  	   return this.dbContext.User
+  		   .findOne({ where: { email: email } })
+  		   .then((user) => {
+  			   let isValid = user != null && bcrypt.hashSync(password, user.salt) == user.passwordHash;
+  			   if (isValid) {
+  				   retUser = user;
+  				   return user;
+  			   }
+  			   else
+  				   throw 'Invalid Username or password';
+  		   })
+  		   .then((user: UserInstance) => {
+  			   return user.getOrganization();
+  		   })
+  		   .then((organization) => {
+  			   if (organization != null)
+  				   retUser.organization = {
+  					   tenantId: organization.tenantId,
+  					   name: organization.name,
+  					   isAdminConsented: organization.isAdminConsented
+  				   };
 
-				   return retUser;
-			   })
-	   }
- 
+  			   return retUser;
+  		   })
+     }
+  ```
+
 
 
 	   public validUserHasSameEmail(email: string): Promise<boolean> {
@@ -1069,9 +1072,10 @@ The starter project is a simple application with only SQL authentication configu
 	}
    ```
 
-    This class is used to handle access token. 
+​	This class is used to handle access token. 
 
-    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/utils/authenticationHelper.ts) in the Demo app.
+​	To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/utils/authenticationHelper.ts) in the Demo app.
+
 
 12. Deploy the application locally by pressing F5.
 
