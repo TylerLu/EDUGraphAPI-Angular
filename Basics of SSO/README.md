@@ -1,6 +1,6 @@
 ﻿# Basic SSO - Angular/Node version
 
-In this sample we show you how to integrate Azure Active Directory(Azure AD) to provide secure sign in and authorization. 
+In this sample we show you how to integrate Azure Active Directory(Azure AD) to provide secure sign in and authorization.
 
 The code in the following sections is part of the full featured Angular app and presented as a new project for clarity and separation of functionality.
 
@@ -57,7 +57,7 @@ The starter project is a simple application with only SQL authentication configu
 
    ![](Images/aad-create-app-03.png)
 
-6. Click it to view its details. 
+6. Click it to view its details.
 
    ![](Images/aad-create-app-04.png)
 
@@ -85,7 +85,7 @@ The starter project is a simple application with only SQL authentication configu
 
      ![](Images/aad-create-app-07.png)
 
-     Click **Save**, then copy aside the **VALUE** of the key. 
+     Click **Save**, then copy aside the **VALUE** of the key.
 
    Close the Settings window.
 
@@ -266,9 +266,6 @@ The starter project is a simple application with only SQL authentication configu
                    }
                });
        }
-   ```
-
-
 
        localLogin() {
            this.userService.localLogin(this.model)
@@ -278,7 +275,7 @@ The starter project is a simple application with only SQL authentication configu
                            .subscribe((user) => {
                                window.location.href = "/schools";
                            });
-    
+
                    } else {
                        this.showLoginFailed = true;
                    }
@@ -287,18 +284,18 @@ The starter project is a simple application with only SQL authentication configu
                    this.showLoginFailed = true;
                });
        }
-    
+
        gotoRegister() {
            window.location.href = "/register";
        }
-    
+
        login() {
            this.auth.login();
        }
    }
    ```
 
-   New login method is added to call login method in auth helper class. 
+   New login method is added to call login method in auth helper class.
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/app/login/login.component.ts) in the Demo app.
 
@@ -364,7 +361,7 @@ The starter project is a simple application with only SQL authentication configu
 
        //Local authentication strategy
        private LocalStrategy = require('passport-local').Strategy;
-   ```
+
 
 
        /******************************************************************************
@@ -378,11 +375,11 @@ The starter project is a simple application with only SQL authentication configu
        //-----------------------------------------------------------------------------
        constructor(app: any) {
            this.app = app;
-    
+
            passport.serializeUser(function (user, done) {
                done(null, user);
            });
-    
+
            passport.deserializeUser(function (user, done) {
                done(null, user);
            });
@@ -391,14 +388,14 @@ The starter project is a simple application with only SQL authentication configu
            passport.use('Local', this.constructLocalStrategy());
            passport.use('O365', this.constructOIDCStrategy());
        }
-    
+
        //-----------------------------------------------------------------------------
        // Use the OIDCStrategy within Passport.
-       // 
+       //
        // Strategies in passport require a `verify` function, which accepts credentials
        // (in this case, the `oid` claim in id_token), and invoke a callback to find
        // the corresponding user object.
-       // 
+       //
        // The following are the accepted prototypes for the `verify` function
        // (1) function(iss, sub, done)
        // (2) function(iss, sub, profile, done)
@@ -432,7 +429,7 @@ The starter project is a simple application with only SQL authentication configu
                profile.tid = profile._json.tid;
                profile.authType = 'O365';
                req.res.cookie('authType', 'O365');
-    
+
                var tokenCacheService = new TokenCacheService();
                tokenCacheService.createOrUpdate(profile.oid, Constants.AADGraphResource, {
                    refreshToken: refresh_token,
@@ -473,7 +470,7 @@ The starter project is a simple application with only SQL authentication configu
                        });
                });
        }
-    
+
        ensureAuthenticated(req, res, next) {
            if (req.isAuthenticated()) {
                return next();
@@ -483,27 +480,27 @@ The starter project is a simple application with only SQL authentication configu
            }
            res.redirect('/');
        }
-    
+
        // Initialize Passport!  Also use passport.session() middleware, to support
        // persistent login sessions (recommended).
        public initPassport(app: any) {
            app.use(passport.initialize());
            app.use(passport.session());
        }
-    
+
        //-----------------------------------------------------------------------------
        // Set up the route controller
        //
-       // 1. For 'login' route and 'returnURL' route, use `passport.authenticate`. 
+       // 1. For 'login' route and 'returnURL' route, use `passport.authenticate`.
        // This way the passport middleware can redirect the user to login page, receive
        // id_token etc from returnURL.
        //
-       // 2. For the routes you want to check if user is already logged in, use 
+       // 2. For the routes you want to check if user is already logged in, use
        // `ensureAuthenticated`. It checks if there is an user stored in session, if not
        // it will call `passport.authenticate` to ask for user to log in.
        //-----------------------------------------------------------------------------
        public initAuthRoute(app: any) {
-    
+
            app.post('/auth/login/local', passport.authenticate('Local'),
                function (req, res) {
                    if (req.body.remember) {
@@ -513,7 +510,7 @@ The starter project is a simple application with only SQL authentication configu
                    }
                    res.json({ status: 'validate successfully' });
                });
-    
+
            app.get('/auth/login/o365', function (req, res, next) {
                var email = req.cookies[Constants.O365Email];
                passport.authenticate('O365', {
@@ -523,7 +520,7 @@ The starter project is a simple application with only SQL authentication configu
                    login_hint: email
                })(req, res, next);
            });
-    
+
            // 'GET returnURL'
            // `passport.authenticate` will try to authenticate the content returned in
            // query (such as authorization code). If authentication fails, user will be
@@ -531,7 +528,7 @@ The starter project is a simple application with only SQL authentication configu
            app.get('/auth/openid/return', passport.authenticate('O365', { failureRedirect: '/' }), function (req, res) {
                res.redirect('/');
            });
-    
+
            // 'POST returnURL'
            // `passport.authenticate` will try to authenticate the content returned in
            // body (such as authorization code). If authentication fails, user will be
@@ -539,7 +536,7 @@ The starter project is a simple application with only SQL authentication configu
            app.post('/auth/openid/return', passport.authenticate('O365', { failureRedirect: '/' }), function (req, res) {
                res.redirect('/');
            });
-    
+
            // 'logout' route, logout from passport, and destroy the session with AAD.
            app.get('/logout', function (req, res) {
                let authType = req.cookies['authType'];
@@ -552,7 +549,7 @@ The starter project is a simple application with only SQL authentication configu
    }
    ```
 
-   A new O365 login passport is setup on this class. It will setup parameters like client id, client secret, redirect URL. 
+   A new O365 login passport is setup on this class. It will setup parameters like client id, client secret, redirect URL.
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/auth/appAuth.ts) in the Demo app.
 
@@ -585,7 +582,7 @@ The starter project is a simple application with only SQL authentication configu
        public static readonly O365Username = "O365Username";
        public static readonly O365Email = "O365Email";
 
-       // Database 
+       // Database
        public static readonly SQLiteDB: string = process.env.SQLiteDB as string;
    }
 
@@ -675,9 +672,6 @@ The starter project is a simple application with only SQL authentication configu
                .catch(error => res.json(500, { error: error }));
        }
    })
-   ```
-
-
 
 
    router.get('/accessToken', function (req, res) {
@@ -685,7 +679,7 @@ The starter project is a simple application with only SQL authentication configu
            res.json(401, { error: "401 unauthorized" });
            return;
        }
-    
+
        let userId = req.user.oid;
        if (userId == null) {
            res.json(null);
@@ -805,180 +799,178 @@ The starter project is a simple application with only SQL authentication configu
    }
    ```
 
-   This class is used to get user information from O365 with access token. 
+   This class is used to get user information from O365 with access token.
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/services/msGraphClient.ts) in the Demo app.
 
 10. Edit **services\userService.ts**.  Remove all code and paste the following.
 
-  ```typescript
-  import * as uuid from "node-uuid";
-  import * as Promise from "bluebird";
-  import * as bcrypt from 'bcryptjs';
-  import { DbContext, UserInstance } from '../data/dbContext';
-  import { TokenCacheService } from '../services/TokenCacheService';
-  import { MSGraphClient } from "../services/msGraphClient";
-  import { AuthenticationHelper } from '../utils/authenticationHelper';
-  import { Roles } from '../constants';
-  import { Constants } from '../constants';
+   ```typescript
 
-  export class UserService {
+	import * as uuid from "node-uuid";
+	import * as Promise from "bluebird";
+	import * as bcrypt from 'bcryptjs';
+	import { DbContext, UserInstance } from '../data/dbContext';
+	import { TokenCacheService } from '../services/TokenCacheService';
+	import { MSGraphClient } from "../services/msGraphClient";
+	import { AuthenticationHelper } from '../utils/authenticationHelper';
+	import { Roles } from '../constants';
+	import { Constants } from '../constants';
 
-     private dbContext = new DbContext();
+	export class UserService {
 
-     public creatUser(email: string, password: string, firstName: string, lastName: string, favoriteColor: string): Promise<UserInstance> {
-  	   email = email.toLowerCase();
-  	   return this.dbContext.User
-  		   .findOne({ where: { email: email } })
-  		   .then(user => {
-  			   if (user == null) {
-  				   let passwordSalt = bcrypt.genSaltSync();
-  				   let passwordHash = password != null
-  					   ? bcrypt.hashSync(password, passwordSalt)
-  					   : null;
-  				   return this.dbContext.User.create(
-  					   {
-  						   id: uuid.v4(),
-  						   email: email,
-  						   firstName: firstName,
-  						   lastName: lastName,
-  						   passwordHash: passwordHash,
-  						   salt: passwordSalt,
-  						   favoriteColor: favoriteColor
-  					   });
-  			   }
-  			   else
-  				   throw (`Email ${email} is used by others`);
+		private dbContext = new DbContext();
 
-  		   });
-     }
+		public creatUser(email: string, password: string, firstName: string, lastName: string, favoriteColor: string): Promise<UserInstance> {
+			email = email.toLowerCase();
+			return this.dbContext.User
+				.findOne({ where: { email: email } })
+				.then(user => {
+					if (user == null) {
+						let passwordSalt = bcrypt.genSaltSync();
+						let passwordHash = password != null
+							? bcrypt.hashSync(password, passwordSalt)
+							: null;
+						return this.dbContext.User.create(
+							{
+								id: uuid.v4(),
+								email: email,
+								firstName: firstName,
+								lastName: lastName,
+								passwordHash: passwordHash,
+								salt: passwordSalt,
+								favoriteColor: favoriteColor
+							});
+					}
+					else
+						throw (`Email ${email} is used by others`);
 
-     public validUser(email: string, password: string): Promise<any> {
-  	   email = email.toLowerCase();
-  	   let retUser;
-  	   return this.dbContext.User
-  		   .findOne({ where: { email: email } })
-  		   .then((user) => {
-  			   let isValid = user != null && bcrypt.hashSync(password, user.salt) == user.passwordHash;
-  			   if (isValid) {
-  				   retUser = user;
-  				   return user;
-  			   }
-  			   else
-  				   throw 'Invalid Username or password';
-  		   })
-  		   .then((user: UserInstance) => {
-  			   return user.getOrganization();
-  		   })
-  		   .then((organization) => {
-  			   if (organization != null)
-  				   retUser.organization = {
-  					   tenantId: organization.tenantId,
-  					   name: organization.name,
-  					   isAdminConsented: organization.isAdminConsented
-  				   };
+				});
+		}
 
-  			   return retUser;
-  		   })
-     }
-  ```
+		public validUser(email: string, password: string): Promise<any> {
+			email = email.toLowerCase();
+			let retUser;
+			return this.dbContext.User
+				.findOne({ where: { email: email } })
+				.then((user) => {
+					let isValid = user != null && bcrypt.hashSync(password, user.salt) == user.passwordHash;
+					if (isValid) {
+						retUser = user;
+						return user;
+					}
+					else
+						throw 'Invalid Username or password';
+				})
+				.then((user: UserInstance) => {
+					return user.getOrganization();
+				})
+				.then((organization) => {
+					if (organization != null)
+						retUser.organization = {
+							tenantId: organization.tenantId,
+							name: organization.name,
+							isAdminConsented: organization.isAdminConsented
+						};
 
-
-
-	   public validUserHasSameEmail(email: string): Promise<boolean> {
-		   email = email.toLowerCase();
-		   return this.dbContext.User
-			   .findOne({ where: { email: email } })
-			   .then(user => {
-				   return user != null;
-			   });
-	   }
+					return retUser;
+				})
+		}
 
 
-
-	   public getUserModel(where: any): Promise<any> {
-		   return this.dbContext.User.findOne({ where: where })
-			   .then(user => {
-				   if (user == null) {
-					   return null;
-				   }
-				   var result = {
-					   id: user.id,
-					   firstName: user.firstName,
-					   lastName: user.lastName,
-					   email: user.email,
-					   o365UserId: user.o365UserId,
-					   o365Email: user.o365Email,
-					   favoriteColor: user.favoriteColor,
-					   organization: null,
-					   roles: []
-				   }
-				   var p1 = user.getOrganization()
-					   .then(organization => {
-						   if (organization != null) {
-							   result.organization = {
-								   tenantId: organization.tenantId,
-								   name: organization.name,
-								   isAdminConsented: organization.isAdminConsented
-							   }
-						   }
-					   });
-				   var p2 = user.getUserRoles()
-					   .then(userRoles => userRoles.forEach(i => result.roles.push(i.name)));
-				   return Promise.all([p1, p2])
-					   .then((ret) => {
-						   return result;
-					   })
-			   });
-	   }
-	
-	   public getO365User(o365UserId: string, tenantId: string): Promise<any> {
-		   return AuthenticationHelper.getAccessToken(o365UserId, Constants.MSGraphResource)
-			   .then((accessToken) => {
-				   let msgraphClient: MSGraphClient = new MSGraphClient(accessToken.value);
-				   return msgraphClient.getO365User(tenantId)
-			   })
-			   .then((o365UserInfo) => {
-				   let userInfo = this.convertO365UserToLocal(o365UserInfo);
-	
-				   return userInfo;
-	
-			   })
-	   }
+		public validUserHasSameEmail(email: string): Promise<boolean> {
+			email = email.toLowerCase();
+			return this.dbContext.User
+				.findOne({ where: { email: email } })
+				.then(user => {
+					return user != null;
+				});
+		}
 
 
-	   private convertO365UserToLocal(o365UserInfo: any): any {
-		   let userInfo = {
-			   firstName: o365UserInfo.user.givenName,
-			   lastName: o365UserInfo.user.surname,
-			   o365UserId: o365UserInfo.user.id,
-			   o365Email: o365UserInfo.user.mail == null ? o365UserInfo.user.userPrincipalName : o365UserInfo.user.mail,
-			   organization: o365UserInfo.organization == null ? null : {
-				   tenantId: o365UserInfo.organization.id,
-				   name: o365UserInfo.organization.displayName
-			   },
-			   roles: o365UserInfo.roles
-		   };
-		   return userInfo
-	   }
-	   private getUserById(userId: string): Promise<UserInstance> {
-		   return this.dbContext.User.findById(userId);
-	   }
-	
-	   private getUserRoles(userId: string): Promise<any> {
-		   return this.getUserById(userId)
-			   .then((user) => {
-				   return user.getUserRoles();
-			   })
-			   .then((roles) => {
-				   let retRoles = [];
-				   roles.forEach(i => retRoles.push(i.name));
-				   return retRoles;
-			   })
-	   }
-   }
+
+		public getUserModel(where: any): Promise<any> {
+			return this.dbContext.User.findOne({ where: where })
+				.then(user => {
+					if (user == null) {
+						return null;
+					}
+					var result = {
+						id: user.id,
+						firstName: user.firstName,
+						lastName: user.lastName,
+						email: user.email,
+						o365UserId: user.o365UserId,
+						o365Email: user.o365Email,
+						favoriteColor: user.favoriteColor,
+						organization: null,
+						roles: []
+					}
+					var p1 = user.getOrganization()
+						.then(organization => {
+							if (organization != null) {
+								result.organization = {
+									tenantId: organization.tenantId,
+									name: organization.name,
+									isAdminConsented: organization.isAdminConsented
+								}
+							}
+						});
+					var p2 = user.getUserRoles()
+						.then(userRoles => userRoles.forEach(i => result.roles.push(i.name)));
+					return Promise.all([p1, p2])
+						.then((ret) => {
+							return result;
+						})
+				});
+		}
+
+		public getO365User(o365UserId: string, tenantId: string): Promise<any> {
+			return AuthenticationHelper.getAccessToken(o365UserId, Constants.MSGraphResource)
+				.then((accessToken) => {
+					let msgraphClient: MSGraphClient = new MSGraphClient(accessToken.value);
+					return msgraphClient.getO365User(tenantId)
+				})
+				.then((o365UserInfo) => {
+					let userInfo = this.convertO365UserToLocal(o365UserInfo);
+
+					return userInfo;
+
+				})
+		}
+
+
+		private convertO365UserToLocal(o365UserInfo: any): any {
+			let userInfo = {
+				firstName: o365UserInfo.user.givenName,
+				lastName: o365UserInfo.user.surname,
+				o365UserId: o365UserInfo.user.id,
+				o365Email: o365UserInfo.user.mail == null ? o365UserInfo.user.userPrincipalName : o365UserInfo.user.mail,
+				organization: o365UserInfo.organization == null ? null : {
+					tenantId: o365UserInfo.organization.id,
+					name: o365UserInfo.organization.displayName
+				},
+				roles: o365UserInfo.roles
+			};
+			return userInfo
+		}
+		private getUserById(userId: string): Promise<UserInstance> {
+			return this.dbContext.User.findById(userId);
+		}
+
+		private getUserRoles(userId: string): Promise<any> {
+			return this.getUserById(userId)
+				.then((user) => {
+					return user.getUserRoles();
+				})
+				.then((roles) => {
+					let retRoles = [];
+					roles.forEach(i => retRoles.push(i.name));
+					return retRoles;
+				})
+		}
+	}		
    ```
-
    New methods are added to get O365 user and convert O365 user to local user so O365 user can login.
 
    To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/services/userService.ts) in the Demo app.
@@ -1072,7 +1064,7 @@ The starter project is a simple application with only SQL authentication configu
 	}
    ```
 
-​	This class is used to handle access token. 
+​	This class is used to handle access token.
 
 ​	To see how this file works in the Demo app, refer to the file located [here](../src/EDUGraphAPI.Web/utils/authenticationHelper.ts) in the Demo app.
 
