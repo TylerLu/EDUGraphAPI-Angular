@@ -49,7 +49,6 @@ router.get('/', function (req, res) {
 })
 
 
-
 router.get('/accessToken', function (req, res) {
     if (!req.isAuthenticated()) {
         res.json(401, { error: "401 unauthorized" });

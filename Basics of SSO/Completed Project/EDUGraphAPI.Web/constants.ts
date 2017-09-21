@@ -24,7 +24,7 @@ export class Constants {
     public static readonly O365Username = "O365Username";
     public static readonly O365Email = "O365Email";
 
-    // Database 
+    // Database
     public static readonly SQLiteDB: string = process.env.SQLiteDB as string;
 }
 

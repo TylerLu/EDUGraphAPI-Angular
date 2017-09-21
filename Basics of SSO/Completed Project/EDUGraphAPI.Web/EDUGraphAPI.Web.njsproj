@@ -12,9 +12,9 @@
     <NameOfLastUsedPublishProfile>edugraphapi2dev - Web Deploy</NameOfLastUsedPublishProfile>
     <LaunchUrl>https://localhost</LaunchUrl>
     <Environment>WEBSITE_HOSTNAME=localhost:44380
+SQLiteDB=dafztabase.sqlite
 clientId=
-clientSecret=
-SQLiteDB=dafztabase.sqlite</Environment>
+clientSecret=</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -55,11 +55,9 @@ SQLiteDB=dafztabase.sqlite</Environment>
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="app\aboutme\aboutme.component.ts" />
     <TypeScriptCompile Include="app\aboutme\aboutme.ts" />
     <TypeScriptCompile Include="app\admin\admin-routing.ts" />
     <TypeScriptCompile Include="app\admin\consent.component.ts" />
-    <TypeScriptCompile Include="app\admin\admin.component.ts" />
     <TypeScriptCompile Include="app\admin\admin.module.ts" />
     <TypeScriptCompile Include="app\admin\admin.service.ts" />
     <TypeScriptCompile Include="app\admin\linkedAccounts.component.ts" />
@@ -68,7 +66,6 @@ SQLiteDB=dafztabase.sqlite</Environment>
     <TypeScriptCompile Include="app\app.routing.ts" />
     <TypeScriptCompile Include="app\authHelper\authHelper.ts" />
     <TypeScriptCompile Include="app\constants.ts" />
-    <TypeScriptCompile Include="app\demoHelper\demoHelper.component.ts" />
     <TypeScriptCompile Include="app\demoHelper\demoHelperPage.ts" />
     <TypeScriptCompile Include="app\demoHelper\demoHelperService.ts" />
     <TypeScriptCompile Include="app\header\header.component.ts" />
@@ -86,7 +83,6 @@ SQLiteDB=dafztabase.sqlite</Environment>
     <TypeScriptCompile Include="app\models\common\organization.ts" />
     <TypeScriptCompile Include="app\models\common\userInfo.ts" />
     <TypeScriptCompile Include="app\home.component.ts" />
-    <TypeScriptCompile Include="app\O365login\O365login.component.ts" />
     <TypeScriptCompile Include="app\register\register.component.ts" />
     <TypeScriptCompile Include="app\register\register.ts" />
     <TypeScriptCompile Include="app\school\school-routing.ts" />
@@ -107,17 +103,14 @@ SQLiteDB=dafztabase.sqlite</Environment>
     <TypeScriptCompile Include="data\dbContext.ts" />
     <TypeScriptCompile Include="routes\me.ts" />
     <TypeScriptCompile Include="routes\register.ts" />
-    <Content Include="app\aboutme\aboutme.component.template.html" />
     <Content Include="app\aboutme\aboutme.service.ts" />
     <Content Include="app\admin\consent.component.template.html" />
-    <Content Include="app\admin\admin.component.template.html" />
     <Content Include="app\admin\linkedAccounts.component.template.html" />
     <Content Include="app\app.component.css" />
     <Content Include="app\app.component.template.html" />
     <Content Include="app\css\bootstrap.min.css" />
     <Content Include="app\css\Site.css" />
     <Content Include="app\demoHelper\demoHelper-pages.json" />
-    <Content Include="app\demoHelper\demoHelper.component.template.html" />
     <Content Include="app\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="app\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="app\fonts\glyphicons-halflings-regular.ttf" />
@@ -178,12 +171,10 @@ SQLiteDB=dafztabase.sqlite</Environment>
     <Content Include="app\images\save.png" />
     <Content Include="app\images\seat.png" />
     <Content Include="app\images\SignInWithOffice365-Button.png" />
-    <Content Include="app\link\link.component.template.html" />
     <Content Include="app\link\link.createLocal.component.template.html" />
     <Content Include="app\link\link.loginLocal.component.template.html" />
     <Content Include="app\link\link.loginO365Required.component.template.html" />
     <Content Include="app\login\login.component.template.html" />
-    <Content Include="app\O365login\O365login.component.template.html" />
     <Content Include="app\register\register.component.template.html" />
     <Content Include="app\school\school.component.template.html" />
     <Content Include="app\tabs\tabs.css" />
@@ -211,11 +202,8 @@ SQLiteDB=dafztabase.sqlite</Environment>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
-    <Folder Include="app\aboutme\" />
-    <Folder Include="app\admin\" />
     <Folder Include="app\authHelper\" />
     <Folder Include="app\css\" />
-    <Folder Include="app\demoHelper\" />
     <Folder Include="app\fonts\" />
     <Folder Include="app\header\" />
     <Folder Include="app\images\" />
@@ -223,7 +211,6 @@ SQLiteDB=dafztabase.sqlite</Environment>
     <Folder Include="app\login\" />
     <Folder Include="app\models\" />
     <Folder Include="app\models\common\" />
-    <Folder Include="app\O365login\" />
     <Folder Include="app\register\" />
     <Folder Include="app\school\" />
     <Folder Include="app\services\" />

@@ -714,30 +714,19 @@ The starter project is a simple application with only SQL authentication configu
            this.accessToken = accessToken;
        }
 
-       public getO365User(tenantId: string): Promise<any> {
-           let o365UserInfo = {
-               user: null,
-               roles: [],
-               organization: null
-           };
-           return this.getMe()
-               .then((user) => {
-                   o365UserInfo.user = user
-                   return this.getRoles(user)
-               })
-               .then((roles) => {
-                   o365UserInfo.roles = roles;
-                   if (tenantId == null) {
-                       o365UserInfo.organization = null;
-                       return o365UserInfo;
-                   }
-                   return this.getOrganization(tenantId)
-               })
-               .then((org) => {
-                   o365UserInfo.organization = org;
-                   return o365UserInfo;
-               })
-       }
+		public getO365User(tenantId: string): Promise<any> {
+			let o365UserInfo = {
+				user: null,
+				roles: [],
+				organization: null
+			};
+			return this.getMe()
+				.then((user) => {
+					o365UserInfo.user = user
+					return o365UserInfo
+				})
+				
+		}
 
        public getMe(): Promise<any> {
            return new Promise((resolve, reject) => {

@@ -1,8 +1,4 @@
-﻿/*
-* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
-* See LICENSE in the project root for license information.
-*/
-import * as uuid from "node-uuid";
+﻿import * as uuid from "node-uuid";
 import * as Promise from "bluebird";
 import * as bcrypt from 'bcryptjs';
 import { DbContext, UserInstance } from '../data/dbContext';
@@ -164,4 +160,4 @@ export class UserService {
                 return retRoles;
             })
     }
-}
+}		

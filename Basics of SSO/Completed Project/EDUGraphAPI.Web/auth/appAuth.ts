@@ -21,6 +21,7 @@ export class appAuth {
     private LocalStrategy = require('passport-local').Strategy;
 
 
+
     /******************************************************************************
     * Set up passport in the app
     ******************************************************************************/
@@ -48,11 +49,11 @@ export class appAuth {
 
     //-----------------------------------------------------------------------------
     // Use the OIDCStrategy within Passport.
-    // 
+    //
     // Strategies in passport require a `verify` function, which accepts credentials
     // (in this case, the `oid` claim in id_token), and invoke a callback to find
     // the corresponding user object.
-    // 
+    //
     // The following are the accepted prototypes for the `verify` function
     // (1) function(iss, sub, done)
     // (2) function(iss, sub, profile, done)
@@ -148,11 +149,11 @@ export class appAuth {
     //-----------------------------------------------------------------------------
     // Set up the route controller
     //
-    // 1. For 'login' route and 'returnURL' route, use `passport.authenticate`. 
+    // 1. For 'login' route and 'returnURL' route, use `passport.authenticate`.
     // This way the passport middleware can redirect the user to login page, receive
     // id_token etc from returnURL.
     //
-    // 2. For the routes you want to check if user is already logged in, use 
+    // 2. For the routes you want to check if user is already logged in, use
     // `ensureAuthenticated`. It checks if there is an user stored in session, if not
     // it will call `passport.authenticate` to ask for user to log in.
     //-----------------------------------------------------------------------------

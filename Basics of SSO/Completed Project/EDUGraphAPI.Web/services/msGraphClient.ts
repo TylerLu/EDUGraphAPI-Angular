@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 * See LICENSE in the project root for license information.
 */
@@ -23,20 +23,9 @@ export class MSGraphClient {
         return this.getMe()
             .then((user) => {
                 o365UserInfo.user = user
-                return this.getRoles(user)
+                return o365UserInfo
             })
-            .then((roles) => {
-                o365UserInfo.roles = roles;
-                if (tenantId == null) {
-                    o365UserInfo.organization = null;
-                    return o365UserInfo;
-                }
-                return this.getOrganization(tenantId)
-            })
-            .then((org) => {
-                o365UserInfo.organization = org;
-                return o365UserInfo;
-            })
+            
     }
 
     public getMe(): Promise<any> {

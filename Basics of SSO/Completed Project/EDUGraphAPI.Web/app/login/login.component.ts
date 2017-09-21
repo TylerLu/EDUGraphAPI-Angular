@@ -91,7 +91,6 @@ export class Login implements OnInit {
             });
     }
 
-
     localLogin() {
         this.userService.localLogin(this.model)
             .then((result) => {
