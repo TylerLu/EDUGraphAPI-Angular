@@ -11,7 +11,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <NameOfLastUsedPublishProfile>edugraphapi2dev - Web Deploy</NameOfLastUsedPublishProfile>
     <LaunchUrl>https://localhost</LaunchUrl>
-    <Environment>WEBSITE_HOSTNAME=localhost:44380
+    <Environment>WEBSITE_HOSTNAME=localhost:44377
 SQLiteDB=dafztabase.sqlite</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -28,7 +28,7 @@ SQLiteDB=dafztabase.sqlite</Environment>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <ProjectView>ProjectFiles</ProjectView>
-    <NodejsPort>44380</NodejsPort>
+    <NodejsPort>44377</NodejsPort>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <EnableTypeScript>true</EnableTypeScript>
@@ -201,11 +201,15 @@ SQLiteDB=dafztabase.sqlite</Environment>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
+    <Folder Include="app\aboutme\" />
+    <Folder Include="app\admin\" />
     <Folder Include="app\authHelper\" />
     <Folder Include="app\css\" />
+    <Folder Include="app\demoHelper\" />
     <Folder Include="app\fonts\" />
     <Folder Include="app\header\" />
     <Folder Include="app\images\" />
+    <Folder Include="app\link\" />
     <Folder Include="app\login\" />
     <Folder Include="app\models\" />
     <Folder Include="app\models\common\" />
