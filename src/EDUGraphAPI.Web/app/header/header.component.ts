@@ -10,7 +10,7 @@ import { AuthHelper } from "../authHelper/authHelper";
 import { MeService } from "../services/meService";
 import { Cookie } from "../services/cookieService";
 import { SchoolService } from '../school/school.service';
-import { UserModel } from '../school/user';
+import { UserModel } from '../models/user';
 import { MapUtils } from '../utils/jsonHelper';
 import { UserPhotoService } from '../services/userPhotoService';
 

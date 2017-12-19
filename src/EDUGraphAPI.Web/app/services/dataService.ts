@@ -10,7 +10,7 @@ import { Injectable, Inject } from '@angular/core';
 import { PagedCollection } from '../models/common/pagedCollection';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
-import { SchoolModel } from '../school/school';
+import { FileItem } from 'ng2-file-upload'
 import { AuthHelper } from "../authHelper/authHelper";
 
 export class Item {
@@ -91,7 +91,7 @@ export class DataService {
             .subscribe(accessToken => {
                 this._http.post(actionUrl, data, { headers: this.getHeader(accessToken) })
                     .subscribe((data) => {
-                        activeProject.next(data);
+                        activeProject.next(<any>data.json());
                     },
                     (error) => {
                         activeProject.error(error);
