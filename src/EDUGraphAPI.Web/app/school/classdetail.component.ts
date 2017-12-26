@@ -165,8 +165,8 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
                                             .getClassWithMembers(this.classId)
                                             .subscribe((result) => {
                                                 this.classEntity = MapUtils.deserialize(EducationClass, result);
-                                                this.classEntity.Term.StartDate = moment.utc(this.classEntity.Term.StartDate).local().format('MMMM  D YYYY');
-                                                this.classEntity.Term.EndDate = moment.utc(this.classEntity.Term.EndDate).local().format('MMMM  D YYYY');
+                                                this.classEntity.Term.StartDate = moment.utc(this.classEntity.Term.StartDate).local().format('MMMM  DD YYYY');
+                                                this.classEntity.Term.EndDate = moment.utc(this.classEntity.Term.EndDate).local().format('MMMM  DD YYYY');
                                                 this.classEntity.IsMyClasses = true;
                                                 result.members.forEach((member) => {
                                                     var user = MapUtils.deserialize(EducationUser, member);
@@ -178,10 +178,15 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
                                                                 user.FavoriteColor = color;
                                                             });
                                                     }
-                                                    this.classEntity.Users.push(MapUtils.deserialize(EducationUser, member));
+                                                    this.classEntity.Users.push(user);
+                                                    if (user.PrimaryRole == EducationRole.Teacher) {
+                                                        this.classEntity.Teachers.push(user)
+                                                    }
+                                                    if (user.PrimaryRole == EducationRole.Student) {
+                                                        this.classEntity.Students.push(user)
+                                                    }
+
                                                 });
-                                                this.classEntity.Teachers = this.classEntity.Users.filter(user => user.PrimaryRole == EducationRole.Teacher);
-                                                this.classEntity.Students = this.classEntity.Users.filter(user => user.PrimaryRole == EducationRole.Student);
                                                 this.setSeatings();
                                                 this.sortMembers();
                                                 if (this.me.ObjectType == 'Teacher') {
@@ -782,18 +787,18 @@ export class ClassDetailComponent implements OnInit, AfterContentInit {
             var sort = CompareHelper.createComparer("DisplayName", this.sortAsc);
             this.classEntity.Students.sort(sort);
         }
-        else {
-            if (this.sortAsc) {
-                $("#students .table-green-header th").last().addClass("headerSortUp");
-                this.sortAsc = false;
-            } else {
-                $("#students .table-green-header th").last().addClass("headerSortDown");
-                this.sortAsc = true;
-            }
-            var sort = CompareHelper.createComparer("EducationGrade", this.sortAsc);
-            this.classEntity.Students.sort(sort);
+        //else {
+        //    if (this.sortAsc) {
+        //        $("#students .table-green-header th").last().addClass("headerSortUp");
+        //        this.sortAsc = false;
+        //    } else {
+        //        $("#students .table-green-header th").last().addClass("headerSortDown");
+        //        this.sortAsc = true;
+        //    }
+        //    var sort = CompareHelper.createComparer("EducationGrade", this.sortAsc);
+        //    this.classEntity.Students.sort(sort);
 
-        }
+        //}
     }
 
     sortDoc(sortby: string) {

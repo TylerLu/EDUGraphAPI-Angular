@@ -31,7 +31,7 @@ export class MyClassesComponent implements OnInit {
     showNoData: boolean = false;
     legendText: string = "";
     noDataText: string = "";
-    me: EducationUser;
+    me: UserModel;
 
     constructor(
         private router: Router,
@@ -45,14 +45,15 @@ export class MyClassesComponent implements OnInit {
             this.schoolService
                 .getMe()
                 .subscribe((result) => {
-                    this.me = MapUtils.deserialize(EducationUser, result);
-                    if (this.me.PrimaryRole == EducationRole.Student) {
+                    this.me = MapUtils.deserialize(UserModel, result);
+                    if (this.me.ObjectType == "Student") {
                         this.legendText = "Not Enrolled";
                         this.noDataText = "Not enrolled in any classes.";
                     } else {
                         this.legendText = "Not Teaching";
                         this.noDataText = "Not teaching any classes.";
                     }
+
                 });
             this.schoolService
                 .getSchoolById(this.schoolGuId)

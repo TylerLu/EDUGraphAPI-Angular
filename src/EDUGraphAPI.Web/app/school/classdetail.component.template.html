@@ -57,7 +57,6 @@
                             <thead>
                                 <tr class="table-green-header">
                                     <th class="header headerSortDown" (click)="sortStu('name')">student name</th>
-                                    <th class="header" (click)="sortStu('grade')">grade</th>
                                 </tr>
                             </thead>
                             <tbody *ngIf="classEntity">
@@ -65,7 +64,6 @@
                                     <td>
                                         <img [src]="stu.Photo || 'app/images/header-default.jpg'"> {{stu.DisplayName}}
                                     </td>
-                                    <td>{{stu.EducationGrade}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -280,7 +278,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <span class="see-more" *ngIf="oneDriveURL"><a href="{{oneDriveURL}}" target="_blank">See All</a></span>
+                        <span class="see-more" *ngIf="oneDriveURL"><a href="{{oneDriveURL}}" target="_blank">See More</a></span>
                         <br style="clear:both">
                     </div>
                 </tab>
@@ -303,7 +301,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <span class="see-more" *ngIf="classEntity"><a target="_blank" href="https://outlook.office.com/owa/?path=/group/{{classEntity.Email}}/mail&amp;exsvurl=1&amp;ispopout=0">See All</a></span>
+                        <span class="see-more" *ngIf="classEntity"><a target="_blank" href="https://outlook.office.com/owa/?path=/group/{{classEntity.Email}}/mail&amp;exsvurl=1&amp;ispopout=0">See More</a></span>
                         <br style="clear:both">
                     </div>
                 </tab>
