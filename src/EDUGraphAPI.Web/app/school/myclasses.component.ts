@@ -62,6 +62,10 @@ export class MyClassesComponent implements OnInit {
 
                     this.schoolService.getMyClassesWithMembers()
                         .subscribe((result) => {
+                            if (result.length == 0) {
+                                this.showNoData = true;
+                                return;
+                            }
                             result.forEach((obj) => {
                                 let myclasawihtMember: EducationClass = MapUtils.deserialize(EducationClass, obj);
                                 obj.members.forEach((member) => {
@@ -96,6 +100,10 @@ export class MyClassesComponent implements OnInit {
                                     });
                                 });
                         });
+                },
+                (error) => {
+                    if (error.status == 404)
+                        this.showNoData = true;
                 });
         });
     }

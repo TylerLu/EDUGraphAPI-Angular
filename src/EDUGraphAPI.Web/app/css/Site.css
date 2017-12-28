@@ -616,7 +616,7 @@ ul.nav-tabs[_ngcontent-rnm-5]    > li.active[_ngcontent-rnm-5]{background-color:
 
 .body-content .link-component {padding-left:15px;}
 
-.nodata{width:100%;text-align:center;padding-top:20px; background-color:white;}
+.nodata{width:100%;text-align:center;padding:20px 0; background-color:white;}
 .saveresult{margin-left:6px;color:green;}
 .tablesorter .header{background-image:url('../Images/arrow-all.png');background-repeat:no-repeat;background-position-y:center;background-size:10px;}
 .tablesorter .headerSortDown{background-image:url('../Images/arrow-up.png');background-repeat:no-repeat;background-position-y:center;background-size:10px;}
