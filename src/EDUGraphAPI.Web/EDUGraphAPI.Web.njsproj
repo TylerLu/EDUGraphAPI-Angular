@@ -12,10 +12,13 @@
     <NameOfLastUsedPublishProfile>edugraphapi2dev - Web Deploy</NameOfLastUsedPublishProfile>
     <LaunchUrl>https://localhost</LaunchUrl>
     <Environment>WEBSITE_HOSTNAME=localhost:44380
-clientId=
-clientSecret=
-sourceCodeRepositoryUrl=
+clientId=4e3fa16f-9909-4bf6-9a66-5560e97e7082
+clientSecret=IO0DqycDalD832ANxFFnVn9zwIjr/I3XXY1rjhinq/s=
+sourceCodeRepositoryUrl=http://github.com
 SQLiteDB=database.sqlite</Environment>
+    <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
+    <ToolsVersionPromptShown>0.0</ToolsVersionPromptShown>
+    <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
