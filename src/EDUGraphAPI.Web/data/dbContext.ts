@@ -16,6 +16,9 @@ export interface UserAttributes {
     passwordHash?: string;
     salt?: string;
     favoriteColor?: string;
+    JobTitle?: string;
+    Department?: string;
+    MobilePhone?: string;
 }
 export interface UserInstance extends Sequelize.Instance<UserAttributes>, UserAttributes {
     getOrganization: Sequelize.BelongsToGetAssociationMixin<OrganizationInstance>;
@@ -69,6 +72,16 @@ export interface TokenCacheInstance extends Sequelize.Instance<TokenCacheAttribu
 }
 export interface TokenCacheModel extends Sequelize.Model<TokenCacheInstance, TokenCacheAttributes> { }
 
+export interface DataSyncRecordsAttributes {
+    id?: number;
+    tenantId: string;
+    query: string;
+    deltaLink: string;
+}
+export interface DataSyncRecordsInstance extends Sequelize.Instance<DataSyncRecordsAttributes>, DataSyncRecordsAttributes {
+}
+export interface DataSyncRecordsModel extends Sequelize.Model<DataSyncRecordsInstance, DataSyncRecordsAttributes> { }
+
 export class DbContext {
     public sequelize: Sequelize.Sequelize;
     public User: UserModel;
@@ -76,6 +89,7 @@ export class DbContext {
     public UserRole: UserRoleModel;
     public ClassroomSeatingArrangement: ClassroomSeatingArrangementModel;
     public TokenCache: TokenCacheModel;
+    public DataSyncRecords: DataSyncRecordsModel;
 
     constructor() {
         this.init();
@@ -86,9 +100,15 @@ export class DbContext {
     }
 
     private init() {
-        this.sequelize = new Sequelize("", "", "", {
-            dialect: 'sqlite',
-            storage: Constants.SQLiteDB
+
+        this.sequelize = new Sequelize(Constants.DB_DATABASE, Constants.DB_USERNAME, Constants.DB_PASSWORD, {
+            host: Constants.DB_HOST, 
+            dialect: 'mysql', 
+            pool: {
+                max: 5, 
+                min: 0, 
+                idle: 10000 
+            }
         });
 
         this.User = this.sequelize.define<UserInstance, UserAttributes>('User',
@@ -105,7 +125,10 @@ export class DbContext {
                 email: Sequelize.STRING,
                 passwordHash: Sequelize.STRING,
                 salt: Sequelize.STRING,
-                favoriteColor: Sequelize.STRING
+                favoriteColor: Sequelize.STRING,
+                JobTitle: Sequelize.STRING,
+                Department: Sequelize.STRING,
+                MobilePhone: Sequelize.STRING
             },
             {
                 timestamps: false,
@@ -157,5 +180,18 @@ export class DbContext {
                 timestamps: false,
                 tableName: "TokenCache"
             });
+
+        this.DataSyncRecords = this.sequelize.define<DataSyncRecordsInstance, DataSyncRecordsAttributes>('DataSyncRecords',
+            {
+                tenantId: Sequelize.STRING,
+                query: Sequelize.STRING,
+                deltaLink: Sequelize.STRING,
+            },
+            {
+                timestamps: false,
+                tableName: "DataSyncRecords"
+            });
+
+        
     }
 }

@@ -24,8 +24,12 @@ export class Constants {
     public static readonly O365Username = "O365Username";
     public static readonly O365Email = "O365Email";
 
-    // Database 
-    public static readonly SQLiteDB: string = process.env.SQLiteDB as string;
+    // Database     
+    public static readonly DB_DATABASE: string = process.env.MySQLDbName as string;
+    public static readonly DB_HOST: string = process.env.MySQLHost as string;
+    public static readonly DB_USERNAME: string = process.env.MySQLUser as string;
+    public static readonly DB_PASSWORD: string = process.env.MySQLPassword as string;
+
 }
 
 export class O365ProductLicenses {
