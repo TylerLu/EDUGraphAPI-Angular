@@ -1,0 +1,17 @@
+{
+  "name": "edugraph-api.sync-data",
+  "version": "0.0.0",
+  "description": "EDUGraphAPI.SyncData",
+  "main": "app.js",
+  "author": {
+    "name": "admin"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.87"
+  },
+  "dependencies": {
+    "adal-node": "^0.1.28",
+    "node-forge": "^0.7.5",
+    "ssl": "^1.0.0"
+  }
+}
