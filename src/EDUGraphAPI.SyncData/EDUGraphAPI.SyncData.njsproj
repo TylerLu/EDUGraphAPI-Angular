@@ -10,7 +10,12 @@
     <SccLocalPath>SAK</SccLocalPath>
     <Environment>ClientId=37443f61-5fe1-4a1b-8778-e251b3df885b
 ClientCertificatePath=app_only_cert.pfx
-ClientCertificatePassword=J48W23RQeZv85vj</Environment>
+ClientCertificatePassword=J48W23RQeZv85vj
+MySQLDbName=eduangular
+MySQLHost=edugraphapiphp8.mysql.database.azure.com
+MySQLUser=azureuser@edugraphapiphp8
+MySQLPassword=P@ssw0rd
+MySQLPort=3306</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -53,12 +58,22 @@ ClientCertificatePassword=J48W23RQeZv85vj</Environment>
     <TypeScriptCompile Include="constants.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="db\dataSyncRecorder.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="db\db.ts" />
+    <TypeScriptCompile Include="db\organization.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="userDataSyncService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="x509Certificate.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="db\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

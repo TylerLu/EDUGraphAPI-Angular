@@ -12,13 +12,13 @@
     <NameOfLastUsedPublishProfile>edugraphapi2dev - Web Deploy</NameOfLastUsedPublishProfile>
     <LaunchUrl>https://localhost</LaunchUrl>
     <Environment>WEBSITE_HOSTNAME=localhost:44380
-clientId=
-clientSecret=
-sourceCodeRepositoryUrl=
-MySQLDbName=
-MySQLHost=
-MySQLUser=
-MySQLPassword=</Environment>
+clientId=4e3fa16f-9909-4bf6-9a66-5560e97e7082
+clientSecret=IO0DqycDalD832ANxFFnVn9zwIjr/I3XXY1rjhinq/s=
+sourceCodeRepositoryUrl=http://github.com
+MySQLDbName=eduangular
+MySQLHost=edugraphapiphp8.mysql.database.azure.com
+MySQLUser=azureuser@edugraphapiphp8
+MySQLPassword=P@ssw0rd</Environment>
     <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
     <ToolsVersionPromptShown>0.0</ToolsVersionPromptShown>
     <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>

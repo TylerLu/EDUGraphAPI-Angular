@@ -17,5 +17,5 @@ export class Constants {
     public static readonly MySQLPort = process.env.MySQLPort;
     public static readonly MySQLUser = process.env.MySQLUser;
     public static readonly MySQLPassword = process.env.MySQLPassword;
-    public static readonly MySQLDbName = 'edu'
+    public static readonly MySQLDbName = process.env.MySQLDbName;
 }

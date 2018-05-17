@@ -6,22 +6,50 @@
 import { Constants } from './constants'
 import * as auth from './authenticationHelper'
 
+var organization = require('./db/organization');
+var dataSyncRecorder = require('./db/dataSyncRecorder');
+
 export class UserDataSyncService {
 
     syncAsync(): Promise<any> {
-        // TODO: get consented tetant ids.
-        var organizationIds = [
-            '64446b5c-6d85-4d16-9ff2-94eddc0c2439',
-            '64446b5c-6d85-4d16-9ff2-94eddc0c2439'];
-        return Promise.all(organizationIds.map(this.syncOrganizationAsync));
+
+        return organization.getAllConsentedTenants()
+            .then(function (orgs) {        
+                var organizationIds = [];
+                for (let org of orgs) {
+                    organizationIds.push(org.tenantId);
+                }
+                return organizationIds;
+            }).then(function (organizationIds) {
+                return Promise.all(organizationIds.map(function (id) {                   
+                    new UserDataSyncService().syncOrganizationAsync(id);
+                }));                
+            });      
+       
+        
     }
 
-    private syncOrganizationAsync(organizationId: string): Promise<any> {
-        return auth.getAppOnlyAccessTokenAsync(organizationId, Constants.ClientId, Constants.MSGraphResource)
-            .then(tokenResponse => {
-                var accessToken = tokenResponse['accessToken'];
-                // TODO: get changed data and update users in db.
-                console.log(accessToken);
-            });
+    private syncOrganizationAsync(tenantId: string): Promise<any> {
+        return dataSyncRecorder.getOrCreateDataSyncRecorder(tenantId).then(recorder => {
+            return recorder.deltaLink;
+        }).then(deltaLink => {
+            return auth.getAppOnlyAccessTokenAsync(tenantId, Constants.ClientId, Constants.MSGraphResource)
+                .then(tokenResponse => {
+                    return tokenResponse['accessToken'];
+                }).then(token => {
+                    console.log(token);
+                    console.log(deltaLink);
+                    console.log(tenantId);
+                    return null;
+                });
+         });
+
+        //return auth.getAppOnlyAccessTokenAsync(tenantId, Constants.ClientId, Constants.MSGraphResource)
+        //    .then(tokenResponse => {
+        //        return tokenResponse['accessToken'];
+        //    }).then(token => {
+        //        //var syncRecorder = dataSyncRecorder.getOrCreateDataSyncRecorder
+        //        return null;
+        //    });
     }
 }
