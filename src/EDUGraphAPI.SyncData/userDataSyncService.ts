@@ -5,6 +5,7 @@
 
 import { Constants } from './constants'
 import * as auth from './authenticationHelper'
+import * as graph from './graphHelper'
 
 var organization = require('./db/organization');
 var dataSyncRecorder = require('./db/dataSyncRecorder');
@@ -37,9 +38,9 @@ export class UserDataSyncService {
                 .then(tokenResponse => {
                     return tokenResponse['accessToken'];
                 }).then(token => {
-                    console.log(token);
-                    console.log(deltaLink);
-                    console.log(tenantId);
+                    var users = [];
+                    var aaa = graph.queryUsers(deltaLink, tenantId, Constants.ClientId, token, users);
+                    var a = 1;
                     return null;
                 });
          });
