@@ -4,17 +4,25 @@
 @if "%SCM_TRACE_LEVEL%" NEQ "4" @echo off
 
 
-
-
-
 :Deployment
-echo Deploy WebJob.
+echo Deploying SyncData WebJob.
 
+SET SYNCDATA_WEBJOB_PATH=%DEPLOYMENT_TARGET%\App_Data\jobs\triggered\SyncData
 
-echo %cd%
+:: 1. Copy files
+xcopy /y/s "%DEPLOYMENT_SOURCE%\src\EDUGraphAPI.SyncData" "%SYNCDATA_WEBJOB_PATH%"
 
-xcopy /y/s "%~dp0%\src\EDUGraphAPI.SyncData" "%DEPLOYMENT_TARGET%\App_Data\jobs\triggered\SyncData"
+:: 2. Install npm packages
+pushd "%SYNCDATA_WEBJOB_PATH%"
+call :ExecuteCmd !NPM_CMD! install
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
 
+:: 3. Gulp build
+pushd "%SYNCDATA_WEBJOB_PATH%"
+call .\node_modules\.bin\gulp build
+	 IF !ERRORLEVEL! NEQ 0 goto error
+popd
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end

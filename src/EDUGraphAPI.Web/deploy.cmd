@@ -86,7 +86,7 @@ goto :EOF
 :: ----------
 
 :Deployment
-echo Handling node.js deployment.
+echo Deploying the Web App.
 
 :: 1. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
