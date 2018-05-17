@@ -74,11 +74,8 @@ MySQLPort=3306</Environment>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Folder Include="db\" />
-=======
     <Compile Include="gulpfile.js" />
->>>>>>> d316a2147a60220659136b71ebc1446b65c29155
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
