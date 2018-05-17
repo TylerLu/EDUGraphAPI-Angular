@@ -81,6 +81,8 @@ echo Deploying SyncData WebJob.
 
 SET SYNCDATA_WEBJOB_PATH=%DEPLOYMENT_TARGET%\App_Data\jobs\triggered\SyncData
 
+echo %DEPLOYMENT_SOURCE%
+
 :: 1. Copy files
 xcopy /y/s "%DEPLOYMENT_SOURCE%\src\EDUGraphAPI.SyncData" "%SYNCDATA_WEBJOB_PATH%\"
 
