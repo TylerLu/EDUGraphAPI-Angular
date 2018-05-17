@@ -10,5 +10,5 @@ var tsProject = ts.createProject('tsconfig.json');
 gulp.task('build', () => {
     return gulp.src(['**/*.ts', '!app{,/**}', '!dist{,/**}', '!node_modules{,/**}'])
         .pipe(tsProject())
-        .pipe(gulp.dest('./'));
+        .pipe(gulp.dest('./dist'));
 });
