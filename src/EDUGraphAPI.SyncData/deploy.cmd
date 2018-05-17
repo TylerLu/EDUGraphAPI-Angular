@@ -82,6 +82,10 @@ echo Deploying SyncData WebJob.
 
 SET SYNCDATA_WEBJOB_PATH=%DEPLOYMENT_TARGET%\App_Data\jobs\triggered\SyncData
 
+:: 0. Fix issue: Node.js deployment succeeds but doesn't work if server.js/app.js doesn't exist at deployment
+:: https://github.com/projectkudu/kudu/issues/1753
+touch "%DEPLOYMENT_SOURCE%\app.js"
+
 :: 1. Copy files
 xcopy /y/s "%DEPLOYMENT_SOURCE%" "%SYNCDATA_WEBJOB_PATH%\"
 
