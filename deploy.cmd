@@ -3,10 +3,10 @@
 
 @if "%SCM_TRACE_LEVEL%" NEQ "4" @echo off
 
-::IF EXIST "%~dp0%\src\EDUGraphAPI.Web\deploy.cmd" (
-::  call %~dp0%\src\EDUGraphAPI.Web\deploy.cmd
-::  popd
-::)
+IF EXIST "%~dp0%\src\EDUGraphAPI.Web\deploy.cmd" (
+  call %~dp0%\src\EDUGraphAPI.Web\deploy.cmd
+  popd
+)
 
 IF EXIST "%~dp0%\src\EDUGraphAPI.SyncData\deploy.cmd" (
   call %~dp0%\src\EDUGraphAPI.SyncData\deploy.cmd
