@@ -182,6 +182,8 @@
             "MySQLPort": "3306",
             "MySQLUser": "[concat(parameters('mySqlAdministratorLogin'), '@', variables('mySQLName'))]",
             "MySQLPassword": "[parameters('mySqlAdministratorLoginPassword')]",
+            "MySQLDbName": "[variables('mySQLDatabaseName')]",
+            "MySQLSSLCA": "./BaltimoreCyberTrustRoot.crt.pem",
             "sourceCodeRepositoryUrl": "[parameters('SourceCodeRepositoryUrl')]",
             "command": "deploy.cmd"
           }
