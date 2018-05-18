@@ -9,5 +9,4 @@ IF EXIST "%~dp0%\src\EDUGraphAPI.Web\deploy.cmd" (
 
 IF EXIST "%~dp0%\src\EDUGraphAPI.SyncData\deploy.cmd" (
   call %~dp0%\src\EDUGraphAPI.SyncData\deploy.cmd
-  popd
 )
