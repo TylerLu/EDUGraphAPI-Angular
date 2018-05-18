@@ -1,4 +1,9 @@
-﻿var Sequelize = require('sequelize');
+﻿/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+
+var Sequelize = require('sequelize');
 var sequelize = require('./db');
 
 

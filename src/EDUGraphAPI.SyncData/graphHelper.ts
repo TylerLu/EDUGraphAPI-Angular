@@ -5,27 +5,28 @@
 var https = require('https');
 
 
-export function queryUsers(url: string, tenantId: string, clientId: string, accessToken: string, users: any) {
-    
-    if (!url) {
-        return users;
-    }
-    else {
-        var host = 'graph.microsoft.com';
-        //var path = 'https://graph.microsoft.com/v1.0/users/delta?$select=jobTitle,department,mobilePhone';
-        var nextUrl = url;
-        
+export function queryUsers(url: string, tenantId: string, clientId: string, accessToken: string): Promise<any> {
 
-        var options = {
-            method: 'GET',
-            host: host,
-            path: nextUrl,
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
-        };
+    var users = [];
 
-        var request = https.get(options, function (res) {
+    return new Promise(function (resolve, reject) {
+
+        getUsers(url);
+
+        function getUsers(url) {
+            var host = 'graph.microsoft.com';
+            var nextUrl = url;
+
+            var options = {
+                method: 'GET',
+                host: host,
+                path: nextUrl,
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                }
+            };
+
+            var request = https.get(options, function (res) {
 
             var json = '';
             res.on('data', function (chunk) {
@@ -35,10 +36,10 @@ export function queryUsers(url: string, tenantId: string, clientId: string, acce
                 if (res.statusCode === 200) {
                     try {
                         var data = JSON.parse(json);
-                       
+
                         for (var i = 0; i < data.value.length; i++) {
                             var isRemoved = false;
-                            if (data.value[i]["removed"])
+                            if (data.value[i]["@removed"])
                                 isRemoved = true;
                             users.push({
                                 "id": data.value[i]["id"], "department": data.value[i]["department"], "jobTitle": data.value[i]["jobTitle"],
@@ -47,15 +48,15 @@ export function queryUsers(url: string, tenantId: string, clientId: string, acce
                         }
                         if (data["@odata.nextLink"]) {
                             nextUrl = data["@odata.nextLink"];
-                            queryUsers(nextUrl, tenantId, clientId, accessToken, users);
+                            getUsers(nextUrl);
                         }
-
+                        else {
+                            resolve(users);
+                        }
 
                     } catch (e) {
                         console.log('Error parsing JSON!');
                     }
-                } else {
-                    console.log('Status:', res.statusCode);
                 }
             });
 
@@ -63,12 +64,11 @@ export function queryUsers(url: string, tenantId: string, clientId: string, acce
         }).on('error', (e) => {
             console.error(e);
         });
+        }
 
-
-
-        var a = 1;
-    }
-
-
+    });
 
 }
+
+
+

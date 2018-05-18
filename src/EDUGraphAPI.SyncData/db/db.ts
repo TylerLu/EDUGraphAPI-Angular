@@ -22,6 +22,7 @@ module.exports = new Sequelize(Constants.MySQLDbName, Constants.MySQLUser, Const
     pool: {
         max: 5,
         min: 0,
-        idle: 10000
+        idle: 10000,
+        maxIdleTime: 10000
     }
 });

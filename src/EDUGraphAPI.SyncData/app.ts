@@ -7,6 +7,5 @@ import { UserDataSyncService } from './userDataSyncService'
 
 
 var userDataSyncService = new UserDataSyncService();
-userDataSyncService.syncAsync()
-    .then(() => { console.log('Done!') });
+userDataSyncService.syncAsync();
     
