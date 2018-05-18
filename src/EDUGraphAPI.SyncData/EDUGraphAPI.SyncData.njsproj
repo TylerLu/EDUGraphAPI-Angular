@@ -66,6 +66,9 @@ MySQLPort=3306</Environment>
     <TypeScriptCompile Include="db\organization.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="db\users.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="graphHelper.ts" />
     <TypeScriptCompile Include="userDataSyncService.ts">
       <SubType>Code</SubType>
