@@ -8,7 +8,7 @@
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
-    <Environment>ClientId=37443f61-5fe1-4a1b-8778-e251b3df885b
+    <Environment>ClientId=4e3fa16f-9909-4bf6-9a66-5560e97e7082
 ClientCertificatePath=app_only_cert.pfx
 ClientCertificatePassword=J48W23RQeZv85vj
 MySQLDbName=eduangular
@@ -66,6 +66,7 @@ MySQLPort=3306</Environment>
     <TypeScriptCompile Include="db\organization.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="graphHelper.ts" />
     <TypeScriptCompile Include="userDataSyncService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

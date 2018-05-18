@@ -38,19 +38,15 @@ export class UserDataSyncService {
                 .then(tokenResponse => {
                     return tokenResponse['accessToken'];
                 }).then(token => {
-                    var users = [];
-                    var aaa = graph.queryUsers(deltaLink, tenantId, Constants.ClientId, token, users);
-                    var a = 1;
+                   
+                    graph.queryUsers(deltaLink, tenantId, Constants.ClientId, token).then(users => {
+                        
+                    });
+                   
                     return null;
                 });
          });
 
-        //return auth.getAppOnlyAccessTokenAsync(tenantId, Constants.ClientId, Constants.MSGraphResource)
-        //    .then(tokenResponse => {
-        //        return tokenResponse['accessToken'];
-        //    }).then(token => {
-        //        //var syncRecorder = dataSyncRecorder.getOrCreateDataSyncRecorder
-        //        return null;
-        //    });
+
     }
 }
