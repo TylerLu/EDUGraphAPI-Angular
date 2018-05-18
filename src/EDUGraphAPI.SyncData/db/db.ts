@@ -10,9 +10,9 @@ module.exports = new Sequelize(Constants.MySQLDbName, Constants.MySQLUser, Const
     host: Constants.MySQLHost,
     dialect: 'mysql',
     pool: {
-        max: 10,
+        max: 5,
         min: 0,
-        idle: 1000000,
-        maxIdleTime: 1000000
+        idle: 10000,
+        maxIdleTime: 10000
     }
 });

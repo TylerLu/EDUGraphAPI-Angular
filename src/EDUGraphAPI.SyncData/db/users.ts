@@ -27,31 +27,34 @@ exports.updateOrDeleteUser = function (users) {
         handleUser(users[0]);
 
         function handleUser(user) {
-            User.findOne({ where: { o365UserId: user.id } }).then(searchResult => {
-            if (searchResult == null) {
-                console.log("Skipping updating user " + user.id + " who does not exist in the local database.");
-                handleNextUser();
-            } else {
-                if (user.isRemoved) {
-                    User.destory({
-                        where: { o365UserId: user.o365UserId }
-                    }).then(function () {
+            
+                User.findOne({ where: { o365UserId: user.id } }).then(searchResult => {
+                    if (searchResult == null) {
+                        console.log("Skipping updating user " + user.id + " who does not exist in the local database.");
                         handleNextUser();
-                        console.log("Remove user with id " + user.o365UserId);
-                     });
-                    
-                } else {
-                    searchResult.updateAttributes({
-                        JobTitle: user.jobTitle,
-                        MobilePhone: user.mobilePhone,
-                        Department: user.department
-                    }).then(function () {
-                        handleNextUser();                       
-                    });;
-                }
-               
-                }
-            });
+                    } else {
+                        if (user.isRemoved) {
+                            User.destroy({
+                                where: { o365UserId: user.id }
+                            }).then(function () {
+                                handleNextUser();
+                                console.log("Remove user with id " + user.id);
+                            });
+
+                        } else {
+                            searchResult.updateAttributes({
+                                JobTitle: user.jobTitle,
+                                MobilePhone: user.mobilePhone,
+                                Department: user.department
+                            }).then(function () {
+                                handleNextUser();
+                            });;
+                        }
+
+                    }
+                });
+
+            
         }
 
         function handleNextUser() {

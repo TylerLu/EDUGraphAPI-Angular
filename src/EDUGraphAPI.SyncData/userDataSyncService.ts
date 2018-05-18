@@ -41,13 +41,9 @@ export class UserDataSyncService {
                 }).then(token => {
                    
                     graph.queryUsers(deltaLink, tenantId, Constants.ClientId, token).then(users => {
-                        //for (let user of users) {
-                        //    userHelper.updateOrDeleteUser(user.id, user.jobTitle, user.mobilePhone, user.department, user.isRemoved).then(result => {
-                        //        console.log(result);
-                        //    });                           
-                        //}
+
                         userHelper.updateOrDeleteUser(users);
-                        console.log('Done!')
+                       
                     });                   
                    
                 });
