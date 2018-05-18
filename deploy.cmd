@@ -5,7 +5,6 @@
 
 IF EXIST "%~dp0%\src\EDUGraphAPI.Web\deploy.cmd" (
   call %~dp0%\src\EDUGraphAPI.Web\deploy.cmd
-  popd
 )
 
 ::IF EXIST "%~dp0%\src\EDUGraphAPI.SyncData\deploy.cmd" (
