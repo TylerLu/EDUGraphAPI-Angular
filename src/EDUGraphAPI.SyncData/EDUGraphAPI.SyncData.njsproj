@@ -49,8 +49,10 @@ MySQLPort=3306</Environment>
       <Publish>True</Publish>
     </None>
     <None Include="key_credential.txt" />
+    <Content Include="BaltimoreCyberTrustRoot.crt.pem" />
     <Content Include="deploy.cmd" />
     <Content Include="package.json" />
+    <Content Include="run.cmd" />
     <Content Include="settings.job" />
     <Content Include="tsconfig.json" />
     <TypeScriptCompile Include="authenticationHelper.ts">
