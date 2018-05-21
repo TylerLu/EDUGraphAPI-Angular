@@ -31,12 +31,72 @@ The sample demonstrates:
 - Getting schools, sections, teachers, and students from Office 365 Education:
 
   - [Office 365 Schools REST API reference](https://msdn.microsoft.com/office/office365/api/school-rest-operations)
+  - A [Differential Query](https://msdn.microsoft.com/en-us/library/azure/ad/graph/howto/azure-ad-graph-api-differential-query) is used to sync data that is cached in a local database by the SyncData Web Job.
 
 EDUGraphAPI is based on NodeJS (the server-side) and Angular 2 (the client-side).
 
 ## Prerequisites
 
-**Deploying and running this sample requires**:
+## **Generate a self-signed certificate**
+
+A self-signed certificate is required by the SyncData WebJob. For preview, you may skip the steps below and use the default certificate we provided:
+
+- Certificate file: `/App_Data/jobs/triggered/SyncData/app_only_cert.pfx`
+- Password: `J48W23RQeZv85vj`
+- Key credential: `/App_Data/jobs/triggered/SyncData/key_credential.txt`
+
+For production, you should you own certifcate:
+
+**Generate certificate with PowerShell**
+
+This file will be used in web job.
+
+Run PowerShell **as administrator**, then execute the commands below:
+
+```powershell
+$cert = New-SelfSignedCertificate -Type Custom -KeyExportPolicy Exportable -KeySpec Signature -Subject "CN=Edu App-only Cert" -NotAfter (Get-Date).AddYears(20) -CertStoreLocation "cert:\CurrentUser\My" -KeyLength 2048
+```
+
+> Note: please keep the PowerShell window open until you finish the steps below.
+
+**Get keyCredential**
+
+Execute the commands below to get keyCredential:
+
+> Note: Feel free to change the file path at the end of the command.
+
+```powershell
+$keyCredential = @{}
+$keyCredential.customKeyIdentifier = [System.Convert]::ToBase64String($cert.GetCertHash())
+$keyCredential.keyId = [System.Guid]::NewGuid().ToString()
+$keyCredential.type = "AsymmetricX509Cert"
+$keyCredential.usage = "Verify"
+$keyCredential.value = [System.Convert]::ToBase64String($cert.GetRawCertData())
+$keyCredential | ConvertTo-Json > c:\keyCredential.txt
+```
+
+The keyCredential is in the generated file, and will be used to create App Registrations in AAD.
+
+![cert-key-credential](/Images/cert-key-credential.png)
+
+### Export the Certificate and Convert to Base64 String
+
+You will be prompted to input a password to protect the certificate. Please copy aside the password. It will be used as the value of the **Certificate Pfx Password** parameter of the ARM Template
+
+The base64 string of the certificate is in the generated text file, and will be used as the value of the **Certificate Pfx Base64** parameter of the ARM Template.
+
+![cert-base64](/Images/cert-base64.png)
+
+Execute the commands below to export the certificate.
+
+```
+$password = Read-Host -Prompt "Enter password" -AsSecureString
+Export-PfxCertificate -Cert $cert -Password $password -FilePath c:\app_only_cert.pfx
+```
+
+
+
+Deploying and running this sample requires**:
 
 - An Azure subscription with permissions to register a new application, and deploy the web app.
 
@@ -93,29 +153,14 @@ EDUGraphAPI is based on NodeJS (the server-side) and Angular 2 (the client-side)
 
    - Click **Required permissions**. Add the following permissions:
 
-     | API                            | Application Permissions | Delegated Permissions                    |
-     | ------------------------------ | ----------------------- | ---------------------------------------- |
-     | Microsoft Graph                |                         | Read directory data<br>Access directory as the signed in user<br>Sign users in<br> Have full access to all files user can access<br> Have full access to user files<br> Read users' class assignments without grades<br> Read and write users' class assignments without grades<br> Read users' class assignments and their grades<br> Read and write users' class assignments and their grades |
-     | Windows Azure Active Directory |                         | Sign in and read user profile<br>Read and write directory data |
+     | API                            | Application Permissions                  | Delegated Permissions                    |
+     | ------------------------------ | ---------------------------------------- | ---------------------------------------- |
+     | Microsoft Graph                | Read all users' full profiles<br>Read the organization's roster | Read directory data<br>Access directory as the signed in user<br>Sign users in<br> Have full access to all files user can access<br> Have full access to user files<br> Read and write users' class assignments and their grades<br>Read users' view of the roster <br>Read all groups |
+     | Windows Azure Active Directory |                                          | Sign in and read user profile<br>Read and write directory data |
 
      ![](/Images/aad-create-app-06.png)
 
-     **Application Permissions**
-
-     | Permission          | Description                              |
-     | ------------------- | ---------------------------------------- |
-     | Read directory data | Allows the app to read data in your organization's directory, such as users, groups and apps, without a signed-in user. |
-
-     **Delegated Permissions**
-
-     | Permission                             | Description                              |
-     | -------------------------------------- | ---------------------------------------- |
-     | Read all users' full profiles          | Allows the app to read the full set of profile properties, reports, and managers of other users in your organization, on behalf of the signed-in user. |
-     | Read directory data                    | Allows the app to read data in your organization's directory, such as users, groups and apps. |
-     | Access directory as the signed in user | Allows the app to have the same access to information in the directory as the signed-in user. |
-     | Sign users in                          | Allows users to sign in to the app with their work or school accounts and allows the app to see basic user profile information. |
-     | Sign in and read user profile          | Allows users to sign-in to the app, and allows the app to read the profile of signed-in users. It also allows the app to read basic company information of signed-in users. |
-     | Read and write directory data          | Allows the app to read and write data in your organization's directory, such as users, and groups.  It does not allow the app to delete users or groups, or reset user passwords. |
+     ​
 
    - Click **Keys**, then add a new key:
 
@@ -123,6 +168,20 @@ EDUGraphAPI is based on NodeJS (the server-side) and Angular 2 (the client-side)
 
      Click **Save**, then copy aside the **VALUE** of the key. 
 
+8. Click **Manifest**.
+
+     ![](Images/aad-create-app-08.png)
+
+
+     Copy the keyCredential (all the text) from `key_credential.txt` file.
+
+     Insert the keyCredential into the square brackets of the **keyCredentials** node.
+
+     ![](Images/aad-create-app-09.png)
+
+     Click **Save**.
+
+     > Note: this step configures the certification used by a Web Job. Check **Application Authentication Flow** section for more details.
    Close the Settings window.
 
 ## Build and debug locally
@@ -299,7 +358,7 @@ These APIs are defined in the **/routes** folder.
 
 **Data Access**
 
-[Sequelize](http://docs.sequelizejs.com/en/v3/) is used in this sample to access data from a SQL Database. 
+[Sequelize](http://docs.sequelizejs.com/en/v3/) is used in this sample to access data from a SQL Database. MySQL is used as database. 
 
 The **DbContext** exposes the models and methods that are used to access data.
 
@@ -530,6 +589,30 @@ public getMe(): Promise<any> {
 Note that in the AAD Application settings, permissions for each Graph API are configured separately:
 
 ![](Images/aad-create-app-06.png) 
+
+### Differential Query
+
+A [differential query](https://msdn.microsoft.com/en-us/Library/Azure/Ad/Graph/howto/azure-ad-graph-api-differential-query) request returns all changes made to specified entities during the time between two consecutive requests. For example, if you make a differential query request an hour after the previous differential query request, only the changes made during that hour will be returned. This functionality is especially useful when synchronizing tenant directory data with an application’s data store.
+
+The related code is in the following folder of the project:
+
+- **EDUGraphAPI.SyncData.njsproj**: contains classes that are used to demonstrate how to sync users.
+
+In userDataSyncService.ts, we demonstrate how to use the **DifferentialQuery** to send differential query and get differential result.
+
+```php
+graph.queryUsers(deltaLink, tenantId, Constants.ClientId, token)
+```
+
+And how to update (or delete) users in local database with the delta result:
+
+```php
+ userHelper.updateOrDeleteUser(users);
+```
+
+Below is the log generated by the SyncData WebJob:
+
+![](Images/sync-data-web-job-log.png) 
 
 ## Questions and comments
 
