@@ -5,6 +5,7 @@
 import * as Sequelize from 'sequelize';
 import * as Promise from "bluebird";
 import { Constants } from '../constants';
+import * as fs from 'fs';
 
 export interface UserAttributes {
     id?: string;
@@ -101,9 +102,17 @@ export class DbContext {
 
     private init() {
 
-        this.sequelize = new Sequelize(Constants.DB_DATABASE, Constants.DB_USERNAME, Constants.DB_PASSWORD, {
-            host: Constants.DB_HOST, 
-            dialect: 'mysql', 
+        var dialectOptions = {};
+        if(Constants.MySQLSSLCA){
+            var caPem = fs.readFileSync(Constants.MySQLSSLCA);
+            dialectOptions['ssl'] = {
+                ca: caPem
+            }
+        }
+        this.sequelize = new Sequelize(Constants.MySQLDbName, Constants.MySQLUser, Constants.MySQLPassword, {
+            host: Constants.MySQLHost, 
+            dialect: 'mysql',
+            dialectOptions: dialectOptions,
             pool: {
                 max: 5, 
                 min: 0, 
