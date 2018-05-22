@@ -61,17 +61,8 @@ MySQLPort=3306</Environment>
     <TypeScriptCompile Include="constants.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="db\dataSyncRecorder.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="db\db.ts" />
-    <TypeScriptCompile Include="db\organization.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="db\users.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="graphHelper.ts" />
+    <TypeScriptCompile Include="dbContext.ts" />
+    <TypeScriptCompile Include="msGraph.ts" />
     <TypeScriptCompile Include="userDataSyncService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -80,7 +71,6 @@ MySQLPort=3306</Environment>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="db\" />
     <Compile Include="gulpfile.js" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->

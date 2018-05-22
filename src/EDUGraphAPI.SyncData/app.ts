@@ -4,8 +4,9 @@
 */
 
 import { UserDataSyncService } from './userDataSyncService'
+import { DbContext } from './dbContext'
 
-
-var userDataSyncService = new UserDataSyncService();
+var dbContext = new DbContext();
+var userDataSyncService = new UserDataSyncService(dbContext);
 userDataSyncService.syncAsync();
     

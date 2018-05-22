@@ -5,50 +5,112 @@
 
 import { Constants } from './constants'
 import * as auth from './authenticationHelper'
-import * as graph from './graphHelper'
-
-var organization = require('./db/organization');
-var dataSyncRecorder = require('./db/dataSyncRecorder');
-var userHelper = require('./db/users');
+import { GraphServiceClient, User, PagedCollection } from './msGraph'
+import { DbContext, DataSyncRecordsModel, OrganizationModel, OrganizationInstance, UserModel } from './dbContext'
 
 export class UserDataSyncService {
 
-    syncAsync(): Promise<any> {
+    constructor(private dbContext: DbContext) { }
 
-        return organization.getAllConsentedTenants()
-            .then(function (orgs) {        
-                var organizationIds = [];
-                for (let org of orgs) {
-                    organizationIds.push(org.tenantId);
+    syncAsync(): Promise<any> {
+        let self = this;
+        return this.dbContext.Organization.findAll({ where: { isAdminConsented: 1 } })
+            .then(organizations => {
+                if (organizations.length > 0) {
+                    return organizations
+                        .map(organization => () => self.syncOrganizationAsync(organization))
+                        .reduce((p, task) => p.then(task), Promise.resolve())
                 }
-                return organizationIds;
-            }).then(function (organizationIds) {
-                return Promise.all(organizationIds.map(function (id) {                   
-                    new UserDataSyncService().syncOrganizationAsync(id);
-                }));                
-            });      
-       
-        
+                else {
+                    console.log('No consented organization found. This sync was canceled.');
+                }
+            })            
     }
 
-    private syncOrganizationAsync(tenantId: string): Promise<any> {
-        return dataSyncRecorder.getOrCreateDataSyncRecorder(tenantId).then(recorder => {
-            return recorder.deltaLink;
-        }).then(deltaLink => {
-            return auth.getAppOnlyAccessTokenAsync(tenantId, Constants.ClientId, Constants.MSGraphResource)
-                .then(tokenResponse => {
-                    return tokenResponse['accessToken'];
-                }).then(token => {
-                   
-                    graph.queryUsers(deltaLink, tenantId, Constants.ClientId, token).then(users => {
+    private syncOrganizationAsync(organization: OrganizationInstance): Promise<any> {
+        let self = this;
+        console.log(`Starting to sync users for the ${organization.name} organization.`);
+        return self.getGraphServiceClient(organization.tenantId)
+            .then(client => {
+                return self.getOrCreateDataSyncRecord(organization.tenantId)
+                    .then(record => {
+                        let getUsers = record.deltaLink != null
+                            ? client.getUsersDelta({ '$select': 'jobTitle,department,mobilePhone' })
+                            : client.getUsers(record.deltaLink)
+                        console.log('\tExecuting Differential Query')
+                        if (record.deltaLink == null) {
+                            console.log('\tFirst time executing differential query; all items will return.')
+                        }
+                        return getUsers.then(collection => {
+                            return self.updateUsersAndHanleRestPagesIteratively(client, collection)
+                                .then(collection => {
+                                    return record.updateAttributes({
+                                        deltaLink: collection.DeltaLink
+                                    });
+                                });                           
+                        });
+                    })
+            });
+    }
 
-                        userHelper.updateOrDeleteUser(users);
-                       
-                    });                   
-                   
-                });
-         });
+    private updateUsersAndHanleRestPagesIteratively(client: GraphServiceClient, collection: PagedCollection<User>): Promise<PagedCollection<User>> {
+        let self = this;
+        console.log(`\tGet ${collection.Items.length} user(s).`);
+        return collection.Items
+            .map(user => () => self.updateOrDeleteUser(user))
+            .reduce((p, task) => p.then(task), Promise.resolve()) 
+            .then(() => {
+                if (collection.NextLink != null) {
+                    return client.getUsers(collection.NextLink)
+                        .then(result => self.updateUsersAndHanleRestPagesIteratively(client, result));
+                }
+                else return collection;
+            });
+    }
 
+    private getOrCreateDataSyncRecord(tenantId): Promise<any> {
+        var self = this;
+        return this.dbContext.DataSyncRecords.findOne({ where: { tenantId: tenantId } })
+            .then(record => {
+                if (record == null) {
+                    return self.dbContext.DataSyncRecords.create({
+                        deltaLink: null,
+                        tenantId: tenantId,
+                        query: 'users'
+                    });
+                }
+                else {
+                    return record;
+                }
+            });
+    }
 
+    private updateOrDeleteUser(user: User): Promise<void> {
+        let self = this;
+        return this.dbContext.User.findOne({ where: { o365UserId: user.Id } })
+            .then(dbUser => {
+                if (dbUser == null) {
+                    console.log("Skipping updating user " + user.Id + " who does not exist in the local database.");
+                    return;
+                }
+                if (user.Removed) {
+                    console.log(`\tDeleting user and related data: ${dbUser.o365Email}`);
+                    return self.dbContext.User.destroy({ where: { o365UserId: user.Id } });
+                }
+                console.log('\tUpdating user: ' + dbUser.o365Email)
+                return dbUser.updateAttributes({
+                    JobTitle: user.JobTitle,
+                    MobilePhone: user.MobilePhone,
+                    Department: user.Department
+                })
+            });
+    }
+
+    private getGraphServiceClient(tenantId): Promise<GraphServiceClient> {
+        return auth.getAppOnlyAccessTokenAsync(tenantId, Constants.ClientId, Constants.MSGraphResource)
+            .then(tokenResponse => {
+                var accessToken = tokenResponse['accessToken'];
+                return new GraphServiceClient(Constants.MSGraphResource, accessToken);
+            });
     }
 }

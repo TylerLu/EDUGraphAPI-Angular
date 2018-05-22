@@ -7,8 +7,9 @@
     "name": "admin"
   },
   "devDependencies": {
+    "@types/bluebird": "^3.0.37",
     "@types/node": "^6.0.87",
-    "@types/bluebird": "3.0.37",
+    "@types/sequelize": "^4.27.18",
     "gulp": "^3.9.1",
     "gulp-typescript": "^4.0.2",
     "typescript": "^2.8.3"
