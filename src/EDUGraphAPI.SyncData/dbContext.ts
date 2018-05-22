@@ -61,6 +61,10 @@ export class DbContext {
         this.init();
     }
 
+    public close() {
+        this.sequelize.close();
+    }
+
     private init() {
 
         var dialectOptions = {};

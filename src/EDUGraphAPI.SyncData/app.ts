@@ -8,5 +8,6 @@ import { DbContext } from './dbContext'
 
 var dbContext = new DbContext();
 var userDataSyncService = new UserDataSyncService(dbContext);
-userDataSyncService.syncAsync();
+userDataSyncService.syncAsync()
+    .then(() => dbContext.close());
     
