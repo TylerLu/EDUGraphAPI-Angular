@@ -47,12 +47,12 @@ EDUGraphAPI is based on NodeJS (the server-side) and Angular 2 (the client-side)
 
   Additionally: Developing/running this sample locally requires the following:
 
-  - Visual Studio 2015 (any edition), [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409) is available for free.
-  - [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593)
+  - Visual Studio 2017 (any edition), [Visual Studio 2017 Community](https://www.visualstudio.com/downloads/) is available for free.
+  - [TypeScript SDK 2.5.2](http://download.microsoft.com/download/7/0/A/70A6AC0E-8934-4396-A43E-445059F430EA/2.5.2-TS-release-dev14update3-20170830.5/TypeScript_SDK.exe)
   - [Node.js](https://nodejs.org/)
-  - [Node.js Tools 1.2](http://aka.ms/ntvs1.2.RTW.2015)
+  - [Node.js Tools](https://www.visualstudio.com/vs/features/node-js/)
   - [Git](https://git-scm.com/download/win)
-  - Familiarity with Node.js, TypeScript, Angular and web services.
+  - Familiarity with Node.js, TypeScript, AngularJS and web services.
 
 ## Generate a self-signed certificate
 
@@ -167,36 +167,47 @@ For production, you should you own certificate:
 
 ## Build and debug locally
 
-This project can be opened with the edition of Visual Studio 2015 you already have, or download and install the Community edition to run, build and/or develop this application locally.
+This project can be opened with the edition of Visual Studio 2017 you already have, or download and install the Community edition to run, build and/or develop this application locally.
 
-- [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409)
+### Preparation
 
-The following tools are also required:
-
-- [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593)
-- [Node.js](https://nodejs.org/)
-- [Node.js Tools 1.2](http://aka.ms/ntvs1.2.RTW.2015)
-- [Git](https://git-scm.com/download/win)
+1. Clone or download the repository to you local computer. 
+2. Replace `/src/EDUGraphAPI.SyncData/app_only_cert.pfx` with your certificate if you plan to use yours.
+3. Open `/src/EDUGraphAPI-Phase2.sln` with Virtual Studio 2017.
 
 ### Debug EDUGraphAPI.Web
 
-1. Configure **Environment Variables**. Right-click the project in Solution Explorer, then click **Properties**.
+1. Right click the **EDUGraphAPI.Web** in Solutions Explorer, then click **Set as StartUp Project**.
+
+2. Configure **Environment Variables**. Right-click the project in Solution Explorer, then click **Properties**.
 
    ![](/Images/web-app-properties.png)
 
    - **clientId**: use the Client Id of the app registration you created earlier.
    - **clientSecret**: use the Key value of the app registration you created earlier.
-   - **SourceCodeRepositoryURL**: use the repository URL of your fork.
+   - **sourceCodeRepositoryURL**: use the repository URL of your fork.
+   - **MySQLDbName**: keep the default value.
+   - **MySQLHost**/**MySQLPort**: the host and port of the MySQL server.
+   - **MySQLUser**/**MySQLPassword**: the user and password of the MySQL server.
 
-2. In the Solution Explorer, right-click **npm**, then click **Install Missing npm Packages**:
+3. In the Solution Explorer, right-click **npm** under the project, then click **Install Missing npm Packages**:
 
    ![](/Images/install-missing-npm-packages.png)
 
-3. Press **F5**. 
+4. Press **F5**. 
 
 ### Debug EDUGraphAPI.SyncData
 
-TODO
+1. Right click the **EDUGraphAPI.SyncData** in Solutions Explorer, then click **Set as StartUp Project**.
+2. Configure **Environment Variables**. Right-click the project in Solution Explorer, then click **Properties**.
+   * **clientId**: use the Client Id of the app registration you created earlier.
+   * **clientCertificatePath**: keep the default value.
+   * **clientCertificatePassword**: use the password of the certificate.
+   * **MySQLDbName**: keep the default value.
+   * **MySQLHost**/**MySQLPort**: the host and port of the MySQL server.
+   * **MySQLUser**/**MySQLPassword**: the user and password of the MySQL server.
+3. In the Solution Explorer, right-click **npm** under the project, then click **Install Missing npm Packages**.
+4. Press **F5**.
 
 ## Deploy the sample to Azure
 

@@ -8,14 +8,15 @@
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
-    <Environment>ClientId=4e3fa16f-9909-4bf6-9a66-5560e97e7082
+    <Environment>ClientId=
 ClientCertificatePath=./app_only_cert.pfx
 ClientCertificatePassword=J48W23RQeZv85vj
-MySQLDbName=eduangular
-MySQLHost=edugraphapiphp8.mysql.database.azure.com
-MySQLUser=azureuser@edugraphapiphp8
-MySQLPassword=P@ssw0rd
-MySQLPort=3306</Environment>
+MySQLDbName=edu
+MySQLHost=
+MySQLPort=3306
+MySQLUser=
+MySQLPassword=
+</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>

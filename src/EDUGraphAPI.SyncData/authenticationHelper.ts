@@ -7,7 +7,7 @@ import { Constants } from './constants'
 import { X509Certificate } from './X509Certificate'
 import { AuthenticationContext, TokenResponse, ErrorResponse } from 'adal-node';
 
-const x509Cert = new X509Certificate(Constants.clientCertPath, Constants.clientCertPassword);
+const x509Cert = new X509Certificate(Constants.ClientCertPath, Constants.ClientCertPassword);
 const certificate = x509Cert.getPrivateKey();
 const thumbprint = x509Cert.getThumbprint();
 

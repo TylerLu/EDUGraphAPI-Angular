@@ -74,7 +74,8 @@ export class DbContext {
             }
         }
         this.sequelize = new Sequelize(Constants.MySQLDbName, Constants.MySQLUser, Constants.MySQLPassword, {
-            host: Constants.MySQLHost, 
+            host: Constants.MySQLHost,
+            port: Constants.MySQLPort,
             dialect: 'mysql',
             dialectOptions: dialectOptions,
             pool: {
