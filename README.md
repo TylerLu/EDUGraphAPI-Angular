@@ -37,7 +37,24 @@ EDUGraphAPI is based on NodeJS (the server-side) and Angular 2 (the client-side)
 
 ## Prerequisites
 
-## **Generate a self-signed certificate**
+**Deploying and running this sample requires**:
+
+- An Azure subscription with permissions to register a new application, and deploy the web app.
+
+- An O365 Education tenant with Microsoft School Data Sync enabled.
+
+  - One of the following browsers: Edge, Internet Explorer 9, Safari 5.0.6, Firefox 5, Chrome 13, or a later version of one of these browsers.
+
+  Additionally: Developing/running this sample locally requires the following:
+
+  - Visual Studio 2015 (any edition), [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409) is available for free.
+  - [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593)
+  - [Node.js](https://nodejs.org/)
+  - [Node.js Tools 1.2](http://aka.ms/ntvs1.2.RTW.2015)
+  - [Git](https://git-scm.com/download/win)
+  - Familiarity with Node.js, TypeScript, Angular and web services.
+
+## Generate a self-signed certificate**
 
 A self-signed certificate is required by the SyncData WebJob. For preview, you may skip the steps below and use the default certificate we provided:
 
@@ -174,13 +191,13 @@ Deploying and running this sample requires**:
 
 
      Copy the keyCredential (all the text) from `key_credential.txt` file.
-
+    
      Insert the keyCredential into the square brackets of the **keyCredentials** node.
-
+    
      ![](Images/aad-create-app-09.png)
-
+    
      Click **Save**.
-
+    
      > Note: this step configures the certification used by a Web Job. Check **Application Authentication Flow** section for more details.
    Close the Settings window.
 
