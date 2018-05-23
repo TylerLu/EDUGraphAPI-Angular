@@ -52,6 +52,7 @@ EDUGraphAPI is based on NodeJS (the server-side) and Angular 2 (the client-side)
   - [Node.js](https://nodejs.org/)
   - [Node.js Tools](https://www.visualstudio.com/vs/features/node-js/)
   - [Git](https://git-scm.com/download/win)
+  - [MySQL](https://www.mysql.com/)
   - Familiarity with Node.js, TypeScript, AngularJS and web services.
 
 ## Generate a self-signed certificate
@@ -62,7 +63,7 @@ A self-signed certificate is required by the SyncData WebJob. For preview, you m
 - Password: `J48W23RQeZv85vj`
 - Key credential: `/src/EDUGraphAPI.SyncData/key_credential.txt`
 
-For production, you should you own certificate:
+For production, you should use your own certificate:
 
 1. Generate certificate with PowerShell
 
@@ -171,13 +172,14 @@ This project can be opened with the edition of Visual Studio 2017 you already ha
 
 ### Preparation
 
-1. Clone or download the repository to you local computer. 
+1. Clone or download the repository to your local computer. 
 2. Replace `/src/EDUGraphAPI.SyncData/app_only_cert.pfx` with your certificate if you plan to use yours.
 3. Open `/src/EDUGraphAPI-Phase2.sln` with Virtual Studio 2017.
+4. Create a schema named **edu** in your MySQL server.
 
 ### Debug EDUGraphAPI.Web
 
-1. Right click the **EDUGraphAPI.Web** in Solutions Explorer, then click **Set as StartUp Project**.
+1. Right-click the **EDUGraphAPI.Web** in Solutions Explorer, then click **Set as StartUp Project**.
 
 2. Configure **Environment Variables**. Right-click the project in Solution Explorer, then click **Properties**.
 
@@ -198,7 +200,7 @@ This project can be opened with the edition of Visual Studio 2017 you already ha
 
 ### Debug EDUGraphAPI.SyncData
 
-1. Right click the **EDUGraphAPI.SyncData** in Solutions Explorer, then click **Set as StartUp Project**.
+1. Right-click the **EDUGraphAPI.SyncData** in Solutions Explorer, then click **Set as StartUp Project**.
 2. Configure **Environment Variables**. Right-click the project in Solution Explorer, then click **Properties**.
    * **clientId**: use the Client Id of the app registration you created earlier.
    * **clientCertificatePath**: keep the default value.
@@ -318,7 +320,7 @@ This project can be opened with the edition of Visual Studio 2017 you already ha
 The top layer of the solution contains the two parts of the EDUGraphAPI.Web project:
 
 * The server-side Node.js app.
-* The client side Angular 2 app.
+* The client-side Angular 2 app.
 
 The bottom layers contain the three data sources.
 
@@ -360,7 +362,7 @@ These APIs are defined in the **/routes** folder.
 
 **Data Access**
 
-[Sequelize](http://docs.sequelizejs.com/en/v3/) is used in this sample to access data from a SQL Database. MySQL is used as database. 
+[Sequelize](http://docs.sequelizejs.com/en/v3/) is used in this sample to access data from a SQL Database. MySQL is used as the database. 
 
 The **DbContext** exposes the models and methods that are used to access data.
 
@@ -559,7 +561,7 @@ This flow is implemented in the AdminController.
 
 **Application Authentication Flow**
 
-This flow in implemented in the SyncData WebJob.
+This flow is implemented in the SyncData WebJob.
 
 ![](/Images/auth-flow-app-login.png)
 
