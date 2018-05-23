@@ -35,7 +35,7 @@ export class UserDataSyncService {
                 return self.getOrCreateDataSyncRecord(organization.tenantId)
                     .then(record => {
                         let getUsers = record.deltaLink != null
-                            ? client.getUsersDelta({ '$select': 'jobTitle,department,mobilePhone' })
+                            ? client.getUsersDelta('$select=jobTitle,department,mobilePhone')
                             : client.getUsers(record.deltaLink)
                         console.log('\tExecuting Differential Query')
                         if (record.deltaLink == null) {

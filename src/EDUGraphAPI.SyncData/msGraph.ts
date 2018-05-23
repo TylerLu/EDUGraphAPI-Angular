@@ -5,7 +5,6 @@
 
 import * as https from 'https'
 import * as url from 'url';
-import * as querystring from 'querystring';
 
 export class User {
 
@@ -14,7 +13,7 @@ export class User {
         public JobTitle: string,
         public MobilePhone: string,
         public Removed: boolean) { }
-} 
+}
 
 export class PagedCollection<T>{
 
@@ -27,11 +26,11 @@ export class GraphServiceClient {
 
     constructor(private baseUrl: string, private accessToken: string) { }
 
-    getUsersDelta(queryDict): Promise<PagedCollection<User>> {
-        let url = this.baseUrl + '/v1.0/users/delta?' + querystring.stringify(queryDict);
+    getUsersDelta(query): Promise<PagedCollection<User>> {
+        let url = this.baseUrl + '/v1.0/users/delta?' + query;
         return this.getUsers(url);
     }
-    
+
     getUsers(absolute_url: string): Promise<PagedCollection<User>> {
         let self = this;
         return this.httpGetJson(absolute_url)
