@@ -51,7 +51,7 @@
       }
     },
     "clientSecret": {
-      "type": "string",
+      "type": "securestring",
       "defaultValue": "",
       "metadata": {
         "description": ""
