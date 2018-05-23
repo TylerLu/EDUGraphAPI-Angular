@@ -9,4 +9,8 @@ import { UserDataSyncService } from './userDataSyncService'
 const dbContext = new DbContext();
 const userDataSyncService = new UserDataSyncService(dbContext);
 userDataSyncService.syncAsync()
-    .then(() => dbContext.close());
+    .then(() => dbContext.close())
+    .catch(error => {
+        console.log(error);
+        dbContext.close()
+    });
