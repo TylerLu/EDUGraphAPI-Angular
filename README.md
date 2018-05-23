@@ -54,82 +54,54 @@ EDUGraphAPI is based on NodeJS (the server-side) and Angular 2 (the client-side)
   - [Git](https://git-scm.com/download/win)
   - Familiarity with Node.js, TypeScript, Angular and web services.
 
-## Generate a self-signed certificate**
+## Generate a self-signed certificate
 
 A self-signed certificate is required by the SyncData WebJob. For preview, you may skip the steps below and use the default certificate we provided:
 
-- Certificate file: `/App_Data/jobs/triggered/SyncData/app_only_cert.pfx`
+- Certificate file: `/src/EDUGraphAPI.SyncData/app_only_cert.pfx`
 - Password: `J48W23RQeZv85vj`
-- Key credential: `/App_Data/jobs/triggered/SyncData/key_credential.txt`
+- Key credential: `/src/EDUGraphAPI.SyncData/key_credential.txt`
 
-For production, you should you own certifcate:
+For production, you should you own certificate:
 
-**Generate certificate with PowerShell**
+1. Generate certificate with PowerShell
 
-This file will be used in web job.
+   Run PowerShell **as administrator**, then execute the commands below:
 
-Run PowerShell **as administrator**, then execute the commands below:
+   ```powershell
+   $cert = New-SelfSignedCertificate -Type Custom -KeyExportPolicy Exportable -KeySpec Signature -Subject "CN=Edu App-only Cert" -NotAfter (Get-Date).AddYears(20) -CertStoreLocation "cert:\CurrentUser\My" -KeyLength 2048
+   ```
 
-```powershell
-$cert = New-SelfSignedCertificate -Type Custom -KeyExportPolicy Exportable -KeySpec Signature -Subject "CN=Edu App-only Cert" -NotAfter (Get-Date).AddYears(20) -CertStoreLocation "cert:\CurrentUser\My" -KeyLength 2048
-```
+   > Note: please keep the PowerShell window open until you finish the steps below.
 
-> Note: please keep the PowerShell window open until you finish the steps below.
+2. Get keyCredential
 
-**Get keyCredential**
+   Execute the commands below to get keyCredential:
 
-Execute the commands below to get keyCredential:
+   > Note: Feel free to change the file path at the end of the command.
 
-> Note: Feel free to change the file path at the end of the command.
+   ```powershell
+   $keyCredential = @{}
+   $keyCredential.customKeyIdentifier = [System.Convert]::ToBase64String($cert.GetCertHash())
+   $keyCredential.keyId = [System.Guid]::NewGuid().ToString()
+   $keyCredential.type = "AsymmetricX509Cert"
+   $keyCredential.usage = "Verify"
+   $keyCredential.value = [System.Convert]::ToBase64String($cert.GetRawCertData())
+   $keyCredential | ConvertTo-Json > c:\keyCredential.txt
+   ```
 
-```powershell
-$keyCredential = @{}
-$keyCredential.customKeyIdentifier = [System.Convert]::ToBase64String($cert.GetCertHash())
-$keyCredential.keyId = [System.Guid]::NewGuid().ToString()
-$keyCredential.type = "AsymmetricX509Cert"
-$keyCredential.usage = "Verify"
-$keyCredential.value = [System.Convert]::ToBase64String($cert.GetRawCertData())
-$keyCredential | ConvertTo-Json > c:\keyCredential.txt
-```
+   The keyCredential is in the generated file, and will be used to create App Registrations in AAD.
 
-The keyCredential is in the generated file, and will be used to create App Registrations in AAD.
+   ![cert-key-credential](C:/Users/admin/Documents/GitHub/EDUGraphAPI-Angular/Images/cert-key-credential.png)
 
-![cert-key-credential](/Images/cert-key-credential.png)
+3. Export the certificate
 
-### Export the Certificate and Convert to Base64 String
+   ```powershell
+   $password = Read-Host -Prompt "Enter password" -AsSecureString
+   Export-PfxCertificate -Cert $cert -Password $password -FilePath c:\app_only_cert.pfx
+   ```
 
-You will be prompted to input a password to protect the certificate. Please copy aside the password. It will be used as the value of the **Certificate Pfx Password** parameter of the ARM Template
-
-The base64 string of the certificate is in the generated text file, and will be used as the value of the **Certificate Pfx Base64** parameter of the ARM Template.
-
-![cert-base64](/Images/cert-base64.png)
-
-Execute the commands below to export the certificate.
-
-```
-$password = Read-Host -Prompt "Enter password" -AsSecureString
-Export-PfxCertificate -Cert $cert -Password $password -FilePath c:\app_only_cert.pfx
-```
-
-
-
-Deploying and running this sample requires**:
-
-- An Azure subscription with permissions to register a new application, and deploy the web app.
-
-- An O365 Education tenant with Microsoft School Data Sync enabled.
-
-  - One of the following browsers: Edge, Internet Explorer 9, Safari 5.0.6, Firefox 5, Chrome 13, or a later version of one of these browsers.
-
-  Additionally: Developing/running this sample locally requires the following:  
-
-  - Visual Studio 2015 (any edition), [Visual Studio 2015 Community](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409) is available for free.
-  - [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593)
-  - [Node.js](https://nodejs.org/)
-  - [Node.js Tools 1.2](http://aka.ms/ntvs1.2.RTW.2015)
-  - [Git](https://git-scm.com/download/win)
-  - Familiarity with Node.js, TypeScript, Angular and web services.
-
+   It will promote you to input a password. Keep the password and the exported certificate.
 
 
 ## Register the application in Azure Active Directory
@@ -146,21 +118,15 @@ Deploying and running this sample requires**:
 
 4. Input a **Name**, and select **Web app / API** as **Application Type**.
 
-   Input **Sign-on URL**: https://localhost:44380/
+   Input **Sign-on URL**: `https://localhost:44380/*`
 
    ![](Images/aad-create-app-02.png)
 
    Click **Create**.
 
-5. Once completed, the app will show in the list.
-
-   ![](/Images/aad-create-app-03.png)
-
-6. Click it to view its details. 
-
    ![](/Images/aad-create-app-04.png)
 
-7. Click **All settings**, if the setting window did not show.
+5. Click **Settings**.
 
    - Click **Properties**, then set **Multi-tenanted** to **Yes**.
 
@@ -170,10 +136,10 @@ Deploying and running this sample requires**:
 
    - Click **Required permissions**. Add the following permissions:
 
-     | API                            | Application Permissions                  | Delegated Permissions                    |
-     | ------------------------------ | ---------------------------------------- | ---------------------------------------- |
-     | Microsoft Graph                | Read all users' full profiles<br>Read the organization's roster | Read directory data<br>Access directory as the signed in user<br>Sign users in<br> Have full access to all files user can access<br> Have full access to user files<br> Read and write users' class assignments and their grades<br>Read users' view of the roster <br>Read all groups |
-     | Windows Azure Active Directory |                                          | Sign in and read user profile<br>Read and write directory data |
+     | API                            | Application Permissions       | Delegated Permissions                                        |
+     | ------------------------------ | ----------------------------- | ------------------------------------------------------------ |
+     | Microsoft Graph                | Read all users' full profiles | Read directory data<br>Access directory as the signed in user<br>Sign users in<br> Have full access to all files user can access<br> Have full access to user files<br> Read and write users' class assignments and their grades<br>Read users' view of the roster <br>Read all groups |
+     | Windows Azure Active Directory |                               | Sign in and read user profile<br>Read and write directory data |
 
      ![](/Images/aad-create-app-06.png)
 
@@ -185,21 +151,19 @@ Deploying and running this sample requires**:
 
      Click **Save**, then copy aside the **VALUE** of the key. 
 
-8. Click **Manifest**.
+   Close the Settings window.
+
+6. Add  keyCredential
+
+     * Click **Manifest**.
 
      ![](Images/aad-create-app-08.png)
 
+     * Copy the keyCredential (all the text) from `key_credential.txt` file.
+     * Insert the keyCredential into the square brackets of the **keyCredentials** node. ![](Images/aad-create-app-09.png)
 
-     Copy the keyCredential (all the text) from `key_credential.txt` file.
-    
-     Insert the keyCredential into the square brackets of the **keyCredentials** node.
-    
-     ![](Images/aad-create-app-09.png)
-    
-     Click **Save**.
-    
-     > Note: this step configures the certification used by a Web Job. Check **Application Authentication Flow** section for more details.
-   Close the Settings window.
+     * Click **Save**.
+
 
 ## Build and debug locally
 
@@ -214,7 +178,7 @@ The following tools are also required:
 - [Node.js Tools 1.2](http://aka.ms/ntvs1.2.RTW.2015)
 - [Git](https://git-scm.com/download/win)
 
-Debug the **EDUGraphAPI.Web**:
+### Debug EDUGraphAPI.Web
 
 1. Configure **Environment Variables**. Right-click the project in Solution Explorer, then click **Properties**.
 
@@ -229,6 +193,10 @@ Debug the **EDUGraphAPI.Web**:
    ![](/Images/install-missing-npm-packages.png)
 
 3. Press **F5**. 
+
+### Debug EDUGraphAPI.SyncData
+
+TODO
 
 ## Deploy the sample to Azure
 
@@ -264,15 +232,15 @@ Debug the **EDUGraphAPI.Web**:
 
 **Deploy the Azure Components from GitHub**
 
-1. Check to ensure that the build is passing VSTS Build.
+1. Fork this repository to your GitHub account.
 
-2. Fork this repository to your GitHub account.
+2. Replace `/src/EDUGraphAPI.SyncData/app_only_cert.pfx` with your certificate if you plan to use yours.
 
 3. Click the Deploy to Azure Button:
 
    [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FOfficeDev%2FO365-EDU-AngularJS-Samples%2Fmaster%2Fazuredeploy.json)
 
-4. Fill in the values in the deployment page and select the **I agree to the terms and conditions stated above** checkbox.
+4. Fill in the values in the deployment page:
 
    ![](Images/azure-auto-deploy.png)
 
@@ -288,6 +256,10 @@ Debug the **EDUGraphAPI.Web**:
      >
      > In this case, please use another name.
 
+   - **My Sql Administrator Login**: The administrator login of the MySQL.
+
+   - **My Sql Administrator Login Password**: The administrator login password of the MySQL.
+
    - **Source Code Repository URL**: replace <YOUR REPOSITORY> with the repository name of your fork.
 
    - **Source Code Manual Integration**: choose **false**, since you are deploying from your own fork.
@@ -296,11 +268,15 @@ Debug the **EDUGraphAPI.Web**:
 
    - **Client Secret**: use the Key value of the app registration you created earlier.
 
+   - **Client Certificate Path**: keep the default value `./app_only_cert.pfx`.
+
+   - **Client Certificate Password**: password of the certificate.
+
    - Check **I agree to the terms and conditions stated above**.
 
 5. Click **Purchase**.
 
-**Add REPLY URL to the app registration**
+**Add Reply URL to the app registration**
 
 1. After the deployment, open the resource group:
 
@@ -310,15 +286,13 @@ Debug the **EDUGraphAPI.Web**:
 
    ![](Images/azure-web-app.png)
 
-   Copy the URL aside and change the schema to **https**. This is the replay URL and will be used in next step.
+   Copy the URL aside, then append `/*` . We get a new reply URL `https://edugraphapi.azurewebsites.net/*`.
 
 3. Navigate to the app registration in the new Azure Portal, then open the setting windows.
 
    Add the reply URL:
 
    ![](Images/aad-add-reply-url.png)
-
-   > Note: to debug the sample locally, make sure that https://localhost:44380/ is in the reply URLs.
 
 4. Click **SAVE**.
 
@@ -509,25 +483,25 @@ getAssignmentsByClassId(classId: string): Observable<any[]> {
         return this.dataService.getArray<any>(`${this.urlBase}/education/classes/${classId}/assignments`);
     }
 ```
-```
-    createAssignment(assignment: Assignment): Observable<any> {
-        let data = {
-            "dueDateTime": assignment.DueDateTime,
-            "displayName": assignment.DisplayName,
-            "status": assignment.Status,
-            "allowStudentsToAddResourcesToSubmission": true,
-            "assignTo": {
-                "@odata.type": "#microsoft.education.assignments.api.educationAssignmentClassRecipient"
-            }
-        };
-        return this.dataService.postToGraph(`${this.urlBase}/education/classes/${assignment.ClassId}/assignments`, data);
-    }
+```typescript
+createAssignment(assignment: Assignment): Observable<any> {
+    let data = {
+        "dueDateTime": assignment.DueDateTime,
+        "displayName": assignment.DisplayName,
+        "status": assignment.Status,
+        "allowStudentsToAddResourcesToSubmission": true,
+        "assignTo": {
+            "@odata.type": "#microsoft.education.assignments.api.educationAssignmentClassRecipient"
+        }
+    };
+    return this.dataService.postToGraph(`${this.urlBase}/education/classes/${assignment.ClassId}/assignments`, data);
+}
 ```
 
-```
-    publishAssignment(assignment: Assignment): Observable<any> {
-        return this.dataService.postToGraph(`${this.urlBase}/education/classes/${assignment.ClassId}/assignments/${assignment.Id}/publish`, null);
-    }
+```typescript
+publishAssignment(assignment: Assignment): Observable<any> {
+    return this.dataService.postToGraph(`${this.urlBase}/education/classes/${assignment.ClassId}/assignments/${assignment.Id}/publish`, null);
+}
 ```
 
 Below are some screenshots of the sample app that show the education data.
@@ -572,6 +546,18 @@ This flow is implemented in the AdminController.
 
 ![](Images/auth-flow-admin-login.png)
 
+**Application Authentication Flow**
+
+This flow in implemented in the SyncData WebJob.
+
+![](/Images/auth-flow-app-login.png)
+
+An X509 certificate is used. For more details, please check the following links:
+
+- [Daemon or Server Application to Web API](https://docs.microsoft.com/en-us/azure/active-directory/active-directory-authentication-scenarios#daemon-or-server-application-to-web-api)
+- [Authenticating to Azure AD in daemon apps with certificates](https://azure.microsoft.com/en-us/resources/samples/active-directory-dotnet-daemon-certificate-credential/)
+- [Build service and daemon apps in Office 365](https://msdn.microsoft.com/en-us/office/office365/howto/building-service-apps-in-office-365)
+
 ### Two Kinds of Graph APIs
 
 There are two distinct Graph APIs used in this sample:
@@ -611,25 +597,16 @@ Note that in the AAD Application settings, permissions for each Graph API are co
 
 A [differential query](https://msdn.microsoft.com/en-us/Library/Azure/Ad/Graph/howto/azure-ad-graph-api-differential-query) request returns all changes made to specified entities during the time between two consecutive requests. For example, if you make a differential query request an hour after the previous differential query request, only the changes made during that hour will be returned. This functionality is especially useful when synchronizing tenant directory data with an application’s data store.
 
-The related code is in the following folder of the project:
-
-- **EDUGraphAPI.SyncData.njsproj**: contains classes that are used to demonstrate how to sync users.
-
-In userDataSyncService.ts, we demonstrate how to use the **DifferentialQuery** to send differential query and get differential result.
-
-```php
-graph.queryUsers(deltaLink, tenantId, Constants.ClientId, token)
-```
-
-And how to update (or delete) users in local database with the delta result:
-
-```php
- userHelper.updateOrDeleteUser(users);
-```
+The related code is in the **EDUGraphAPI.SyncData** project which is deployed as SyncData WebJob.
 
 Below is the log generated by the SyncData WebJob:
 
-![](Images/sync-data-web-job-log.png) 
+~~~
+[05/23/2018 06:26:07 > 4a686b: INFO] Starting to sync users for the Canviz EDU organization.
+[05/23/2018 06:26:07 > 4a686b: INFO] 	Executing Differential Query
+[05/23/2018 06:26:07 > 4a686b: INFO] 	Get 1 user(s).
+[05/23/2018 06:26:07 > 4a686b: INFO] 	Updating user: admin@canvizedu.onmicrosoft.com
+~~~
 
 ## Questions and comments
 
