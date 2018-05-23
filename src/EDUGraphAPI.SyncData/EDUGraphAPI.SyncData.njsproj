@@ -8,9 +8,9 @@
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
-    <Environment>ClientId=
-ClientCertificatePath=./app_only_cert.pfx
-ClientCertificatePassword=J48W23RQeZv85vj
+    <Environment>clientId=
+clientCertificatePath=./app_only_cert.pfx
+clientCertificatePassword=J48W23RQeZv85vj
 MySQLDbName=edu
 MySQLHost=
 MySQLPort=3306
