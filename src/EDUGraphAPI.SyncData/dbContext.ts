@@ -136,7 +136,7 @@ export class DbContext {
             {
                 tenantId: Sequelize.STRING,
                 query: Sequelize.STRING,
-                deltaLink: Sequelize.STRING,
+                deltaLink: Sequelize.TEXT,
             },
             {
                 timestamps: false,
