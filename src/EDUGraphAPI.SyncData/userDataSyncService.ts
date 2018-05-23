@@ -90,7 +90,7 @@ export class UserDataSyncService {
         return this.dbContext.User.findOne({ where: { o365UserId: user.Id } })
             .then(dbUser => {
                 if (dbUser == null) {
-                    console.log("Skipping updating user " + user.Id + " who does not exist in the local database.");
+                    console.log("\tSkipping updating user " + user.Id + " who does not exist in the local database.");
                     return;
                 }
                 if (user.Removed) {

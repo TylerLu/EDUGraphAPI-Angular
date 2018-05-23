@@ -7,9 +7,9 @@ import { Constants } from './constants'
 import { X509Certificate } from './X509Certificate'
 import { AuthenticationContext, TokenResponse, ErrorResponse } from 'adal-node';
 
-const cert = new X509Certificate('./app_only_cert.pfx', 'J48W23RQeZv85vj');
-const certificate = cert.getPrivateKey();
-const thumbprint = cert.getThumbprint();
+const x509Cert = new X509Certificate('./app_only_cert.pfx', 'J48W23RQeZv85vj');
+const certificate = x509Cert.getPrivateKey();
+const thumbprint = x509Cert.getThumbprint();
 
 export function getAppOnlyAccessTokenAsync(tenantId: string, clientId: string, resource: string): Promise<TokenResponse | ErrorResponse> {
 

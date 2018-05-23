@@ -2,10 +2,11 @@
 * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 * See LICENSE in the project root for license information.
 */
-import * as Sequelize from 'sequelize';
-import * as Promise from "bluebird";
+
 import { Constants } from './constants';
 import * as fs from 'fs';
+import * as Sequelize from 'sequelize';
+import * as Promise from "bluebird";
 
 export interface UserAttributes {
     id?: string;
@@ -19,7 +20,6 @@ export interface UserInstance extends Sequelize.Instance<UserAttributes>, UserAt
 }
 export interface UserModel extends Sequelize.Model<UserInstance, UserAttributes> { }
 
-
 export interface OrganizationAttributes {
     name?: string;
     tenantId?: string;
@@ -29,7 +29,6 @@ export interface OrganizationAttributes {
 export interface OrganizationInstance extends Sequelize.Instance<OrganizationAttributes>, OrganizationAttributes {
 }
 export interface OrganizationModel extends Sequelize.Model<OrganizationInstance, OrganizationAttributes> { }
-
 
 export interface TokenCacheAttributes {
     userId: string;
@@ -82,7 +81,8 @@ export class DbContext {
                 max: 5, 
                 min: 0, 
                 idle: 10000 
-            }
+            },
+            logging: false
         });
 
         this.User = this.sequelize.define<UserInstance, UserAttributes>('User',

@@ -3,11 +3,10 @@
 * See LICENSE in the project root for license information.
 */
 
-import { UserDataSyncService } from './userDataSyncService'
 import { DbContext } from './dbContext'
+import { UserDataSyncService } from './userDataSyncService'
 
-var dbContext = new DbContext();
-var userDataSyncService = new UserDataSyncService(dbContext);
+const dbContext = new DbContext();
+const userDataSyncService = new UserDataSyncService(dbContext);
 userDataSyncService.syncAsync()
     .then(() => dbContext.close());
-    

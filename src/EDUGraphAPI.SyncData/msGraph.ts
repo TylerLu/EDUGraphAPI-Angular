@@ -3,11 +3,12 @@
 * See LICENSE in the project root for license information.
 */
 
-const https = require('https');
-const url = require('url');
-const querystring = require('querystring');
+import * as https from 'https'
+import * as url from 'url';
+import * as querystring from 'querystring';
 
 export class User {
+
     constructor(public Id: string,
         public Department: string,
         public JobTitle: string,
@@ -20,7 +21,6 @@ export class PagedCollection<T>{
     constructor(public Items: T[],
         public NextLink: string,
         public DeltaLink: string) { }
-
 }
 
 export class GraphServiceClient {
