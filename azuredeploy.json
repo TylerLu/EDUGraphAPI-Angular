@@ -59,7 +59,7 @@
     },
     "clientCertificatePath": {
       "type": "string",
-      "defaultValue": "app_only_cert.pfx",
+      "defaultValue": "./app_only_cert.pfx",
       "metadata": {
         "description": "Path of the app-only certificate."
       }

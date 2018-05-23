@@ -9,7 +9,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
     <Environment>ClientId=4e3fa16f-9909-4bf6-9a66-5560e97e7082
-ClientCertificatePath=app_only_cert.pfx
+ClientCertificatePath=./app_only_cert.pfx
 ClientCertificatePassword=J48W23RQeZv85vj
 MySQLDbName=eduangular
 MySQLHost=edugraphapiphp8.mysql.database.azure.com
