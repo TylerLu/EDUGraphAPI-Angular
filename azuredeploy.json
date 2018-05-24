@@ -24,7 +24,7 @@
     },
     "sourceCodeRepositoryURL": {
       "type": "string",
-      "defaultValue": "https://github.com/<YOUR REPOSITORY>/O365-EDU-AngularJS-Samples",
+      "defaultValue": "https://github.com/<YOUR REPOSITORY>/O365-EDU-AngularNodeJS-Samples",
       "metadata": {
         "description": "Source code repository URL"
       }

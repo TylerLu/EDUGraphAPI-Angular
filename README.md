@@ -259,7 +259,7 @@ This project can be opened with the edition of Visual Studio 2017 you already ha
 
 3. Click the Deploy to Azure Button:
 
-   [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FOfficeDev%2FO365-EDU-AngularJS-Samples%2Fmaster%2Fazuredeploy.json)
+   [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FOfficeDev%2FO365-EDU-AngularNodeJS-Samples%2Fmaster%2Fazuredeploy.json)
 
 4. Fill in the values in the deployment page:
 
