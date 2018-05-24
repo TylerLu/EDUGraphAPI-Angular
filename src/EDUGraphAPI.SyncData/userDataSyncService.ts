@@ -98,10 +98,19 @@ export class UserDataSyncService {
                     return self.dbContext.User.destroy({ where: { o365UserId: user.Id } });
                 }
                 console.log('\tUpdating user: ' + dbUser.o365Email)
+                if (dbUser.JobTitle != user.JobTitle) {
+                    console.log('\t\tJob title: ' + user.JobTitle)
+                }
+                if (dbUser.Department != user.Department) {
+                    console.log('\t\tDepartment: ' + user.Department)
+                }
+                if (dbUser.MobilePhone != user.MobilePhone) {
+                    console.log('\t\tMobile phone: ' + user.MobilePhone)
+                }
                 return dbUser.updateAttributes({
                     JobTitle: user.JobTitle,
-                    MobilePhone: user.MobilePhone,
-                    Department: user.Department
+                    Department: user.Department,
+                    MobilePhone: user.MobilePhone
                 })
             });
     }
