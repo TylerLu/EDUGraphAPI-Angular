@@ -101,7 +101,7 @@ For production, you should use your own certificate:
 
    The keyCredential is in the generated file, and will be used to create App Registrations in AAD.
 
-   ![cert-key-credential](C:/Users/admin/Documents/GitHub/EDUGraphAPI-Angular/Images/cert-key-credential.png)
+   ![cert-key-credential](Images/cert-key-credential.png)
 
 3. Export the certificate
 
