@@ -6,7 +6,7 @@ import * as uuid from "node-uuid";
 import * as Promise from "bluebird";
 import * as bcrypt from 'bcryptjs';
 import { DbContext, UserInstance } from '../data/dbContext';
-import { TokenCacheService } from '../services/TokenCacheService';
+import { TokenCacheService } from '../services/tokenCacheService';
 import { MSGraphClient } from "../services/msGraphClient";
 import { AuthenticationHelper } from '../utils/authenticationHelper';
 import { Roles } from '../constants';
